@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">NaugthyVideo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--menu-->
+    <string name="BACU_UP">Backup</string>
+    <string name="DELETE">Delete</string>
+    <string name="SETTINGS">Settings</string>
+    <!--nav menu-->
+    <string name="nav_function">功能</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_settings">设置</string>
+</resources>
