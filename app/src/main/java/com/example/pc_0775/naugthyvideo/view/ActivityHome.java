@@ -29,7 +29,9 @@ import java.util.List;
 public class ActivityHome extends BaseActivity {
 
     //view
+    @ViewInject(R.id.drawer_layout)
     private DrawerLayout drawer_layout;
+    @ViewInject(R.id.nav_header_view)
     private NavigationView nav_headerView;
     @ViewInject(R.id.rv_home_list)
     private RecyclerView rv_homeList;
@@ -75,9 +77,6 @@ public class ActivityHome extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //实例化view
-        drawer_layout = $(R.id.drawer_layout);
-        nav_headerView = $(R.id.nav_header_view);
 
         //配置rv_homeList
         adapterHomeInfo = new AdapterHomeInfo(homeInfoDataList);
@@ -99,6 +98,15 @@ public class ActivityHome extends BaseActivity {
                         break;
                     case R.id.nav_function:
                         ActivityFunction.actionStart(ActivityHome.this);
+                        break;
+                    case R.id.nav_part_slide:
+                        startActivity(ActivityPartSlide.class);
+                        break;
+                    case R.id.nav_function_4:
+                        Toast.makeText(ActivityHome.this, "功能4未开放", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_function_5:
+                        Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;

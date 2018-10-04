@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdFilterTool;
@@ -25,6 +26,7 @@ import static android.view.KeyEvent.KEYCODE_BACK;
 public class ActivityVideoPlay extends BaseActivity {
 
     //view
+    @ViewInject(R.id.wv_function_video_play)
     private WebView wv_functionVideoPlay;
 
     //setting
@@ -56,7 +58,6 @@ public class ActivityVideoPlay extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        wv_functionVideoPlay = $(R.id.wv_function_video_play);
         webSettings = wv_functionVideoPlay.getSettings();
         setWebView();
 
