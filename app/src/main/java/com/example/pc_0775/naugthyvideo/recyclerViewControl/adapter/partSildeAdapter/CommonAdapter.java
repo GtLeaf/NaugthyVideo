@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.adapter;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.partSildeAdapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +37,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonViewHo
         CommonViewHolder holder = new CommonViewHolder(itemView);
         //获取可滑动的view布局
         LinearLayout moveLayout = holder.getView(R.id.id_move_layout);
+        //?
         moveLayout.scrollTo(fixX, 0);
         moveViewList.add(moveLayout);
         return holder;

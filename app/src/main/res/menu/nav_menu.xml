@@ -16,8 +16,8 @@
             android:title="@string/nav_part_slide"
             />
         <item
-            android:id="@+id/nav_function_4"
-            android:title="功能4"
+            android:id="@+id/nav_card_slide"
+            android:title="@string/nav_card_slide"
             />
         <item
             android:id="@+id/nav_function_5"

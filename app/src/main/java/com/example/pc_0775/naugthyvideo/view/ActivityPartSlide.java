@@ -2,17 +2,17 @@ package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.adapter.CoinAdapter;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.partSildeAdapter.CoinAdapter;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.CoinInfo;
-import com.example.pc_0775.naugthyvideo.myView.HRecyclerView;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.myRecyclerView.HRecyclerView;
 import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.viewHolder.CommonViewHolder;
 
@@ -93,5 +93,10 @@ public class ActivityPartSlide extends BaseActivity {
     public static void actionStart(Context context){
         Intent intent = new Intent(context, ActivityFunction.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 }

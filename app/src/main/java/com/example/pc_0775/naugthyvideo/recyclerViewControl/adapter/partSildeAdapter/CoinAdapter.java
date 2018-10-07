@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.adapter;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.partSildeAdapter;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.myView;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.myRecyclerView;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

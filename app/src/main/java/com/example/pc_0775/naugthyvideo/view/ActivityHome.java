@@ -11,16 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.adapter.homeAdapter.AdapterHomeInfo;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
-import com.example.pc_0775.naugthyvideo.util.Constant;
 import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
 
 import java.util.ArrayList;
@@ -102,8 +102,8 @@ public class ActivityHome extends BaseActivity {
                     case R.id.nav_part_slide:
                         startActivity(ActivityPartSlide.class);
                         break;
-                    case R.id.nav_function_4:
-                        Toast.makeText(ActivityHome.this, "功能4未开放", Toast.LENGTH_SHORT).show();
+                    case R.id.nav_card_slide:
+                        startActivity(ActivityCardSilde.class);
                         break;
                     case R.id.nav_function_5:
                         Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
@@ -160,4 +160,17 @@ public class ActivityHome extends BaseActivity {
             homeInfoDataList.add(homeInfoData);
         }
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+//        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
+    }
+
+
 }

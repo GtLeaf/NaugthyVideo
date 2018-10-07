@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.myView;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.myRecyclerView;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.pc_0775.naugthyvideo.adapter.CommonAdapter;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.partSildeAdapter.CommonAdapter;
 
 import java.util.ArrayList;
 

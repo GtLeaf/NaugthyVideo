@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.adapter.homeAdapter;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

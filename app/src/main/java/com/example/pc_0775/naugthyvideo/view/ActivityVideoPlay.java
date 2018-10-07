@@ -35,10 +35,6 @@ public class ActivityVideoPlay extends BaseActivity {
     //data
     private String videoUrl;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void initParams(Bundle params) {
