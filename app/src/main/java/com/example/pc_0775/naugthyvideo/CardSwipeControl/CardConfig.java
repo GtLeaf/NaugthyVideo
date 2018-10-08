@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.recyclerViewControl;
+package com.example.pc_0775.naugthyvideo.CardSwipeControl;
 
 /**
  * Created by PC-0775 on 2018/10/6.
@@ -20,7 +20,7 @@ public class CardConfig {
     /**
      * 卡片滑动时默认倾斜的角度
      */
-    public static final float DEFAULT_ROTATE_DEGREE = 15f;
+    public static final float DEFAULT_ROTATE_DEGREE = 10f;
     /**
      * 卡片滑动时不偏左也不偏右
      */

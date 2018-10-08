@@ -1,42 +1,83 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
+import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.CardConfig;
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.CardItemTouchHelperCallback;
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.OnCardSwipeListener;
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.myLayoutManager.CardLayoutManager;
+import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.pc_0775.naugthyvideo.Constants.Constant.INTENT_URI;
 
 public class ActivityCardSilde extends BaseActivity {
 
     //view
+    @ViewInject(R.id.dl_card_slide)
+    private DrawerLayout dl_cardSlide;
     @ViewInject(R.id.rv_card_slide)
     private RecyclerView rv_cardSlide;
+    @ViewInject(R.id.rl_left_layout)
+    private RelativeLayout rl_leftLayout;
+    @ViewInject(R.id.rl_right_layout)
+    private RelativeLayout rl_rightLayout;
+
+    //adapter
+    private AdapterCardSwipe adapterCardSwipe;
+
+    //other
+    /**
+     * 滑动ItemTouchHelper的回调函数
+     */
+    private CardItemTouchHelperCallback cardCallback;
+
+    private ActionBarDrawerToggle drawerbar;
 
     private List<Integer> list = new ArrayList<>();
+    private List<String> stringList = new ArrayList<>();
+
+    //data
+    protected List<VideoInfo> videoInfoList;
+    private int pageNumber = 1;
+    private Uri uri;
+    private int requestNum = 0;
 
     @Override
     public void initParams(Bundle params) {
-
+        Bundle bundle = getIntent().getExtras();
+        this.uri = Uri.parse(bundle.getString(Constant.INTENT_URI));
+        this.videoInfoList = (List)bundle.getSerializable(Constant.INTENT_RESULT_LIST);
     }
 
     @Override
@@ -52,13 +93,26 @@ public class ActivityCardSilde extends BaseActivity {
     @Override
     public void initView(final View view) {
         ViewInjectUtils.inject(this);
+        adapterCardSwipe = new AdapterCardSwipe(ActivityCardSilde.this, videoInfoList);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//??这个是什么方法
-        rv_cardSlide.setAdapter(new MyAdapetr());
-        CardItemTouchHelperCallback cardCallback = new CardItemTouchHelperCallback(rv_cardSlide.getAdapter(), list);
-        cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<Integer>() {
+        rv_cardSlide.setAdapter(adapterCardSwipe);
+        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe, adapterCardSwipe.getmGlideDrawableList());
+
+        //ItemTouchHelper的用法
+        ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
+        CardLayoutManager cardLayoutManager = new CardLayoutManager(rv_cardSlide, touchHelper);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rv_cardSlide.setLayoutManager(cardLayoutManager);
+        touchHelper.attachToRecyclerView(rv_cardSlide);
+        initDrawer();
+    }
+
+    @Override
+    public void setListener() {
+        cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<GlideDrawable>() {
             @Override
             public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
-                MyAdapetr.MyViewHolder holder = (MyAdapetr.MyViewHolder) viewHolder;
+                AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1 - Math.abs(ratio) * 0.2f);
                 if (CardConfig.SWIPING_LEFT == direction) {
                     holder.iv_dislike.setAlpha(Math.abs(ratio));
@@ -71,13 +125,22 @@ public class ActivityCardSilde extends BaseActivity {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, Integer integer, int direction) {
-                MyAdapetr.MyViewHolder holder = (MyAdapetr.MyViewHolder) viewHolder;
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, GlideDrawable glideDrawable, int direction) {
+                AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);
                 Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
             }
+
+            /*@Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, VideoInfo videoInfo, int direction) {
+                AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
+                viewHolder.itemView.setAlpha(1f);
+                holder.iv_dislike.setAlpha(0f);
+                holder.iv_like.setAlpha(0f);
+                Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
+            }*/
 
             @Override
             public void onSwipedClear() {
@@ -92,17 +155,6 @@ public class ActivityCardSilde extends BaseActivity {
                 }, 3000L);
             }
         });
-        //ItemTouchHelper的用法
-        ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
-        CardLayoutManager cardLayoutManager = new CardLayoutManager(rv_cardSlide, touchHelper);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rv_cardSlide.setLayoutManager(cardLayoutManager);
-        touchHelper.attachToRecyclerView(rv_cardSlide);
-    }
-
-    @Override
-    public void setListener() {
-
     }
 
     @Override
@@ -118,47 +170,49 @@ public class ActivityCardSilde extends BaseActivity {
     }
 
     public void initData(){
-        list.add(R.color.red_dark);
-        list.add(R.color.yellow);
-        list.add(R.color.blue);
-        list.add(R.color.green);
-        list.add(R.color.indigo);
-        list.add(R.color.paleturquoise);
-        list.add(R.color.darkorchid);
-        list.add(R.color.pink);
+        list.add(R.drawable.movie1);
+        list.add(R.drawable.movie2);
+        list.add(R.drawable.movie3);
+        list.add(R.drawable.movie4);
+        list.add(R.drawable.movie5);
+        list.add(R.drawable.movie6);
+        list.add(R.drawable.movie7);
+        list.add(R.drawable.nav_icon);
+        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
+        stringList.add("https://i.postimg.cc/59857TX8/image.png");
+        stringList.add("https://i.postimg.cc/8kykSPfG/config.png");
+        stringList.add("https://i.postimg.cc/vZnGfrq8/github.png");
+        stringList.add("https://i.postimg.cc/mrVJHhs2/Blog.png");
+        stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
+        stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
+        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
     }
 
-    private class MyAdapetr extends RecyclerView.Adapter<MyAdapetr.MyViewHolder>{
-
-        class MyViewHolder extends RecyclerView.ViewHolder{
-
-            ImageView iv_avatar;
-            ImageView iv_dislike;
-            ImageView iv_like;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                iv_avatar = itemView.findViewById(R.id.iv_avatar);
-                iv_dislike = itemView.findViewById(R.id.iv_dislike);
-                iv_like = itemView.findViewById(R.id.iv_like);
+    public void initDrawer(){
+        drawerbar = new ActionBarDrawerToggle(this, dl_cardSlide, R.drawable.nav_icon, R.string.dl_open, R.string.dl_close){
+            //菜单打开
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
             }
-        }
 
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_slide, parent, false);
-            return new MyViewHolder(view);
-        }
+            //菜单关闭
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        dl_cardSlide.setDrawerListener(drawerbar);
+    }
 
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            ImageView iv_avatar = holder.iv_avatar;
-            iv_avatar.setBackgroundColor(list.get(position));
-        }
+    public static void actionStart(Context context, Uri uri, List resultList){
+        Intent intent = new Intent(context, ActivityCardSilde.class);
+        //不是很明白，但要加上去，
+        // 参考：https://blog.csdn.net/watermusicyes/article/details/44963773
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
 
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
+        intent.putExtra(INTENT_URI, uri.toString());
+        intent.putExtra("resultList", (Serializable) resultList);
+        context.startActivity(intent);
     }
 }

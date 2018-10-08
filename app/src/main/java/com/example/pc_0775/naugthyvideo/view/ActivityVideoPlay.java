@@ -20,6 +20,7 @@ import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdFilterTool;
+import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
 
@@ -54,6 +55,8 @@ public class ActivityVideoPlay extends BaseActivity {
 
     @Override
     public void initView(View view) {
+        ViewInjectUtils.inject(this);
+
         webSettings = wv_functionVideoPlay.getSettings();
         setWebView();
 

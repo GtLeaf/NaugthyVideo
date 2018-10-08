@@ -4,72 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc_0775.naugthyvideo.view.Main2Activity">
+    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay">
 
-    <FrameLayout
-        android:id="@+id/fl_showContent"
+    <WebView
+        android:id="@+id/wv_main2_video_play"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-    </FrameLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp">
-        <LinearLayout
-            android:id="@+id/ll_home_tab_function"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="功能"
-                android:textSize="20sp"/>
-        </LinearLayout>
-        <ImageView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-        <LinearLayout
-            android:id="@+id/ll_home_tab_home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="首页"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-
-        <LinearLayout
-            android:id="@+id/ll_home_tab_user"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="个人中心"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-    </LinearLayout>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

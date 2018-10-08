@@ -2,6 +2,9 @@ package com.example.pc_0775.naugthyvideo.view;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -16,14 +19,20 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
+import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
+import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
 
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ActivityHome extends BaseActivity {
@@ -39,11 +48,51 @@ public class ActivityHome extends BaseActivity {
     //adapter
     private AdapterHomeInfo adapterHomeInfo;
 
+    //flag
+    /**
+     * 是否允许启动ActivityCardSilde页面，当用户点击后为真
+     */
+    private boolean isStartActivityCardSilde = false;
+
     //data
     /**
      * rv_homeList的数据源
      */
     private List<HomeInfoData> homeInfoDataList = new ArrayList(){};
+    private List<VideoInfo> videoInfoList;
+
+    //handler
+    private ActivityHome.MyHandler handler = new ActivityHome.MyHandler(this);
+    private static class MyHandler extends Handler {
+        WeakReference<ActivityHome> weakReference;
+
+        public MyHandler(ActivityHome activityHome){
+            weakReference = new WeakReference<ActivityHome>(activityHome);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ActivityHome activity = weakReference.get();
+            if(null == msg.obj){
+                Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            activity.videoInfoList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
+            if(activity.videoInfoList.size() == 0){
+                Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            switch (msg.what){
+                case Constant.CLASS_TWO_REQUEST:
+                    if (activity.isStartActivityCardSilde){
+                        activity.startActivityCardSilde();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +134,7 @@ public class ActivityHome extends BaseActivity {
         rv_homeList.setAdapter(adapterHomeInfo);
 
         nav_headerView.setCheckedItem(R.id.nav_home);
+        requestVideoInfoData(handler);
     }
 
     @Override
@@ -103,7 +153,13 @@ public class ActivityHome extends BaseActivity {
                         startActivity(ActivityPartSlide.class);
                         break;
                     case R.id.nav_card_slide:
-                        startActivity(ActivityCardSilde.class);
+                        isStartActivityCardSilde = true;
+                        if (null != videoInfoList) {
+                            startActivityCardSilde();
+                        }else {
+                            requestVideoInfoData(handler);
+                        }
+
                         break;
                     case R.id.nav_function_5:
                         Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
@@ -172,5 +228,21 @@ public class ActivityHome extends BaseActivity {
 //        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
     }
 
+    private void requestVideoInfoData(Handler myHandler){
+        HashMap classTowparameters = new HashMap();
+        classTowparameters.put("leixing", "se56");
+        classTowparameters.put("yeshu", "1");
+        Uri classTowuri = NetWorkUtil.createUri(Constant.CLASS_TWO_VIDEO_URL, classTowparameters);
+        NetWorkUtil.sendRequestWithOkHttp(classTowuri.toString(), Constant.CLASS_TWO_REQUEST, myHandler );
+    }
 
+    private void startActivityCardSilde(){
+        HashMap classTowparameters = new HashMap();
+        classTowparameters.put("leixing", "movielist1");
+        Uri classTowUri = NetWorkUtil.createUri(Constant.CLASS_TWO_VIDEO_URL, classTowparameters);
+        Bundle bundle = new Bundle();
+        bundle.putString("uri", classTowUri.toString());
+        bundle.putSerializable("resultList", (Serializable)videoInfoList);
+        startActivity(ActivityCardSilde.class, bundle);
+    }
 }

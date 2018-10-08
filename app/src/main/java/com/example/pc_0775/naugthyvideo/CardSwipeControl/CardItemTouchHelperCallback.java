@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.recyclerViewControl;
+package com.example.pc_0775.naugthyvideo.CardSwipeControl;
 
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
@@ -6,7 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.myLayoutManager.CardLayoutManager;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
+import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.view.ActivityCardSilde;
 
 import java.util.List;
 
@@ -16,12 +20,19 @@ import java.util.List;
 
 public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
 
-    private final RecyclerView.Adapter adapter;
+    private AdapterCardSwipe adapterCardSwipe;
+    private List<GlideDrawable> glideDrawableList;
+
+    private RecyclerView.Adapter adapter;
     private List<T> dataList;
     private OnCardSwipeListener<T> onCardSwipeListener;
 
     public CardItemTouchHelperCallback(@NonNull RecyclerView.Adapter adapter, @NonNull List<T> dataList) {
         this.adapter = adapter;
+        this.dataList = dataList;
+    }
+    public CardItemTouchHelperCallback(@NonNull AdapterCardSwipe adapterCardSwipe, @NonNull List<T> dataList) {
+        this.adapterCardSwipe = adapterCardSwipe;
         this.dataList = dataList;
     }
 
@@ -30,6 +41,7 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         this.dataList = dataList;
         this.onCardSwipeListener = onCardSwipeListener;
     }
+
 
     public void setOnCardSwipeListener(OnCardSwipeListener<T> onCardSwipeListener){
         this.onCardSwipeListener = onCardSwipeListener;
@@ -77,14 +89,15 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         //删除对应的数据
         int layoutPosition = viewHolder.getLayoutPosition();
         T remove = dataList.remove(layoutPosition);
-        adapter.notifyDataSetChanged();
+        adapterCardSwipe.updateGlideDrawableList();
+        adapterCardSwipe.notifyDataSetChanged();
 
         // 卡片滑出后回调 OnSwipeListener 监听器
         if (onCardSwipeListener != null) {
             onCardSwipeListener.onSwiped(viewHolder, remove, direction);
         }
         // 当没有数据时回调 OnSwipeListener 监听器
-        if (0 == adapter.getItemCount()) {
+        if (0 == adapterCardSwipe.getItemCount()) {
             if (onCardSwipeListener != null){
                 onCardSwipeListener.onSwipedClear();
             }
@@ -120,8 +133,10 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
 
         View itemView = viewHolder.itemView;
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            //得到滑动的阈值, dX是什么？？
-            float ratio = dX / getThreshold(recyclerView, viewHolder);
+            //得到滑动的阈值, dX是什么：dX,dY为在X、Y方向上的位移距离
+            float distance = (float)Math.sqrt(dX*dX+dY*dY);
+            float ratio = distance / getThreshold(recyclerView, viewHolder);
+//            float ratio = dX / getThreshold(recyclerView, viewHolder);
             // ratio 最大为 1 或 -1
             if (ratio > 1) {
                 ratio = 1;
@@ -140,12 +155,12 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
                     //在这一段是哪里的动画？？
                     view.setScaleX(1 - index*CardConfig.DEFAULT_SCALE + Math.abs(ratio)*CardConfig.DEFAULT_SCALE);
                     view.setScaleY(1 - index*CardConfig.DEFAULT_SCALE + Math.abs(ratio)*CardConfig.DEFAULT_SCALE);
-                    //这个是什么位移
+                    //将第四个view(在下方，窗口外)往上推
                     view.setTranslationY((index - Math.abs(ratio))*itemView.getMeasuredHeight()/CardConfig.DEFAULT_TRANSLATE_Y);
                 }
             }else {
                 // 当数据源个数小于或等于最大显示数时
-                //小于时动画会有什么不同？？
+                //小于时动画会有什么不同：不需要将视野外的下一个布局往上推了，因为没有了
                 for (int position = 0; position < childCount-1; position++){
                     int index = childCount - position -1;
                     View view = recyclerView.getChildAt(position);
@@ -157,7 +172,7 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
             // 回调监听器
             if (null != onCardSwipeListener) {
                 if (0 != ratio) {
-                    onCardSwipeListener.onSwiping(viewHolder, ratio, ratio<0 ? CardConfig.SWIPING_LEFT:CardConfig.SWIPING_RIGHT);
+                    onCardSwipeListener.onSwiping(viewHolder, ratio, ratio>0 ? CardConfig.SWIPING_RIGHT:CardConfig.SWIPING_LEFT);
                 }else {
                     onCardSwipeListener.onSwiping(viewHolder, ratio, CardConfig.SWIPING_NONE);
                 }
@@ -166,7 +181,7 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         }
     }
 
-    //计算公式为什么是这个？？阈值是什么？？
+    //计算公式为什么是这个？？阈值是什么：阈值即为临界点，用户滑动的距离，当用户滑动距离超过屏幕一半时，滑出去。
     private float getThreshold(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder){
         return recyclerView.getWidth() * getSwipeThreshold(viewHolder);
     }

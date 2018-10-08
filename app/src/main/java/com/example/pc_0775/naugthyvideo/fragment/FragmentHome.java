@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.util.Constant;
+import com.example.pc_0775.naugthyvideo.Constants.Constant;
 
 import java.net.MalformedURLException;
 import java.net.URL;

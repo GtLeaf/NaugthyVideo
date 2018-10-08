@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.recyclerViewControl;
+package com.example.pc_0775.naugthyvideo.CardSwipeControl;
 
 import android.support.v7.widget.RecyclerView;
 

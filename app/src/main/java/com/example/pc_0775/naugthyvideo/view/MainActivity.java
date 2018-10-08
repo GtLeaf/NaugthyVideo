@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +14,6 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.fragment.FragmentFunction;
 import com.example.pc_0775.naugthyvideo.fragment.FragmentHome;
 import com.example.pc_0775.naugthyvideo.fragment.FragmentUser;
-import com.example.pc_0775.naugthyvideo.util.Constant;
 
 import java.net.MalformedURLException;
 import java.net.URL;

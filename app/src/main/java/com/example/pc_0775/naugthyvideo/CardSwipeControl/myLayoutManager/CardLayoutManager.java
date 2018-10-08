@@ -1,14 +1,13 @@
-package com.example.pc_0775.naugthyvideo.recyclerViewControl.myLayoutManager;
+package com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager;
 
 import android.support.annotation.NonNull;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.CardConfig;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 
 /**
  * Created by PC-0775 on 2018/10/6.
@@ -22,6 +21,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager{
         this.recyclerView = recyclerView;
         this.itemTouchHelper = itemTouchHelper;
     }
+
 
     private <T> T checkIsNull(T t){
         if (null == t) {

@@ -18,7 +18,7 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterFunctionVideo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.util.Constant;
+import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import java.io.Serializable;
@@ -160,6 +160,7 @@ public class ActivityFunctionVideo extends BaseActivity {
         //不是很明白，但要加上去，
         // 参考：https://blog.csdn.net/watermusicyes/article/details/44963773
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+
         intent.putExtra("uri", uri.toString());
         intent.putExtra("resultList", (Serializable) resultList);
         context.startActivity(intent);

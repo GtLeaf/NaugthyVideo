@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.view.ActivityFunctionVideo;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.util.Constant;
+import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 

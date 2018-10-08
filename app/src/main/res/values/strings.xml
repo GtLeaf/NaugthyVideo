@@ -13,6 +13,8 @@
     <string name="nav_part_slide">部分滑动</string>
     <string name="nav_card_slide">卡片滑动</string>
     <string name="nav_settings">设置</string>
+    <string name="dl_open">打开</string>
+    <string name="dl_close">关闭</string>
     <string-array name="right_title_name">
         <item>最新价</item>
         <item>涨幅</item>

@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +17,7 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.util.Constant;
+import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,6 +36,9 @@ public class ActivityFunction extends BaseActivity {
     private Button btn_funtcionClassThree;
     private Button btn_functionTest;
     private EditText et_functionUrl;
+
+    //other
+    private String laster_url = "";
 
     //handler
     private MyHandler handler = new MyHandler(this);
@@ -116,6 +121,23 @@ public class ActivityFunction extends BaseActivity {
         btn_funtcionClassTwo.setOnClickListener(this);
         btn_funtcionClassThree.setOnClickListener(this);
         btn_functionTest.setOnClickListener(this);
+
+        et_functionUrl.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                laster_url = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -143,6 +165,9 @@ public class ActivityFunction extends BaseActivity {
                 NetWorkUtil.sendRequestWithOkHttp(classThreeUri.toString(), Constant.CLASS_THREE_REQUEST, handler );
                 break;
             case R.id.btn_function_test:
+                if (!laster_url.equals("")) {
+                    Constant.TEST_VIDEO_URL = laster_url;
+                }
                 ActivityVideoPlay.actionStart(this.getApplicationContext(), Constant.TEST_VIDEO_URL, true);
                 break;
             default:
@@ -170,6 +195,7 @@ public class ActivityFunction extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent){
+        laster_url = messageEvent.getMessage();
         et_functionUrl.setText(messageEvent.getMessage());
     }
 }

@@ -53,6 +53,7 @@ public class NetWorkUtil {
     public static Gson getGson(){
         return gson;
     }
+
     public static void sendRequestWithOkHttp(final String address, final int what, final Handler handler){
         new Thread(new Runnable() {
             @Override
@@ -67,14 +68,19 @@ public class NetWorkUtil {
                     public void onFailure(Call call, IOException e) {
                         e.printStackTrace();
                         message.obj = null;
-                        handler.sendMessage(message);
+                        if (null != handler) {
+                            handler.sendMessage(message);
+                        }
+
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String responseData = response.body().string();
                         message.obj = responseData;
-                        handler.sendMessage(message);
+                        if (null != handler) {
+                            handler.sendMessage(message);
+                        }
                     }
                 });
 
