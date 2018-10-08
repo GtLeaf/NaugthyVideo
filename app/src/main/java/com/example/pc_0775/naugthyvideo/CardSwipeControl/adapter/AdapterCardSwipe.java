@@ -100,6 +100,13 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
                 ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
             }
         });
+        iv_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, videoInfo.getUrl(), Toast.LENGTH_SHORT).show();
+                ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
+            }
+        });
     }
 
     @Override
