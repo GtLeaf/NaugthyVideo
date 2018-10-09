@@ -31,10 +31,7 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
     private List<VideoInfo> videoInfoList;
     private Context mContext;
 
-    //Map中的资源名称
-    private static final String TITLE = "title";
-    private static final String IMG = "img";
-    private static final String URL = "url";
+
 
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -84,7 +81,6 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         holder.ll_videoInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = videoInfo.getUrl();
                 Toast.makeText(mContext, videoInfo.getUrl(), Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new MessageEvent(videoInfo.getUrl()));
                 ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());

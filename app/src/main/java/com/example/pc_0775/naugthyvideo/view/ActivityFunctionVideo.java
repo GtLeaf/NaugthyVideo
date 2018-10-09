@@ -18,7 +18,7 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterFunctionVideo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.Constants.Constant;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import java.io.Serializable;
@@ -36,7 +36,7 @@ public class ActivityFunctionVideo extends BaseActivity {
     //adapter
     private AdapterFunctionVideo adapterFunctionVideo;
 
-    //Constant
+    //Constants
     private static final String INTENT_URI = "uri";
     private static final String INTENT_RESULT_LIST = "resultList";
 
@@ -175,14 +175,6 @@ public class ActivityFunctionVideo extends BaseActivity {
             tv_functionPageNumber.setText("-"+pageNumber+"-");
         }
         Uri videoListUri = uri.buildUpon().appendQueryParameter("yeshu", pageNumber+"").build();
-        NetWorkUtil.sendRequestWithOkHttp(videoListUri.toString(), Constant.CLASS_ONE_REQUEST, handler);
-    }
-
-    /**
-     * 获取到数据时，重新为recycler设置Aadapter
-     */
-    private void resetRecyclerView(){
-        adapterFunctionVideo = new AdapterFunctionVideo(videoInfoList);
-        rv_functionVideoList.setAdapter(adapterFunctionVideo);
+        NetWorkUtil.sendRequestWithOkHttp(videoListUri.toString(), Constants.CLASS_ONE_REQUEST, handler);
     }
 }

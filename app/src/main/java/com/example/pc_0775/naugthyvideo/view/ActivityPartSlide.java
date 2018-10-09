@@ -1,7 +1,6 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,7 +12,7 @@ import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.partSildeAda
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.CoinInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.myRecyclerView.HRecyclerView;
-import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.viewHolder.CommonViewHolder;
 
 import java.util.ArrayList;
@@ -88,11 +87,6 @@ public class ActivityPartSlide extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-    }
-
-    public static void actionStart(Context context){
-        Intent intent = new Intent(context, ActivityFunction.class);
-        context.startActivity(intent);
     }
 
     @Override

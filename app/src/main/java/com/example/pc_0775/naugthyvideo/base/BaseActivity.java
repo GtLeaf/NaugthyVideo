@@ -13,6 +13,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
+
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -57,7 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 //            setStandard();
 //        }
         setContentView(mContextView);
-
+        ViewInjectUtils.inject(this);
 
         if (!isAllowScreenRotate) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

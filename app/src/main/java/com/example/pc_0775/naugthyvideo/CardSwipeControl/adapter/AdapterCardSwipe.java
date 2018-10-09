@@ -15,13 +15,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardInfoBean;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.view.ActivityCardSilde;
-import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +39,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
     /**
      * 通过glide获取，缓存的图片
      */
-    private List<GlideDrawable> mGlideDrawableList = new ArrayList<>();
+    private List<CardInfoBean> mCardInfoBeanList = new ArrayList<>();
     /**
      * 测试数据-纯色
      */
@@ -90,30 +86,38 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final VideoInfo videoInfo = mVideoInfoList.get(position);
+//        final VideoInfo videoInfo = mVideoInfoList.get(position);
         ImageView iv_avatar = holder.iv_avatar;
-        iv_avatar.setImageDrawable(mGlideDrawableList.get(position));
+        iv_avatar.setImageDrawable(mCardInfoBeanList.get(position).getGlideDrawable());
         holder.rl_layoutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, videoInfo.getUrl(), Toast.LENGTH_SHORT).show();
-                ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
+                Toast.makeText(mContext, "rl", Toast.LENGTH_SHORT).show();
+//                ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "onClick-----", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mGlideDrawableList.size();
+        return mCardInfoBeanList.size();
     }
 
     public void updateGlideDrawableList(){
-        for (int i = mGlideDrawableList.size(); i < CardConfig.DEFAULT_SHOW_ITEM+1; i++){
+        for (int i = mCardInfoBeanList.size(); i < CardConfig.DEFAULT_SHOW_ITEM+1; i++){
             if (mVideoInfoList.size() <= 0) {
                 return;
 //                initData();
             }
             VideoInfo videoInfo = mVideoInfoList.remove(0);
+            final CardInfoBean cardInfoBean = new CardInfoBean();
+            cardInfoBean.setVideoInfo(videoInfo);
 //            String url = stringList.remove(0);
             Glide.with(mContext)
                     .load(videoInfo.getImg())
@@ -121,15 +125,16 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
                     .into(new SimpleTarget<GlideDrawable>(336, 326) {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            mGlideDrawableList.add(resource);
+                            cardInfoBean.setGlideDrawable(resource);
+                            mCardInfoBeanList.add(cardInfoBean);
                             AdapterCardSwipe.this.notifyDataSetChanged();
                         }
                     });
         }
     }
 
-    public List<GlideDrawable> getmGlideDrawableList(){
-        return mGlideDrawableList;
+    public List<CardInfoBean> getmCardInfoBeanList(){
+        return mCardInfoBeanList;
     }
 
     public void initData(){
