@@ -29,15 +29,14 @@ public class CardLayoutManager extends RecyclerView.LayoutManager{
         }
         return t;
     }
-
+    //当ViewGroup中所有子View都不捕获Down事件时，将触发ViewGroup自身的onTouch事件
+    //点击---dispatch---Ontouch返回值为ture  不执行---ontouchEvent---onclick
+    //点击---dispatch---Ontouch返回值为false 执行---ontouchEvent---onclick
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             RecyclerView.ViewHolder childViewHolder = recyclerView.getChildViewHolder(v);
 
-            /*if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN){
-                itemTouchHelper.startSwipe(childViewHolder);
-            }*/
             if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
                 itemTouchHelper.startSwipe(childViewHolder);
             }

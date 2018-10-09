@@ -141,7 +141,7 @@ public class ActivityFunction extends BaseActivity {
     }
 
     @Override
-    public void widgetClick(View v) throws Exception {
+    public  void widgetClick(View v) throws Exception {
         switch (v.getId()){
             case R.id.btn_funtcion_class_one:
                 HashMap parameters = new HashMap();
