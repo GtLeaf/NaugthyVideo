@@ -54,8 +54,7 @@ public class GifImageLoader extends AsyncTask<String, Void, GifDrawable> {
                     baos.write(bytes, 0, len);
                 }
                 byte data[] = baos.toByteArray();
-                GifDrawable gifDrawable = new GifDrawable(data);
-                return gifDrawable;
+                return new GifDrawable(data);
             }
         }catch (Exception e){
             e.printStackTrace();

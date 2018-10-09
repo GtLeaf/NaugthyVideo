@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.Constants.Constant;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -70,10 +70,10 @@ public class FragmentHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Uri uri = Uri.parse(Constant.TEST_VIDEO_URL);
+        Uri uri = Uri.parse(Constants.TEST_VIDEO_URL);
         uri.getQueryParameter("yeshu");
         try {
-            URL url = new URL(Constant.TEST_VIDEO_URL);
+            URL url = new URL(Constants.TEST_VIDEO_URL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

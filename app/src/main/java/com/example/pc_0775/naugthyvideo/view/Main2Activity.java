@@ -1,7 +1,6 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -9,7 +8,7 @@ import android.webkit.WebView;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 
 public class Main2Activity extends BaseActivity {
 

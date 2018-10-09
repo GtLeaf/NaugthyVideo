@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
-import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
@@ -27,7 +26,7 @@ import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
-import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -83,7 +82,7 @@ public class ActivityHome extends BaseActivity {
                 return;
             }
             switch (msg.what){
-                case Constant.CLASS_TWO_REQUEST:
+                case Constants.CLASS_TWO_REQUEST:
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
@@ -116,7 +115,6 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        ViewInjectUtils.inject(this);
 
         //设置标题栏
         Toolbar toolbar = $(R.id.home_toolbar);
@@ -232,14 +230,14 @@ public class ActivityHome extends BaseActivity {
         HashMap classTowparameters = new HashMap();
         classTowparameters.put("leixing", "se56");
         classTowparameters.put("yeshu", "1");
-        Uri classTowuri = NetWorkUtil.createUri(Constant.CLASS_TWO_VIDEO_URL, classTowparameters);
-        NetWorkUtil.sendRequestWithOkHttp(classTowuri.toString(), Constant.CLASS_TWO_REQUEST, myHandler );
+        Uri classTowuri = NetWorkUtil.createUri(Constants.CLASS_TWO_VIDEO_URL, classTowparameters);
+        NetWorkUtil.sendRequestWithOkHttp(classTowuri.toString(), Constants.CLASS_TWO_REQUEST, myHandler );
     }
 
     private void startActivityCardSilde(){
         HashMap classTowparameters = new HashMap();
         classTowparameters.put("leixing", "movielist1");
-        Uri classTowUri = NetWorkUtil.createUri(Constant.CLASS_TWO_VIDEO_URL, classTowparameters);
+        Uri classTowUri = NetWorkUtil.createUri(Constants.CLASS_TWO_VIDEO_URL, classTowparameters);
         Bundle bundle = new Bundle();
         bundle.putString("uri", classTowUri.toString());
         bundle.putSerializable("resultList", (Serializable)videoInfoList);

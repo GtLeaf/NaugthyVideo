@@ -76,8 +76,7 @@ public class NetWorkUtil {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String responseData = response.body().string();
-                        message.obj = responseData;
+                        message.obj = response.body().string();
                         if (null != handler) {
                             handler.sendMessage(message);
                         }
@@ -95,8 +94,7 @@ public class NetWorkUtil {
             uriBuilder.appendQueryParameter(entry.getKey(), entry.getValue());
         }
 
-        Uri uri = uriBuilder.build();
-        return uri;
+        return uriBuilder.build();
     }
 
     public static <T> T parseJsonWithGson(String jsonData, Class<?> cls){

@@ -13,11 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pc_0775.naugthyvideo.Anno.OnClick;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.Constants.Constant;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,22 +63,22 @@ public class ActivityFunction extends BaseActivity {
                 return;
             }
             switch (msg.what){
-                case Constant.CLASS_ONE_REQUEST:
+                case Constants.CLASS_ONE_REQUEST:
                     HashMap parameters = new HashMap();
                     parameters.put("leixing", "1");
-                    Uri uri = NetWorkUtil.createUri(Constant.CLASS_ONE_VIDEO_URL, parameters);
+                    Uri uri = NetWorkUtil.createUri(Constants.CLASS_ONE_VIDEO_URL, parameters);
                     ActivityFunctionVideo.actionStart(activity, uri, videoInfoList);
                     break;
-                case Constant.CLASS_TWO_REQUEST:
+                case Constants.CLASS_TWO_REQUEST:
                     HashMap classTowparameters = new HashMap();
                     classTowparameters.put("leixing", "movielist1");
-                    Uri classTowUri = NetWorkUtil.createUri(Constant.CLASS_TWO_VIDEO_URL, classTowparameters);
+                    Uri classTowUri = NetWorkUtil.createUri(Constants.CLASS_TWO_VIDEO_URL, classTowparameters);
                     ActivityFunctionVideo.actionStart(activity, classTowUri, videoInfoList);
                     break;
-                case Constant.CLASS_THREE_REQUEST:
+                case Constants.CLASS_THREE_REQUEST:
                     HashMap classThreeparameters = new HashMap();
                     classThreeparameters.put("leixing", "toupaizipai");
-                    Uri classThreeUri = NetWorkUtil.createUri(Constant.CLASS_THREE_VIDEO_URL, classThreeparameters);
+                    Uri classThreeUri = NetWorkUtil.createUri(Constants.CLASS_THREE_VIDEO_URL, classThreeparameters);
                     ActivityFunctionVideo.actionStart(activity, classThreeUri, videoInfoList);
                     break;
             }
@@ -117,10 +118,10 @@ public class ActivityFunction extends BaseActivity {
 
     @Override
     public void setListener() {
-        btn_funtcionClassOne.setOnClickListener(this);
+        /*btn_funtcionClassOne.setOnClickListener(this);
         btn_funtcionClassTwo.setOnClickListener(this);
         btn_funtcionClassThree.setOnClickListener(this);
-        btn_functionTest.setOnClickListener(this);
+        btn_functionTest.setOnClickListener(this);*/
 
         et_functionUrl.addTextChangedListener(new TextWatcher() {
             @Override
@@ -141,34 +142,35 @@ public class ActivityFunction extends BaseActivity {
     }
 
     @Override
+    @OnClick({R.id.btn_funtcion_class_one, R.id.btn_funtcion_class_two, R.id.btn_funtcion_class_three, R.id.btn_function_test})
     public void widgetClick(View v) throws Exception {
         switch (v.getId()){
             case R.id.btn_funtcion_class_one:
                 HashMap parameters = new HashMap();
                 parameters.put("leixing", "se55");
                 parameters.put("yeshu", "1");
-                Uri uri = NetWorkUtil.createUri(Constant.CLASS_ONE_VIDEO_URL, parameters);
-                NetWorkUtil.sendRequestWithOkHttp(uri.toString(), Constant.CLASS_ONE_REQUEST, handler );
+                Uri uri = NetWorkUtil.createUri(Constants.CLASS_ONE_VIDEO_URL, parameters);
+                NetWorkUtil.sendRequestWithOkHttp(uri.toString(), Constants.CLASS_ONE_REQUEST, handler );
                 break;
             case R.id.btn_funtcion_class_two:
                 HashMap classTowparameters = new HashMap();
                 classTowparameters.put("leixing", "se56");
                 classTowparameters.put("yeshu", "1");
-                Uri classTowuri = NetWorkUtil.createUri(Constant.CLASS_TWO_VIDEO_URL, classTowparameters);
-                NetWorkUtil.sendRequestWithOkHttp(classTowuri.toString(), Constant.CLASS_TWO_REQUEST, handler );
+                Uri classTowuri = NetWorkUtil.createUri(Constants.CLASS_TWO_VIDEO_URL, classTowparameters);
+                NetWorkUtil.sendRequestWithOkHttp(classTowuri.toString(), Constants.CLASS_TWO_REQUEST, handler );
                 break;
             case R.id.btn_funtcion_class_three:
                 HashMap classThreeparameters = new HashMap();
                 classThreeparameters.put("leixing", "se57");
                 classThreeparameters.put("yeshu", "1");
-                Uri classThreeUri = NetWorkUtil.createUri(Constant.CLASS_THREE_VIDEO_URL, classThreeparameters);
-                NetWorkUtil.sendRequestWithOkHttp(classThreeUri.toString(), Constant.CLASS_THREE_REQUEST, handler );
+                Uri classThreeUri = NetWorkUtil.createUri(Constants.CLASS_THREE_VIDEO_URL, classThreeparameters);
+                NetWorkUtil.sendRequestWithOkHttp(classThreeUri.toString(), Constants.CLASS_THREE_REQUEST, handler );
                 break;
             case R.id.btn_function_test:
                 if (!laster_url.equals("")) {
-                    Constant.TEST_VIDEO_URL = laster_url;
+                    Constants.TEST_VIDEO_URL = laster_url;
                 }
-                ActivityVideoPlay.actionStart(this.getApplicationContext(), Constant.TEST_VIDEO_URL, true);
+                ActivityVideoPlay.actionStart(this.getApplicationContext(), Constants.TEST_VIDEO_URL, true);
                 break;
             default:
                 break;

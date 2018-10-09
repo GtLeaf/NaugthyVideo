@@ -13,6 +13,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
+
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -36,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewInjectUtils.inject(this);
         this.savedInstanceState = savedInstanceState;
         Log.d(TAG, "BaseActivity-->onCreate()");
         Bundle bundle = getIntent().getExtras();

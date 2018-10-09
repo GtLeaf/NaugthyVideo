@@ -1,31 +1,22 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardInfoBean;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
-import com.example.pc_0775.naugthyvideo.Constants.Constant;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
@@ -33,13 +24,10 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
-import com.example.pc_0775.naugthyvideo.util.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.pc_0775.naugthyvideo.Constants.Constant.INTENT_URI;
 
 public class ActivityCardSilde extends BaseActivity {
 
@@ -76,8 +64,8 @@ public class ActivityCardSilde extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
         Bundle bundle = getIntent().getExtras();
-        this.uri = Uri.parse(bundle.getString(Constant.INTENT_URI));
-        this.videoInfoList = (List)bundle.getSerializable(Constant.INTENT_RESULT_LIST);
+        this.uri = Uri.parse(bundle.getString(Constants.INTENT_URI));
+        this.videoInfoList = (List)bundle.getSerializable(Constants.INTENT_RESULT_LIST);
     }
 
     @Override
@@ -92,16 +80,17 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Override
     public void initView(final View view) {
-        ViewInjectUtils.inject(this);
+
+
         adapterCardSwipe = new AdapterCardSwipe(ActivityCardSilde.this, videoInfoList);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//??这个是什么方法
         rv_cardSlide.setAdapter(adapterCardSwipe);
-        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe, adapterCardSwipe.getmGlideDrawableList());
+        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe, adapterCardSwipe.getmCardInfoBeanList());
 
         //ItemTouchHelper的用法
         ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
         CardLayoutManager cardLayoutManager = new CardLayoutManager(rv_cardSlide, touchHelper);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_cardSlide.setLayoutManager(cardLayoutManager);
         touchHelper.attachToRecyclerView(rv_cardSlide);
         initDrawer();
@@ -109,7 +98,7 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Override
     public void setListener() {
-        cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<GlideDrawable>() {
+        cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<CardInfoBean>() {
             @Override
             public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
                 AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
@@ -125,22 +114,13 @@ public class ActivityCardSilde extends BaseActivity {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, GlideDrawable glideDrawable, int direction) {
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, CardInfoBean cardInfoBean, int direction) {
                 AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);
                 Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
             }
-
-            /*@Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, VideoInfo videoInfo, int direction) {
-                AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
-                viewHolder.itemView.setAlpha(1f);
-                holder.iv_dislike.setAlpha(0f);
-                holder.iv_like.setAlpha(0f);
-                Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
-            }*/
 
             @Override
             public void onSwipedClear() {
@@ -203,16 +183,5 @@ public class ActivityCardSilde extends BaseActivity {
             }
         };
         dl_cardSlide.setDrawerListener(drawerbar);
-    }
-
-    public static void actionStart(Context context, Uri uri, List resultList){
-        Intent intent = new Intent(context, ActivityCardSilde.class);
-        //不是很明白，但要加上去，
-        // 参考：https://blog.csdn.net/watermusicyes/article/details/44963773
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-
-        intent.putExtra(INTENT_URI, uri.toString());
-        intent.putExtra("resultList", (Serializable) resultList);
-        context.startActivity(intent);
     }
 }
