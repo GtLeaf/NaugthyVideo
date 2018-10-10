@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.base;
+package com.example.pc_0775.naugthyvideo.bean;
 
 import java.io.Serializable;
 import java.util.List;

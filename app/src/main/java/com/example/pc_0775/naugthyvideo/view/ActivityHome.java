@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
@@ -76,7 +77,8 @@ public class ActivityHome extends BaseActivity {
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
             }
-             activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
+//             activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
+             activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
             if(activity.dataList.size() == 0){
                 Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                 return;

@@ -14,18 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardInfoBean;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.base.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
-import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +85,7 @@ public class ActivityCardSilde extends BaseActivity {
         adapterCardSwipe = new AdapterCardSwipe(ActivityCardSilde.this, videoInfoDataList);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//??这个是什么方法
         rv_cardSlide.setAdapter(adapterCardSwipe);
-        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe, adapterCardSwipe.getmCardInfoBeanList());
+        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe, adapterCardSwipe.getmCardShowInfoBeanList());
 
         //ItemTouchHelper的用法
         ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
@@ -100,7 +98,7 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Override
     public void setListener() {
-        cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<CardInfoBean>() {
+        cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<CardShowInfoBean>() {
             @Override
             public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
                 AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
@@ -116,7 +114,7 @@ public class ActivityCardSilde extends BaseActivity {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, CardInfoBean cardInfoBean, int direction) {
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, CardShowInfoBean cardShowInfoBean, int direction) {
                 AdapterCardSwipe.ViewHolder holder = (AdapterCardSwipe.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);

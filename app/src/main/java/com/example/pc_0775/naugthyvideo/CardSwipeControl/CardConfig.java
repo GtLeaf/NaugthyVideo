@@ -10,6 +10,10 @@ public class CardConfig {
      */
     public static final int DEFAULT_SHOW_ITEM = 3;
     /**
+     * 用于缓冲的预加载卡片数量
+     */
+    public static final int DEFAULT_CACHE_ITEM = 2;
+    /**
      * 默认缩放的比例
      */
     public static final float DEFAULT_SCALE = 0.1f;
