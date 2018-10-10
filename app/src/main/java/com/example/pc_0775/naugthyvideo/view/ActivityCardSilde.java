@@ -19,6 +19,7 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwip
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.base.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
@@ -52,6 +53,7 @@ public class ActivityCardSilde extends BaseActivity {
 
     private ActionBarDrawerToggle drawerbar;
 
+    private List videoInfoDataList = new ArrayList();
     private List<Integer> list = new ArrayList<>();
     private List<String> stringList = new ArrayList<>();
 
@@ -65,7 +67,7 @@ public class ActivityCardSilde extends BaseActivity {
     public void initParams(Bundle params) {
         Bundle bundle = getIntent().getExtras();
         this.uri = Uri.parse(bundle.getString(Constants.INTENT_URI));
-        this.videoInfoList = (List)bundle.getSerializable(Constants.INTENT_RESULT_LIST);
+        this.videoInfoDataList = (List)bundle.getSerializable(Constants.INTENT_RESULT_LIST);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class ActivityCardSilde extends BaseActivity {
     public void initView(final View view) {
 
 
-        adapterCardSwipe = new AdapterCardSwipe(ActivityCardSilde.this, videoInfoList);
+        adapterCardSwipe = new AdapterCardSwipe(ActivityCardSilde.this, videoInfoDataList);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//??这个是什么方法
         rv_cardSlide.setAdapter(adapterCardSwipe);
         cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe, adapterCardSwipe.getmCardInfoBeanList());
@@ -119,7 +121,7 @@ public class ActivityCardSilde extends BaseActivity {
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);
-                Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -184,4 +186,5 @@ public class ActivityCardSilde extends BaseActivity {
         };
         dl_cardSlide.setDrawerListener(drawerbar);
     }
+
 }

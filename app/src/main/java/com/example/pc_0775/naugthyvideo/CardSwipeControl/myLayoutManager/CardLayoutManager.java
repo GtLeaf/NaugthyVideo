@@ -37,7 +37,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager{
         public boolean onTouch(View v, MotionEvent event) {
             RecyclerView.ViewHolder childViewHolder = recyclerView.getChildViewHolder(v);
 
-            if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+            if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_MOVE) {
                 itemTouchHelper.startSwipe(childViewHolder);
             }
             return false;

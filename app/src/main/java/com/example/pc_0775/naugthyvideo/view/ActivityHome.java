@@ -26,7 +26,6 @@ import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
-import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -59,10 +58,11 @@ public class ActivityHome extends BaseActivity {
      */
     private List<HomeInfoData> homeInfoDataList = new ArrayList(){};
     private List<VideoInfo> videoInfoList;
+    private List dataList;
 
     //handler
     private ActivityHome.MyHandler handler = new ActivityHome.MyHandler(this);
-    private static class MyHandler extends Handler {
+    private static class MyHandler<T> extends Handler {
         WeakReference<ActivityHome> weakReference;
 
         public MyHandler(ActivityHome activityHome){
@@ -76,13 +76,18 @@ public class ActivityHome extends BaseActivity {
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
             }
-            activity.videoInfoList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-            if(activity.videoInfoList.size() == 0){
+             activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
+            if(activity.dataList.size() == 0){
                 Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                 return;
             }
             switch (msg.what){
                 case Constants.CLASS_TWO_REQUEST:
+                    if (activity.isStartActivityCardSilde){
+                        activity.startActivityCardSilde();
+                    }
+                    break;
+                case Constants.EUROPE_VIDEO_REQUEST:
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
@@ -152,12 +157,12 @@ public class ActivityHome extends BaseActivity {
                         break;
                     case R.id.nav_card_slide:
                         isStartActivityCardSilde = true;
-                        if (null != videoInfoList) {
+                        if (null != videoInfoList && 0 != videoInfoList.size()) {
                             startActivityCardSilde();
                         }else {
                             requestVideoInfoData(handler);
                         }
-
+//                        startActivityCardSilde();
                         break;
                     case R.id.nav_function_5:
                         Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
@@ -228,19 +233,18 @@ public class ActivityHome extends BaseActivity {
 
     private void requestVideoInfoData(Handler myHandler){
         HashMap classTowparameters = new HashMap();
-        classTowparameters.put("leixing", "se56");
         classTowparameters.put("yeshu", "1");
-        Uri classTowuri = NetWorkUtil.createUri(Constants.CLASS_TWO_VIDEO_URL, classTowparameters);
-        NetWorkUtil.sendRequestWithOkHttp(classTowuri.toString(), Constants.CLASS_TWO_REQUEST, myHandler );
+        Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
+        NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.EUROPE_VIDEO_REQUEST, myHandler );
     }
 
     private void startActivityCardSilde(){
         HashMap classTowparameters = new HashMap();
-        classTowparameters.put("leixing", "movielist1");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.CLASS_TWO_VIDEO_URL, classTowparameters);
+        classTowparameters.put("yeshu", "1");
+        Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
         Bundle bundle = new Bundle();
         bundle.putString("uri", classTowUri.toString());
-        bundle.putSerializable("resultList", (Serializable)videoInfoList);
+        bundle.putSerializable("resultList", (Serializable)dataList);
         startActivity(ActivityCardSilde.class, bundle);
     }
 }

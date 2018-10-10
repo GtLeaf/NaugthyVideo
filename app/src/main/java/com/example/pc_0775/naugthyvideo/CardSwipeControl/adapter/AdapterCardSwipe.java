@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardInfoBean;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.base.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
     /**
      * 从网络获取的视频信息
      */
-    private List<VideoInfo> mVideoInfoList;
+    private List mVideoInfoDataList;
     /**
      * 通过glide获取，缓存的图片
      */
@@ -67,9 +68,9 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
         }
     }
 
-    public AdapterCardSwipe(Context context, List<VideoInfo> videoInfoList){
+    public AdapterCardSwipe(Context context, List videoInfoDataList){
         this.mContext = context;
-        this.mVideoInfoList = videoInfoList;
+        this.mVideoInfoDataList = videoInfoDataList;
         initData();
         updateGlideDrawableList();
     }
@@ -86,16 +87,8 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//        final VideoInfo videoInfo = mVideoInfoList.get(position);
         ImageView iv_avatar = holder.iv_avatar;
         iv_avatar.setImageDrawable(mCardInfoBeanList.get(position).getGlideDrawable());
-        holder.rl_layoutCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "rl", Toast.LENGTH_SHORT).show();
-//                ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
-            }
-        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,24 +103,25 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
     }
 
     public void updateGlideDrawableList(){
-        for (int i = mCardInfoBeanList.size(); i < CardConfig.DEFAULT_SHOW_ITEM+1; i++){
-            if (mVideoInfoList.size() <= 0) {
+        for (int i = mCardInfoBeanList.size(); i < CardConfig.DEFAULT_SHOW_ITEM+2; i++){
+            if (mVideoInfoDataList.size() <= 0) {
                 return;
 //                initData();
             }
-            VideoInfo videoInfo = mVideoInfoList.remove(0);
-            final CardInfoBean cardInfoBean = new CardInfoBean();
-            cardInfoBean.setVideoInfo(videoInfo);
-//            String url = stringList.remove(0);
+//            VideoInfo videoInfo = mVideoInfoDataList.remove(0);
+            Object object = mVideoInfoDataList.remove(0);
+            final CardInfoBean cardInfoBean = setCardInfoBean(object);
+//            cardInfoBean.setVideoInfo(videoInfo);
+            String url = stringList.remove(0);
             Glide.with(mContext)
-                    .load(videoInfo.getImg())
+                    .load(cardInfoBean.getVideoInfo().getImg())
 //                    .load(url)
                     .into(new SimpleTarget<GlideDrawable>(336, 326) {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                             cardInfoBean.setGlideDrawable(resource);
                             mCardInfoBeanList.add(cardInfoBean);
-                            AdapterCardSwipe.this.notifyDataSetChanged();
+//                            AdapterCardSwipe.this.notifyDataSetChanged();
                         }
                     });
         }
@@ -154,5 +148,24 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
         stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
         stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
         stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
+    }
+
+    private CardInfoBean setCardInfoBean(Object object){
+        CardInfoBean cardInfoBean = new CardInfoBean();
+        if (object instanceof VideoInfo) {
+             cardInfoBean.setVideoInfo((VideoInfo) object);
+             return cardInfoBean;
+
+        }
+        if (object instanceof EuropeVideoInfo) {
+            VideoInfo videoInfo = new VideoInfo();
+            videoInfo.setImg(((EuropeVideoInfo) object).getImage());
+            videoInfo.setTitle(((EuropeVideoInfo) object).getName());
+            videoInfo.setUrl(((EuropeVideoInfo) object).getUrl());
+
+            cardInfoBean.setVideoInfo(videoInfo);
+            return cardInfoBean;
+        }
+        return cardInfoBean;
     }
 }
