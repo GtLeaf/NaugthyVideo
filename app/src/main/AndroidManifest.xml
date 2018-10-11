@@ -32,6 +32,7 @@
         <activity android:name=".view.ActivityFunction" />
         <activity android:name=".view.ActivityPartSlide" />
         <activity android:name=".view.ActivityCardSilde" />
+        <activity android:name=".view.ActivityCardSildeWithPaging" />
         <activity android:name=".kotlinTest.ActivityFirstKotlinTest" />
     </application>
 

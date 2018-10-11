@@ -104,7 +104,7 @@ public class ViewInjectUtils {
                         //拿到Onclick注解中的value方法
                         Method aMethod = annotationType.getDeclaredMethod("value");
                         //取出所有的viewId
-                        int[] viewIds = (int[]) aMethod.invoke(annotation, null);
+                        int[] viewIds = (int[]) aMethod.invoke(annotation, new Object());
                         //通过InvocationHandler设置代理
                         DynamicHandler handler = new DynamicHandler(activity);
                         handler.addMethod(methodName, method);

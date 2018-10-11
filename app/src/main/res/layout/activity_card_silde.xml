@@ -25,7 +25,8 @@
         android:layout_gravity="start"
         android:background="@color/white"
         android:clickable="true">
-        <TextView
+        <EditText
+            android:id="@+id/et_left_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="这是左边布局"/>

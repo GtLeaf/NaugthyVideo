@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -18,8 +19,11 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
+import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +63,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
         public ImageView iv_avatar;
         public ImageView iv_dislike;
         public ImageView iv_like;
+        public TextView tv_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -66,6 +71,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
             iv_avatar = itemView.findViewById(R.id.iv_avatar);
             iv_dislike = itemView.findViewById(R.id.iv_dislike);
             iv_like = itemView.findViewById(R.id.iv_like);
+            tv_name = itemView.findViewById(R.id.tv_name);
         }
     }
 
@@ -89,11 +95,13 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         ImageView iv_avatar = holder.iv_avatar;
-        iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
+//        iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
+//        holder.tv_name.setText(mCardShowInfoBeanList.get(position).getVideoInfo().getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, mCardShowInfoBeanList.get(position).getVideoInfo().getUrl(), Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new MessageEvent(mCardShowInfoBeanList.get(position).getVideoInfo().getUrl()));
                 ActivityVideoPlay.actionStart(mContext, mCardShowInfoBeanList.get(position).getVideoInfo().getUrl());
             }
         });

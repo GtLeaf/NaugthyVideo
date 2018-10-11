@@ -77,26 +77,44 @@ public class ActivityHome extends BaseActivity {
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
             }
-//             activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-             activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
-            if(activity.dataList.size() == 0){
-                Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-                return;
-            }
             switch (msg.what){
                 case Constants.CLASS_TWO_REQUEST:
+                    activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
+                    if(activity.dataList.size() == 0){
+                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
                     break;
+
                 case Constants.EUROPE_VIDEO_REQUEST:
+                    activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
+                    if(activity.dataList.size() == 0){
+                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (activity.isStartActivityCardSilde){
+                        activity.startActivityCardSildeWithPaging();
+                    }
+                    break;
+
+                case Constants.CARTOON_VIDEO_REQUEST:
+                    activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
+                    if(activity.dataList.size() == 0){
+                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
                     break;
+
                 default:
                     break;
             }
+
         }
     }
 
@@ -167,7 +185,13 @@ public class ActivityHome extends BaseActivity {
 //                        startActivityCardSilde();
                         break;
                     case R.id.nav_function_5:
-                        Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
+                        isStartActivityCardSilde = true;
+                        if (null != videoInfoList && 0 != videoInfoList.size()) {
+                            startActivityCardSildeWithPaging();
+                        }else {
+                            requestEuropeVideoInfoData(handler);
+                        }
                         break;
                     default:
                         break;
@@ -236,6 +260,14 @@ public class ActivityHome extends BaseActivity {
     private void requestVideoInfoData(Handler myHandler){
         HashMap classTowparameters = new HashMap();
         classTowparameters.put("yeshu", "1");
+        classTowparameters.put("type", "18");
+        Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);
+        NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.CARTOON_VIDEO_REQUEST, myHandler );
+    }
+
+    private void requestEuropeVideoInfoData(Handler myHandler){
+        HashMap classTowparameters = new HashMap();
+        classTowparameters.put("yeshu", "1");
         Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
         NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.EUROPE_VIDEO_REQUEST, myHandler );
     }
@@ -243,10 +275,21 @@ public class ActivityHome extends BaseActivity {
     private void startActivityCardSilde(){
         HashMap classTowparameters = new HashMap();
         classTowparameters.put("yeshu", "1");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
+        classTowparameters.put("type", "18");
+        Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);
         Bundle bundle = new Bundle();
         bundle.putString("uri", classTowUri.toString());
         bundle.putSerializable("resultList", (Serializable)dataList);
         startActivity(ActivityCardSilde.class, bundle);
+    }
+
+    private void startActivityCardSildeWithPaging(){
+        HashMap classTowparameters = new HashMap();
+        classTowparameters.put("yeshu", "1");
+        Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
+        Bundle bundle = new Bundle();
+        bundle.putString("uri", classTowUri.toString());
+        bundle.putSerializable("resultList", (Serializable)dataList);
+        startActivity(ActivityCardSildeWithPaging.class, bundle);
     }
 }

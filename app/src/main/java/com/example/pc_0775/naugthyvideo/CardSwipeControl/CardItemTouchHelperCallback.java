@@ -9,8 +9,7 @@ import android.view.View;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
-import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.view.ActivityCardSilde;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterPagingCardSwipe;
 
 import java.util.List;
 
@@ -31,17 +30,9 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         this.adapter = adapter;
         this.dataList = dataList;
     }
-    public CardItemTouchHelperCallback(@NonNull AdapterCardSwipe adapterCardSwipe, @NonNull List<T> dataList) {
+    public CardItemTouchHelperCallback(@NonNull AdapterCardSwipe adapterCardSwipe) {
         this.adapterCardSwipe = adapterCardSwipe;
-        this.dataList = dataList;
     }
-
-    public CardItemTouchHelperCallback(@NonNull RecyclerView.Adapter adapter, @NonNull List<T> dataList, @NonNull OnCardSwipeListener onCardSwipeListener) {
-        this.adapter = adapter;
-        this.dataList = dataList;
-        this.onCardSwipeListener = onCardSwipeListener;
-    }
-
 
     public void setOnCardSwipeListener(OnCardSwipeListener<T> onCardSwipeListener){
         this.onCardSwipeListener = onCardSwipeListener;
@@ -88,9 +79,9 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         viewHolder.itemView.setOnTouchListener(null);
         //删除对应的数据
         int layoutPosition = viewHolder.getLayoutPosition();
-        T remove = dataList.remove(layoutPosition);
+        T remove = ((List<T>)adapterCardSwipe.getmCardShowInfoBeanList()).remove(layoutPosition);
         adapterCardSwipe.updateGlideDrawableList();
-        adapterCardSwipe.notifyDataSetChanged();
+        adapterNotifyDataSetChanged(adapterCardSwipe);
 
         // 卡片滑出后回调 OnSwipeListener 监听器
         if (onCardSwipeListener != null) {
@@ -190,5 +181,14 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         viewHolder.itemView.setRotation(0f);
+    }
+
+    /**
+     * 判空，并对不同类型的adapter都可进行notify
+     */
+    public void adapterNotifyDataSetChanged(RecyclerView.Adapter adapter){
+        if (adapter != null){
+            adapter.notifyDataSetChanged();
+        }
     }
 }

@@ -16,6 +16,11 @@ public class Constants {
     public static final String CLASS_THREE_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
     //http://new.xkapi.xyz/index/g/oumei/?yeshu=1
     public static final String EUROPE_VIDEO_URL = "http://new.xkapi.xyz/index/g/oumei/";
+    //http://new.xkapi.xyz/index/g/av/?yeshu=1&type=23 cartoon
+    //http://new.xkapi.xyz/index/g/av/?yeshu=1&type=21 no
+    //http://new.xkapi.xyz/index/g/av/?yeshu=1&type=22 yes
+    //http://new.xkapi.xyz/index/g/av/?yeshu=1&type=18中文
+    public static final String CARTOON_VIDEO_URL = "http://new.xkapi.xyz/index/g/av/";
     public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
 
     //handler的what常量
@@ -23,6 +28,7 @@ public class Constants {
     public static final int CLASS_TWO_REQUEST = 3102;
     public static final int CLASS_THREE_REQUEST = 3103;
     public static final int EUROPE_VIDEO_REQUEST = 3104;
+    public static final int CARTOON_VIDEO_REQUEST = 3105;
 
     public static final String INTENT_URI = "uri";
     public static final String INTENT_RESULT_LIST = "resultList";
