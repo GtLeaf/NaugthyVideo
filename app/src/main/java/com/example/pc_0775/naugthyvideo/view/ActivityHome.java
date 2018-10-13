@@ -185,13 +185,7 @@ public class ActivityHome extends BaseActivity {
 //                        startActivityCardSilde();
                         break;
                     case R.id.nav_function_5:
-//                        Toast.makeText(ActivityHome.this, "功能5未开放", Toast.LENGTH_SHORT).show();
-                        isStartActivityCardSilde = true;
-                        if (null != videoInfoList && 0 != videoInfoList.size()) {
-                            startActivityCardSildeWithPaging();
-                        }else {
-                            requestEuropeVideoInfoData(handler);
-                        }
+                        startActivity(ActivityLiveBroadcastPlay.class);
                         break;
                     default:
                         break;
