@@ -18,19 +18,18 @@
 
     </RelativeLayout>
     <!--左侧抽屉-->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_left_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_gravity="start"
         android:background="@color/white"
         android:clickable="true">
-        <EditText
-            android:id="@+id/et_left_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="这是左边布局"/>
-    </RelativeLayout>
+
+        <include
+            layout="@layout/card_silde_left_layout"/>
+    </LinearLayout>
     <!--右侧抽屉-->
     <RelativeLayout
         android:id="@+id/rl_right_layout"

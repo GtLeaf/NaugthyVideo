@@ -43,6 +43,8 @@ public class ActivityHome extends BaseActivity {
     private NavigationView nav_headerView;
     @ViewInject(R.id.rv_home_list)
     private RecyclerView rv_homeList;
+    @ViewInject(R.id.panel_home_left_menu)
+    private Panel panel_home_left_menu;
 
     //adapter
     private AdapterHomeInfo adapterHomeInfo;
@@ -119,11 +121,6 @@ public class ActivityHome extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void initParams(Bundle params) {
         initData();
     }
@@ -140,6 +137,8 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public void initView(View view) {
+
+//        panel_home_left_menu.setOpen(true, true);
 
         //设置标题栏
         Toolbar toolbar = $(R.id.home_toolbar);

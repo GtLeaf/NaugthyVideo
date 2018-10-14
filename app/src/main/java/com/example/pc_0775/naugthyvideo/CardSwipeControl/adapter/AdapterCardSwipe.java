@@ -47,10 +47,6 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
      */
     private List<CardShowInfoBean> mCardShowInfoBeanList = new ArrayList<>();
     /**
-     * 测试数据-纯色
-     */
-    private List<Integer> list = new ArrayList<>();
-    /**
      * 测试数据-网络图片
      */
     private List<String> stringList = new ArrayList<>();
@@ -76,9 +72,8 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
     }
 
     public AdapterCardSwipe(Context context, List videoInfoDataList){
-        this.mContext = context;
         this.mCardShowInfoDataList = videoInfoDataList;
-        initData();
+        this.mContext = context;
         updateGlideDrawableList();
     }
 
@@ -88,15 +83,18 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_slide, parent, false);
+        if (null == mContext) {
+            mContext = parent.getContext();
+        }
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_card_slide, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         ImageView iv_avatar = holder.iv_avatar;
-//        iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
-//        holder.tv_name.setText(mCardShowInfoBeanList.get(position).getVideoInfo().getTitle());
+        iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
+        holder.tv_name.setText(mCardShowInfoBeanList.get(position).getVideoInfo().getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +112,9 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
 
     public void updateGlideDrawableList(){
         for (int i = mCardShowInfoBeanList.size(); i < CardConfig.DEFAULT_SHOW_ITEM+CardConfig.DEFAULT_CACHE_ITEM; i++){
+            if (mCardShowInfoDataList.size() <= 3) {
+
+            }
             if (mCardShowInfoDataList.size() <= 0) {
                 return;
 //                initData();
@@ -141,25 +142,6 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
         return mCardShowInfoBeanList;
     }
 
-    public void initData(){
-        list.add(R.drawable.movie1);
-        list.add(R.drawable.movie2);
-        list.add(R.drawable.movie3);
-        list.add(R.drawable.movie4);
-        list.add(R.drawable.movie5);
-        list.add(R.drawable.movie6);
-        list.add(R.drawable.movie7);
-        list.add(R.drawable.nav_icon);
-        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
-        stringList.add("https://i.postimg.cc/59857TX8/image.png");
-        stringList.add("https://i.postimg.cc/8kykSPfG/config.png");
-        stringList.add("https://i.postimg.cc/vZnGfrq8/github.png");
-        stringList.add("https://i.postimg.cc/mrVJHhs2/Blog.png");
-        stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
-        stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
-        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
-    }
-
     /**
      * 根据list中不同的类型，选取内容装入cardShowInfoBean中
      * @param object
@@ -183,4 +165,20 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder>{
         }
         return cardShowInfoBean;
     }
+
+    /**
+     * 测试方法
+     */
+    /*public void initData(){
+        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
+        stringList.add("https://i.postimg.cc/59857TX8/image.png");
+        stringList.add("https://i.postimg.cc/8kykSPfG/config.png");
+        stringList.add("https://i.postimg.cc/vZnGfrq8/github.png");
+        stringList.add("https://i.postimg.cc/mrVJHhs2/Blog.png");
+        stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
+        stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
+        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
+    }*/
+
+    public void netRequrst(){}
 }

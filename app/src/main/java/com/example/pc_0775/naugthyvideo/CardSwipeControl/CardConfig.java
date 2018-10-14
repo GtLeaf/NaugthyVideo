@@ -14,6 +14,11 @@ public class CardConfig {
      */
     public static final int DEFAULT_CACHE_ITEM = 2;
     /**
+     * 最后剩余卡片数量少于这个数，开始网络请求
+     */
+    public static final int PPR_FETCH_DISTABCE = 2;
+
+    /**
      * 默认缩放的比例
      */
     public static final float DEFAULT_SCALE = 0.1f;

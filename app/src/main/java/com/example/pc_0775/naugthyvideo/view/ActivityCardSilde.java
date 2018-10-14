@@ -40,8 +40,6 @@ public class ActivityCardSilde extends BaseActivity {
     private DrawerLayout dl_cardSlide;
     @ViewInject(R.id.rv_card_slide)
     private RecyclerView rv_cardSlide;
-    @ViewInject(R.id.et_left_url)
-    private EditText et_leftUrl;
     @ViewInject(R.id.rl_left_layout)
     private RelativeLayout rl_leftLayout;
     @ViewInject(R.id.rl_right_layout)
@@ -57,7 +55,6 @@ public class ActivityCardSilde extends BaseActivity {
 
     private ActionBarDrawerToggle drawerbar;
 
-    //paging分页控件
 
     //data
     private List videoInfoDataList = new ArrayList();
@@ -89,7 +86,7 @@ public class ActivityCardSilde extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
 
-        adapterCardSwipe = new AdapterCardSwipe(ActivityCardSilde.this, videoInfoDataList);
+        adapterCardSwipe = new AdapterCardSwipe(this, videoInfoDataList);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
         rv_cardSlide.setAdapter(adapterCardSwipe);
         cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe);
@@ -193,12 +190,14 @@ public class ActivityCardSilde extends BaseActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                showToast("抽屉打开");
             }
 
             //菜单关闭
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                showToast("抽屉关闭");
             }
         };
         dl_cardSlide.setDrawerListener(drawerbar);
@@ -206,7 +205,6 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent){
-        et_leftUrl.setText(messageEvent.getMessage());
     }
 
 }
