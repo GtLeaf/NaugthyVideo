@@ -25,7 +25,8 @@
         android:orientation="vertical"
         android:layout_gravity="start"
         android:background="@color/white"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <include
             layout="@layout/card_silde_left_layout"/>
@@ -37,11 +38,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="end"
-        android:background="@color/white"
-        android:clickable="true">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_card_slide_right_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+        android:background="@color/black"
+        android:clickable="true"
+        android:focusable="true">
+            <include layout="@layout/card_slide_right_layout"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

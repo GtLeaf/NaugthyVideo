@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeRight;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
@@ -28,6 +30,7 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCall
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LivePlatform;
+import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +62,7 @@ public class ActivityCardSilde extends BaseActivity {
 
     //adapter
     private AdapterCardSwipe adapterCardSwipe;
+    private AdapterCardSwipeRight adapterCardSwipeRight;
     //other
     /**
      * 滑动ItemTouchHelper的回调函数
@@ -88,7 +92,7 @@ public class ActivityCardSilde extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ActivityCardSilde activity = weakReference.get();
+            final ActivityCardSilde activity = weakReference.get();
             if(null == msg.obj){
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
@@ -97,8 +101,17 @@ public class ActivityCardSilde extends BaseActivity {
                 case Constants.CARTOON_VIDEO_REQUEST:
                     break;
                 case Constants.LIVE_PLATFORM_REQUEST:
-                    activity.livePlatformList = NetWorkUtil.parseJsonArray(msg.obj.toString(), LivePlatform.class);
-
+                    activity.livePlatformList.clear();
+                    activity.livePlatformList.addAll(NetWorkUtil.parseJsonArray(msg.obj.toString(), LivePlatform.class));
+                    activity.adapterCardSwipeRight.notifyDataSetChanged();
+                    break;
+                case Constants.LIVE_ROOM_REQUEST:
+                    activity.videoInfoDataList.clear();
+                    activity.videoInfoDataList.addAll(NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class));
+                    activity.adapterCardSwipe = new AdapterCardSwipe(activity.getApplicationContext(),
+                            activity.videoInfoDataList, null);
+                    activity.rv_cardSlide.setAdapter(activity.adapterCardSwipe);
+//                    activity.cardCallback = new CardItemTouchHelperCallback(activity.adapterCardSwipe);
                     break;
                 default:
                     break;
@@ -142,7 +155,11 @@ public class ActivityCardSilde extends BaseActivity {
         initDrawer();
 
         //右侧抽屉布局
-
+        initData();
+        adapterCardSwipeRight = new AdapterCardSwipeRight(livePlatformList, myHandler);
+        rv_cardSlideRightList.setAdapter(adapterCardSwipeRight);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rv_cardSlideRightList.setLayoutManager(layoutManager);
 
     }
 
@@ -199,7 +216,9 @@ public class ActivityCardSilde extends BaseActivity {
                 showToast("click video");
                 break;
             case R.id.btn_card_swipe_left_live:
+                showToast("click live");
                 NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
+                NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
                 break;
             default:
                 break;
@@ -222,14 +241,6 @@ public class ActivityCardSilde extends BaseActivity {
     }
 
     public void initData(){
-        list.add(R.drawable.movie1);
-        list.add(R.drawable.movie2);
-        list.add(R.drawable.movie3);
-        list.add(R.drawable.movie4);
-        list.add(R.drawable.movie5);
-        list.add(R.drawable.movie6);
-        list.add(R.drawable.movie7);
-        list.add(R.drawable.nav_icon);
         stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
         stringList.add("https://i.postimg.cc/59857TX8/image.png");
         stringList.add("https://i.postimg.cc/8kykSPfG/config.png");
@@ -238,6 +249,12 @@ public class ActivityCardSilde extends BaseActivity {
         stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
         stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
         stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
+
+        for (int i=0; i<10; i++){
+            LivePlatform livePlatform = new LivePlatform();
+            livePlatform.setTitle("live"+i);
+            livePlatformList.add(livePlatform);
+        }
     }
 
     public void initDrawer(){
@@ -262,5 +279,6 @@ public class ActivityCardSilde extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent){
     }
+
 
 }

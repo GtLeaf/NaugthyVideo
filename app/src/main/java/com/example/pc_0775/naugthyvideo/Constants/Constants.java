@@ -58,6 +58,7 @@ public class Constants {
     public static final int EUROPE_VIDEO_REQUEST = 3104;
     public static final int CARTOON_VIDEO_REQUEST = 3105;
     public static final int LIVE_PLATFORM_REQUEST = 3106;
+    public static final int LIVE_ROOM_REQUEST = 3107;
 
     public static final String INTENT_URI = "uri";
     public static final String INTENT_RESULT_LIST = "resultList";

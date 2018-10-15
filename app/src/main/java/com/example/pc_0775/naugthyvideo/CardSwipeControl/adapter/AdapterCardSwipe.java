@@ -142,15 +142,12 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
         return mCardShowInfoBeanList.size();
     }
 
+    //请求缓存List和请求缓存图片都在这，这个类太复杂了，需优化
     public void updateGlideDrawableList(){
         for (int i = mCardShowInfoBeanList.size(); i < CardConfig.DEFAULT_SHOW_ITEM+CardConfig.DEFAULT_CACHE_ITEM; i++){
-            //当没发送网络请求，而且mCardInfoDataList小于预加载临界数时
-            if (!isSendRequest && (mCardInfoDataList.size() <= CardConfig.PER_FETCH_DISTABCE)) {
-                int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
-                String url = NetWorkUtil.replace(uri.toString(),
-                        Constants.PAGE_NUMBER, currentPageNumber+1+"");
-                listObservable.setUrl(url);
-            }
+
+            requestCacheData();
+
             if (mCardInfoDataList.size() <= 0) {
                 if (mCacheList.size() <= 0) {
                     return;
@@ -184,11 +181,13 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
      */
     private CardShowInfoBean setcardShowInfoBean(Object object){
         CardShowInfoBean cardShowInfoBean = new CardShowInfoBean();
+        //VideoInfo
         if (object instanceof VideoInfo) {
              cardShowInfoBean.setVideoInfo((VideoInfo) object);
              return cardShowInfoBean;
 
         }
+        //EuropeVideoInfo
         if (object instanceof EuropeVideoInfo) {
             VideoInfo videoInfo = new VideoInfo();
             videoInfo.setImg(((EuropeVideoInfo) object).getImage_small());
@@ -198,9 +197,36 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
             cardShowInfoBean.setVideoInfo(videoInfo);
             return cardShowInfoBean;
         }
+        //LiveRoomInfo
         if (object instanceof LiveRoomInfo) {
+            VideoInfo videoInfo = new VideoInfo();
+            videoInfo.setImg(((LiveRoomInfo) object).getImg());
+            videoInfo.setUrl((((LiveRoomInfo) object).getAddress()));
+            videoInfo.setTitle(((LiveRoomInfo) object).getTitle());
+
+            cardShowInfoBean.setVideoInfo(videoInfo);
         }
         return cardShowInfoBean;
+    }
+
+    private void requestCacheData(){
+        //当没发送网络请求，而且mCardInfoDataList小于预加载临界数时
+        if (!isSendRequest && (mCardInfoDataList.size() <= CardConfig.PER_FETCH_DISTABCE)) {
+            //uri为空不必下一页
+            if (null == uri) {
+                return;
+            }
+            int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
+            String url = NetWorkUtil.replace(uri.toString(),
+                    Constants.PAGE_NUMBER, currentPageNumber+1+"");
+            listObservable.setUrl(url);
+        }
+    }
+
+    public void listClear(){
+        mCardInfoDataList.clear();
+        mCacheList.clear();
+        mCardShowInfoBeanList.clear();
     }
 
     /**
