@@ -37,6 +37,10 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         this.onCardSwipeListener = onCardSwipeListener;
     }
 
+    public void setAdapterCardSwipe(AdapterCardSwipe adapterCardSwipe) {
+        this.adapterCardSwipe = adapterCardSwipe;
+    }
+
     /**
      * 设置滑动类型标记
      * @param recyclerView

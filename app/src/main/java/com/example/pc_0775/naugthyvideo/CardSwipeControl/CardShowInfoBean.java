@@ -12,6 +12,7 @@ import java.util.List;
 public class CardShowInfoBean {
     private GlideDrawable glideDrawable;
     private List<String> categories;
+    private int type;
     private VideoInfo videoInfo;
 
     public CardShowInfoBean() {
@@ -44,5 +45,13 @@ public class CardShowInfoBean {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

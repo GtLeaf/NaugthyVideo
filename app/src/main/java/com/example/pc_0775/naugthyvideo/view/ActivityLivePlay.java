@@ -1,5 +1,7 @@
 package com.example.pc_0775.naugthyvideo.view;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 
 import io.vov.vitamio.LibsChecker;
@@ -48,8 +51,13 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
         }
         setContentView(R.layout.activity_live_play);
         ViewInjectUtils.inject(this);
+        initParams();
         initView();
         setListener();
+    }
+
+    public void initParams(){
+        path = getIntent().getExtras().getString(Constants.INTENT_VIDEO_URL);
     }
 
     public void initView() {
@@ -131,5 +139,13 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
                 break;
         }
         return true;
+    }
+
+    public static void actionStart(Context context, String viedoUrl){
+        Intent intent = new Intent(context, ActivityLivePlay.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.INTENT_VIDEO_URL, viedoUrl);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 }

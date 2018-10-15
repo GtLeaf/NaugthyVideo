@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdFilterTool;
@@ -38,7 +39,7 @@ public class ActivityVideoPlay extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
         Bundle bundle = getIntent().getExtras();
-        videoUrl = bundle.getString("videoUrl");
+        videoUrl = bundle.getString(Constants.INTENT_VIDEO_URL);
     }
 
     @Override
@@ -94,17 +95,16 @@ public class ActivityVideoPlay extends BaseActivity {
     public static void actionStart(Context context, String viedoUrl){
         Intent intent = new Intent(context, ActivityVideoPlay.class);
         Bundle bundle = new Bundle();
-        bundle.putString("videoUrl", viedoUrl);
+        bundle.putString(Constants.INTENT_VIDEO_URL, viedoUrl);
         intent.putExtras(bundle);
         context.startActivity(intent);
-
     }
 
     //可将String换成URL类型
     public static void actionStart(Context context, String viedoUrl, boolean isFragment){
         Intent intent = new Intent(context, ActivityVideoPlay.class);
         Bundle bundle = new Bundle();
-        bundle.putString("videoUrl", viedoUrl);
+        bundle.putString(Constants.INTENT_VIDEO_URL, viedoUrl);
         intent.putExtras(bundle);
         if(isFragment){
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );

@@ -111,7 +111,7 @@ public class ActivityCardSilde extends BaseActivity {
                     activity.adapterCardSwipe = new AdapterCardSwipe(activity.getApplicationContext(),
                             activity.videoInfoDataList, null);
                     activity.rv_cardSlide.setAdapter(activity.adapterCardSwipe);
-//                    activity.cardCallback = new CardItemTouchHelperCallback(activity.adapterCardSwipe);
+                    activity.cardCallback.setAdapterCardSwipe(activity.adapterCardSwipe);
                     break;
                 default:
                     break;
@@ -155,7 +155,6 @@ public class ActivityCardSilde extends BaseActivity {
         initDrawer();
 
         //右侧抽屉布局
-        initData();
         adapterCardSwipeRight = new AdapterCardSwipeRight(livePlatformList, myHandler);
         rv_cardSlideRightList.setAdapter(adapterCardSwipeRight);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -192,15 +191,15 @@ public class ActivityCardSilde extends BaseActivity {
 
             @Override
             public void onSwipedClear() {
-                Toast.makeText(ActivityCardSilde.this, "data clear", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityCardSilde.this, "已经没有了，去看看其他频道吧", Toast.LENGTH_SHORT).show();
                 //这是什么函数：延迟3秒执行线程
-                rv_cardSlide.postDelayed(new Runnable() {
+                /*rv_cardSlide.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         initData();
                         rv_cardSlide.getAdapter().notifyDataSetChanged();
                     }
-                }, 3000L);
+                }, 3000L);*/
             }
         });
         btn_cardSwipeLeftLive.setOnClickListener(this);
@@ -213,10 +212,9 @@ public class ActivityCardSilde extends BaseActivity {
     public void widgetClick(View v) throws Exception {
         switch (v.getId()){
             case R.id.btn_card_swipe_left_video:
-                showToast("click video");
+//                showToast("click video");
                 break;
             case R.id.btn_card_swipe_left_live:
-                showToast("click live");
                 NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
                 NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
                 break;
@@ -249,12 +247,6 @@ public class ActivityCardSilde extends BaseActivity {
         stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
         stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
         stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
-
-        for (int i=0; i<10; i++){
-            LivePlatform livePlatform = new LivePlatform();
-            livePlatform.setTitle("live"+i);
-            livePlatformList.add(livePlatform);
-        }
     }
 
     public void initDrawer(){
@@ -263,14 +255,14 @@ public class ActivityCardSilde extends BaseActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                showToast("抽屉打开");
+//                showToast("抽屉打开");
             }
 
             //菜单关闭
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                showToast("抽屉关闭");
+//                showToast("抽屉关闭");
             }
         };
         dl_cardSlide.setDrawerListener(drawerbar);

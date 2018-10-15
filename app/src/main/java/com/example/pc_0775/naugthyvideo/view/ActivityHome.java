@@ -182,7 +182,8 @@ public class ActivityHome extends BaseActivity {
 //                        startActivityCardSilde();
                         break;
                     case R.id.nav_function_5:
-                        startActivity(ActivityLivePlay.class);
+                        showToast("功能尚未开放");
+//                        startActivity(ActivityLivePlay.class);
                         break;
                     default:
                         break;

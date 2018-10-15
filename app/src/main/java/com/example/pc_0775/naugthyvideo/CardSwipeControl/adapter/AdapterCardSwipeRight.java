@@ -67,7 +67,7 @@ public class AdapterCardSwipeRight extends RecyclerView.Adapter<AdapterCardSwipe
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.tv_card_swipe_right_title:
-                        Toast.makeText(context, "click TextView", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "请稍等...", Toast.LENGTH_SHORT).show();
                         NetWorkUtil.sendRequestWithOkHttp(url, Constants.LIVE_ROOM_REQUEST, handler);
                         break;
                     default:

@@ -51,6 +51,9 @@ public class Constants {
     //paramter
     public static final String PAGE_NUMBER = "yeshu";
 
+    //videoType
+    public static final int VIDEO_TYPE = 1;
+    public static final int LIVE_TYPE = 2;
     //handler的what常量
     public static final int CLASS_ONE_REQUEST = 3101;
     public static final int CLASS_TWO_REQUEST = 3102;
@@ -61,6 +64,7 @@ public class Constants {
     public static final int LIVE_ROOM_REQUEST = 3107;
 
     public static final String INTENT_URI = "uri";
+    public static final String INTENT_VIDEO_URL = "videoUrl";
     public static final String INTENT_RESULT_LIST = "resultList";
 
     //intent传输VideoInfo用的标识

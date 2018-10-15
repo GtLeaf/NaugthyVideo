@@ -27,6 +27,7 @@ import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
+import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 
 import org.greenrobot.eventbus.EventBus;
@@ -124,15 +125,20 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        ImageView iv_avatar = holder.iv_avatar;
-        iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
+        final CardShowInfoBean cardShowInfo = mCardShowInfoBeanList.get(position);
+        holder.iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
         holder.tv_name.setText(mCardShowInfoBeanList.get(position).getVideoInfo().getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, mCardShowInfoBeanList.get(position).getVideoInfo().getUrl(), Toast.LENGTH_SHORT).show();
-                EventBus.getDefault().post(new MessageEvent(mCardShowInfoBeanList.get(position).getVideoInfo().getUrl()));
-                ActivityVideoPlay.actionStart(mContext, mCardShowInfoBeanList.get(position).getVideoInfo().getUrl());
+                Toast.makeText(mContext, cardShowInfo.getVideoInfo().getUrl(), Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new MessageEvent(cardShowInfo.getVideoInfo().getUrl()));
+                if (Constants.LIVE_TYPE == cardShowInfo.getType()) {
+                    ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                }
+                if (Constants.VIDEO_TYPE == cardShowInfo.getType()) {
+                    ActivityVideoPlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                }
             }
         });
     }
@@ -183,8 +189,9 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
         CardShowInfoBean cardShowInfoBean = new CardShowInfoBean();
         //VideoInfo
         if (object instanceof VideoInfo) {
-             cardShowInfoBean.setVideoInfo((VideoInfo) object);
-             return cardShowInfoBean;
+            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
+            cardShowInfoBean.setVideoInfo((VideoInfo) object);
+            return cardShowInfoBean;
 
         }
         //EuropeVideoInfo
@@ -194,6 +201,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
             videoInfo.setTitle(((EuropeVideoInfo) object).getName());
             videoInfo.setUrl(((EuropeVideoInfo) object).getUrl());
 
+            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
             cardShowInfoBean.setVideoInfo(videoInfo);
             return cardShowInfoBean;
         }
@@ -204,6 +212,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
             videoInfo.setUrl((((LiveRoomInfo) object).getAddress()));
             videoInfo.setTitle(((LiveRoomInfo) object).getTitle());
 
+            cardShowInfoBean.setType(Constants.LIVE_TYPE);
             cardShowInfoBean.setVideoInfo(videoInfo);
         }
         return cardShowInfoBean;
