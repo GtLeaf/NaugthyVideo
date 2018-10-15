@@ -43,8 +43,6 @@ public class ActivityHome extends BaseActivity {
     private NavigationView nav_headerView;
     @ViewInject(R.id.rv_home_list)
     private RecyclerView rv_homeList;
-    @ViewInject(R.id.panel_home_left_menu)
-    private Panel panel_home_left_menu;
 
     //adapter
     private AdapterHomeInfo adapterHomeInfo;
@@ -184,7 +182,7 @@ public class ActivityHome extends BaseActivity {
 //                        startActivityCardSilde();
                         break;
                     case R.id.nav_function_5:
-                        startActivity(ActivityLiveBroadcastPlay.class);
+                        startActivity(ActivityLivePlay.class);
                         break;
                     default:
                         break;

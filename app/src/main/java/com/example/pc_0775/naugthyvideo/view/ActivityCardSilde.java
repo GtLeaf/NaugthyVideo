@@ -3,6 +3,8 @@ package com.example.pc_0775.naugthyvideo.view;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,7 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -25,11 +27,14 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
+import com.example.pc_0775.naugthyvideo.bean.liveBean.LivePlatform;
+import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +49,13 @@ public class ActivityCardSilde extends BaseActivity {
     private RelativeLayout rl_leftLayout;
     @ViewInject(R.id.rl_right_layout)
     private RelativeLayout rl_rightLayout;
+    @ViewInject(R.id.btn_card_swipe_left_video)
+    private Button btn_cardSwipeLeftVideo;
+    @ViewInject(R.id.btn_card_swipe_left_live)
+    private Button btn_cardSwipeLeftLive;
+    @ViewInject(R.id.rv_card_slide_right_list)
+    private RecyclerView rv_cardSlideRightList;
+
 
     //adapter
     private AdapterCardSwipe adapterCardSwipe;
@@ -58,10 +70,41 @@ public class ActivityCardSilde extends BaseActivity {
 
     //data
     private List videoInfoDataList = new ArrayList();
+    private List livePlatformList = new ArrayList();
     private List<Integer> list = new ArrayList<>();
     private List<String> stringList = new ArrayList<>();
 
     private Uri uri;
+
+    //handler
+    private MyHandler myHandler = new MyHandler(this);
+    private static class MyHandler extends Handler{
+        WeakReference<ActivityCardSilde> weakReference;
+
+        public MyHandler(ActivityCardSilde activityCardSilde){
+            weakReference = new WeakReference<ActivityCardSilde>(activityCardSilde);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ActivityCardSilde activity = weakReference.get();
+            if(null == msg.obj){
+                Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            switch (msg.what){
+                case Constants.CARTOON_VIDEO_REQUEST:
+                    break;
+                case Constants.LIVE_PLATFORM_REQUEST:
+                    activity.livePlatformList = NetWorkUtil.parseJsonArray(msg.obj.toString(), LivePlatform.class);
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     @Override
     public void initParams(Bundle params) {
@@ -86,7 +129,7 @@ public class ActivityCardSilde extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
 
-        adapterCardSwipe = new AdapterCardSwipe(this, videoInfoDataList);
+        adapterCardSwipe = new AdapterCardSwipe(this, videoInfoDataList, uri);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
         rv_cardSlide.setAdapter(adapterCardSwipe);
         cardCallback = new CardItemTouchHelperCallback(adapterCardSwipe);
@@ -97,6 +140,8 @@ public class ActivityCardSilde extends BaseActivity {
         rv_cardSlide.setLayoutManager(cardLayoutManager);
         touchHelper.attachToRecyclerView(rv_cardSlide);
         initDrawer();
+
+        //右侧抽屉布局
 
 
     }
@@ -141,13 +186,24 @@ public class ActivityCardSilde extends BaseActivity {
                 }, 3000L);
             }
         });
+        btn_cardSwipeLeftLive.setOnClickListener(this);
+        btn_cardSwipeLeftVideo.setOnClickListener(this);
 
-        //paging分页回调函数
     }
 
     @Override
+//    @OnClick({R.id.btn_card_swipe_left_video, R.id.btn_card_swipe_left_live})//暂时没用
     public void widgetClick(View v) throws Exception {
-
+        switch (v.getId()){
+            case R.id.btn_card_swipe_left_video:
+                showToast("click video");
+                break;
+            case R.id.btn_card_swipe_left_live:
+                NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

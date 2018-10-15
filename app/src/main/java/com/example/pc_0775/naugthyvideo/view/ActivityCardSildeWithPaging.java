@@ -87,7 +87,7 @@ public class ActivityCardSildeWithPaging extends BaseActivity {
     @Override
     public void initView(final View view) {
 
-        adapterCardSwipe = new AdapterCardSwipe(this, videoInfoDataList);
+        adapterCardSwipe = new AdapterCardSwipe(this, videoInfoDataList, uri);
         initPaging();
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
         rv_cardSlide.setAdapter(adapterCardSwipe);

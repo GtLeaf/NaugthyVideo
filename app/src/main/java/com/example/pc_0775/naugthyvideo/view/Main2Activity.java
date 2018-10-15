@@ -13,8 +13,7 @@ import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 public class Main2Activity extends BaseActivity {
 
     //view
-    @ViewInject(R.id.wv_main2_video_play)
-    private WebView wv_main2VideoPlay;
+
 
     @Override
     public void initParams(Bundle params) {

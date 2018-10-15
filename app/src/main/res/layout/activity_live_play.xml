@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityLiveBroadcastPlay">
+    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityLivePlay">
 
     <io.vov.vitamio.widget.CenterLayout
-        android:id="@+id/cl_live_broadcast_dd"
+        android:id="@+id/cl_live_dd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <io.vov.vitamio.widget.VideoView
-            android:id="@+id/vv_live_broadcast_vitamio"
+            android:id="@+id/vv_live_vitamio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
@@ -28,7 +28,7 @@
         android:orientation="horizontal">
 
         <ProgressBar
-            android:id="@+id/pb_live_broadcast"
+            android:id="@+id/pb_live"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

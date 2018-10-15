@@ -3,6 +3,7 @@ package com.example.pc_0775.naugthyvideo.util;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -33,7 +34,6 @@ public class NetWorkUtil {
     private static NetWorkUtil netWorkUtil;
     private static final Gson gson = new Gson();
     private static final OkHttpClient client = new OkHttpClient();
-    private static Uri uri;
 
     private NetWorkUtil(){
 
@@ -119,12 +119,11 @@ public class NetWorkUtil {
         return tList;
     }
 
-    public static Uri getUri() {
-        return uri;
-    }
-
-    public static void setUri(Uri uri) {
-        NetWorkUtil.uri = uri;
+    public static String replace(String url, String key, String value) {
+        if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(key)) {
+            url = url.replaceAll("(" + key + "=[^&]*)", key + "=" + value);
+        }
+        return url;
     }
 
 }

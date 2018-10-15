@@ -31,16 +31,17 @@
             layout="@layout/card_silde_left_layout"/>
     </LinearLayout>
     <!--右侧抽屉-->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_right_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_gravity="end"
         android:background="@color/white"
         android:clickable="true">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="这是右边布局"/>
-    </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_card_slide_right_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

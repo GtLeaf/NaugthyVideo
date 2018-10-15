@@ -9,7 +9,6 @@ import android.view.View;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterPagingCardSwipe;
 
 import java.util.List;
 

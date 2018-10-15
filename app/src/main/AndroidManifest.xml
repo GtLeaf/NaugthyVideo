@@ -38,7 +38,7 @@
         <activity android:name=".view.ActivityCardSilde" />
         <activity android:name=".view.ActivityCardSildeWithPaging" />
         <activity android:name=".kotlinTest.ActivityFirstKotlinTest" />
-        <activity android:name=".view.ActivityLiveBroadcastPlay"/>
+        <activity android:name=".view.ActivityLivePlay"/>
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"

@@ -118,10 +118,10 @@ public class ActivityFunction extends BaseActivity {
 
     @Override
     public void setListener() {
-        /*btn_funtcionClassOne.setOnClickListener(this);
+        btn_funtcionClassOne.setOnClickListener(this);
         btn_funtcionClassTwo.setOnClickListener(this);
         btn_funtcionClassThree.setOnClickListener(this);
-        btn_functionTest.setOnClickListener(this);*/
+        btn_functionTest.setOnClickListener(this);
 
         et_functionUrl.addTextChangedListener(new TextWatcher() {
             @Override
@@ -142,7 +142,7 @@ public class ActivityFunction extends BaseActivity {
     }
 
     @Override
-    @OnClick({R.id.btn_funtcion_class_one, R.id.btn_funtcion_class_two, R.id.btn_funtcion_class_three, R.id.btn_function_test})
+//    @OnClick({R.id.btn_funtcion_class_one, R.id.btn_funtcion_class_two, R.id.btn_funtcion_class_three, R.id.btn_function_test})
     public void widgetClick(View v) throws Exception {
         switch (v.getId()){
             case R.id.btn_funtcion_class_one:

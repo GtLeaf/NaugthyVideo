@@ -1,11 +1,9 @@
 package com.example.pc_0775.naugthyvideo.view;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,28 +12,27 @@ import android.widget.Toast;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.Vitamio;
-import io.vov.vitamio.provider.MediaStore;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 
-public class ActivityLiveBroadcastPlay extends AppCompatActivity implements MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener {
+public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener {
 
-    @ViewInject(R.id.vv_live_broadcast_vitamio)
-    private VideoView vv_liveBroadcastVitamio;
+    @ViewInject(R.id.vv_live_vitamio)
+    private VideoView vv_liveVitamio;
     @ViewInject(R.id.tv_buffer_percent)
     private TextView tv_bufferPercent;
     @ViewInject(R.id.tv_net_speed)
     private TextView tv_netSpeed;
-    @ViewInject(R.id.pb_live_broadcast)
-    private ProgressBar pb_liveBroadcast;
+    @ViewInject(R.id.pb_live)
+    private ProgressBar pb_live;
     private int mVideoLayout = 0;
 
     //data
+
+
 
     /**
      * 视频播放地址
@@ -49,7 +46,7 @@ public class ActivityLiveBroadcastPlay extends AppCompatActivity implements Medi
         if (!LibsChecker.checkVitamioLibs(this)) {
             return;
         }
-        setContentView(R.layout.activity_live_broadcast_play);
+        setContentView(R.layout.activity_live_play);
         ViewInjectUtils.inject(this);
         initView();
         setListener();
@@ -60,20 +57,20 @@ public class ActivityLiveBroadcastPlay extends AppCompatActivity implements Medi
         if ("" == path) {
             // Tell the user to provide a media file URL/path.
             Toast.makeText(
-                    ActivityLiveBroadcastPlay.this,
+                    ActivityLivePlay.this,
                     "Please edit VideoBuffer Activity, and set path"
                             + " variable to your media file URL/path", Toast.LENGTH_LONG).show();
             return;
         }else {
             Uri uri = Uri.parse(path);
-            vv_liveBroadcastVitamio.setVideoURI(uri);
-            vv_liveBroadcastVitamio.setMediaController(new MediaController(this));
-            vv_liveBroadcastVitamio.requestFocus();
-            vv_liveBroadcastVitamio.setBufferSize(10240);//设置视频缓冲大小。默认1024KB，单位byte
-            vv_liveBroadcastVitamio.setOnInfoListener(this);
-            vv_liveBroadcastVitamio.setOnBufferingUpdateListener(this);
-            vv_liveBroadcastVitamio.setVideoQuality(MediaPlayer.VIDEOQUALITY_HIGH);//好像没啥用
-            vv_liveBroadcastVitamio.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            vv_liveVitamio.setVideoURI(uri);
+            vv_liveVitamio.setMediaController(new MediaController(this));
+            vv_liveVitamio.requestFocus();
+            vv_liveVitamio.setBufferSize(10240);//设置视频缓冲大小。默认1024KB，单位byte
+            vv_liveVitamio.setOnInfoListener(this);
+            vv_liveVitamio.setOnBufferingUpdateListener(this);
+            vv_liveVitamio.setVideoQuality(MediaPlayer.VIDEOQUALITY_HIGH);//好像没啥用
+            vv_liveVitamio.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     // optional need Vitamio 4.0
@@ -98,7 +95,7 @@ public class ActivityLiveBroadcastPlay extends AppCompatActivity implements Medi
                 mVideoLayout = VideoView.VIDEO_LAYOUT_ORIGIN;
                 break;
         }
-        vv_liveBroadcastVitamio.setVideoLayout(mVideoLayout, 0);
+        vv_liveVitamio.setVideoLayout(mVideoLayout, 0);
     }
 
 
@@ -112,9 +109,9 @@ public class ActivityLiveBroadcastPlay extends AppCompatActivity implements Medi
         switch (what){
             //开始缓冲
             case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                if (vv_liveBroadcastVitamio.isPlaying()) {
-                    vv_liveBroadcastVitamio.pause();
-                    pb_liveBroadcast.setVisibility(View.VISIBLE);
+                if (vv_liveVitamio.isPlaying()) {
+                    vv_liveVitamio.pause();
+                    pb_live.setVisibility(View.VISIBLE);
                     tv_bufferPercent.setText("");
                     tv_netSpeed.setText("");
                     tv_bufferPercent.setVisibility(View.VISIBLE);
@@ -123,8 +120,8 @@ public class ActivityLiveBroadcastPlay extends AppCompatActivity implements Medi
                 break;
             //正在缓冲结束
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                vv_liveBroadcastVitamio.start();
-                pb_liveBroadcast.setVisibility(View.GONE);
+                vv_liveVitamio.start();
+                pb_live.setVisibility(View.GONE);
                 tv_bufferPercent.setVisibility(View.GONE);
                 tv_netSpeed.setVisibility(View.GONE);
                 break;
