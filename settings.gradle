@@ -1,2 +1,1 @@
-include ':app', ':vitamio', ':vitamio-sample'
-include ':panpleTest'
+include ':app', ':vitamio'

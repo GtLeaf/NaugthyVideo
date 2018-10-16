@@ -146,6 +146,7 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
         Bundle bundle = new Bundle();
         bundle.putString(Constants.INTENT_VIDEO_URL, viedoUrl);
         intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intent);
     }
 }

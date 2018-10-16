@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    signingConfigs {
+        GtLeaf {
+            keyAlias 'GtLeaf'
+            keyPassword '3799@Qq.gooGle$C'
+            storeFile file('D:/Android/KeyStore/GtLeaf.jks')
+            storePassword 'cen@google.com$3799'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.pc_0775.naugthyvideo"
@@ -18,6 +26,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.GtLeaf
+        }
+        debug {
+            signingConfig signingConfigs.GtLeaf
         }
     }
     sourceSets {
