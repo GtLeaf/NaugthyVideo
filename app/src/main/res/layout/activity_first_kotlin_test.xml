@@ -6,4 +6,9 @@
     android:orientation="vertical"
     tools:context="com.example.pc_0775.naugthyvideo.kotlinTest.ActivityFirstKotlinTest">
 
+    <TextView
+        android:id="@+id/tv_kotlin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
