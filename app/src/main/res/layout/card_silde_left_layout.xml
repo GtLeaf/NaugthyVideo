@@ -17,28 +17,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分类"
+            android:text="收藏"
             android:textSize="30sp"
             android:textColor="@color/white"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_card_swipe_left_video"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_live_collection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="#000000"
-        android:text="视频"
-        android:textColor="@color/white"
-        android:textSize="22sp"/>
-    <Button
-        android:id="@+id/btn_card_swipe_left_live"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#000000"
-        android:gravity="center"
-        android:text="直播"
-        android:textColor="@color/white"
-        android:textSize="22sp"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -11,7 +11,7 @@
     <string name="nav_home">首页</string>
     <string name="nav_part_slide">部分滑动</string>
     <string name="nav_card_slide">卡片滑动</string>
-    <string name="nav_live_broadcast_play">功能5</string>
+    <string name="nav_live_broadcast_play">直播</string>
     <string name="nav_settings">设置</string>
     <string name="dl_open">打开</string>
     <string name="dl_close">关闭</string>

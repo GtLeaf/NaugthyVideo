@@ -23,6 +23,7 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
@@ -73,17 +74,24 @@ public class ActivityHome extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             ActivityHome activity = weakReference.get();
+            //网络状况不好时，返回obj为null
             if(null == msg.obj){
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //服务器返回数据null时
+            List list = NetWorkUtil.parseJsonArray(msg.obj.toString(), Object.class);
+            if(list.size() == 0){
+                Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                 return;
             }
             switch (msg.what){
                 case Constants.CLASS_TWO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-                    if(activity.dataList.size() == 0){
+                    /*if(activity.dataList.size() == 0){
                         Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                         return;
-                    }
+                    }*/
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
@@ -91,10 +99,10 @@ public class ActivityHome extends BaseActivity {
 
                 case Constants.EUROPE_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
-                    if(activity.dataList.size() == 0){
+                    /*if(activity.dataList.size() == 0){
                         Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                         return;
-                    }
+                    }*/
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSildeWithPaging();
                     }
@@ -102,13 +110,22 @@ public class ActivityHome extends BaseActivity {
 
                 case Constants.CARTOON_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-                    if(activity.dataList.size() == 0){
+                    /*if(activity.dataList.size() == 0){
                         Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                         return;
-                    }
+                    }*/
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
+                    break;
+
+                case Constants.LIVE_ROOM_REQUEST:
+                    List<LiveRoomInfo> liveRoomInfos = NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class);
+                    /*if (liveRoomInfos.size() == 0) {
+                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }*/
+
                     break;
 
                 default:
@@ -179,11 +196,9 @@ public class ActivityHome extends BaseActivity {
                         }else {
                             requestVideoInfoData(handler);
                         }
-//                        startActivityCardSilde();
                         break;
-                    case R.id.nav_function_5:
-                        showToast("功能尚未开放");
-//                        startActivity(ActivityLivePlay.class);
+                    case R.id.nav_live_card_slide:
+                        startActivity(ActivityLiveCardSilde.class);
                         break;
                     default:
                         break;
@@ -257,14 +272,22 @@ public class ActivityHome extends BaseActivity {
         NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.CARTOON_VIDEO_REQUEST, myHandler );
     }
 
-    private void requestEuropeVideoInfoData(Handler myHandler){
-        HashMap classTowparameters = new HashMap();
-        classTowparameters.put("yeshu", "1");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
-        NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.EUROPE_VIDEO_REQUEST, myHandler );
+    private void requestLiveRoomInfoData(Handler myHandler){
+        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
     }
 
     private void startActivityCardSilde(){
+        HashMap classTowparameters = new HashMap();
+        classTowparameters.put("yeshu", "1");
+        classTowparameters.put("type", "18");
+        Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);
+        Bundle bundle = new Bundle();
+        bundle.putString("uri", classTowUri.toString());
+        bundle.putSerializable("resultList", (Serializable)dataList);
+        startActivity(ActivityCardSilde.class, bundle);
+    }
+
+    private void startActivityLiveCardSilde(){
         HashMap classTowparameters = new HashMap();
         classTowparameters.put("yeshu", "1");
         classTowparameters.put("type", "18");

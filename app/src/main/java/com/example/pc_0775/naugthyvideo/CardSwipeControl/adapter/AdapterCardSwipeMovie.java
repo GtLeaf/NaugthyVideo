@@ -39,7 +39,7 @@ import java.util.List;
  * Created by PC-0775 on 2018/10/8.
  */
 
-public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> implements ListObserver {
+public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHolder> implements ListObserver {
 
     /**
      * 外部传入的图片地址
@@ -101,7 +101,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
         }
     }
 
-    public AdapterCardSwipe(Context context, List videoInfoDataList, Uri uri){
+    public AdapterCardSwipeMovie(Context context, List videoInfoDataList, Uri uri){
         this.mCardInfoDataList = videoInfoDataList;
         this.mContext = context;
         this.uri = uri;
@@ -170,7 +170,7 @@ public class AdapterCardSwipe extends Adapter<AdapterCardSwipe.ViewHolder> imple
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                             cardShowInfoBean.setGlideDrawable(resource);
                             mCardShowInfoBeanList.add(cardShowInfoBean);
-                            AdapterCardSwipe.this.notifyDataSetChanged();
+                            AdapterCardSwipeMovie.this.notifyDataSetChanged();
                         }
                     });
         }

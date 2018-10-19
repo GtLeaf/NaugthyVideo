@@ -7,7 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipe;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeMovie;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
 
-    private AdapterCardSwipe adapterCardSwipe;
+    private AdapterCardSwipeMovie adapterCardSwipeMovie;
     private List<GlideDrawable> glideDrawableList;
 
     private RecyclerView.Adapter adapter;
@@ -29,16 +29,16 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         this.adapter = adapter;
         this.dataList = dataList;
     }
-    public CardItemTouchHelperCallback(@NonNull AdapterCardSwipe adapterCardSwipe) {
-        this.adapterCardSwipe = adapterCardSwipe;
+    public CardItemTouchHelperCallback(@NonNull AdapterCardSwipeMovie adapterCardSwipeMovie) {
+        this.adapterCardSwipeMovie = adapterCardSwipeMovie;
     }
 
     public void setOnCardSwipeListener(OnCardSwipeListener<T> onCardSwipeListener){
         this.onCardSwipeListener = onCardSwipeListener;
     }
 
-    public void setAdapterCardSwipe(AdapterCardSwipe adapterCardSwipe) {
-        this.adapterCardSwipe = adapterCardSwipe;
+    public void setAdapterCardSwipeMovie(AdapterCardSwipeMovie adapterCardSwipeMovie) {
+        this.adapterCardSwipeMovie = adapterCardSwipeMovie;
     }
 
     /**
@@ -82,16 +82,16 @@ public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
         viewHolder.itemView.setOnTouchListener(null);
         //删除对应的数据
         int layoutPosition = viewHolder.getLayoutPosition();
-        T remove = ((List<T>)adapterCardSwipe.getmCardShowInfoBeanList()).remove(layoutPosition);
-        adapterCardSwipe.updateGlideDrawableList();
-        adapterNotifyDataSetChanged(adapterCardSwipe);
+        T remove = ((List<T>) adapterCardSwipeMovie.getmCardShowInfoBeanList()).remove(layoutPosition);
+        adapterCardSwipeMovie.updateGlideDrawableList();
+        adapterNotifyDataSetChanged(adapterCardSwipeMovie);
 
         // 卡片滑出后回调 OnSwipeListener 监听器
         if (onCardSwipeListener != null) {
             onCardSwipeListener.onSwiped(viewHolder, remove, direction);
         }
         // 当没有数据时回调 OnSwipeListener 监听器
-        if (0 == adapterCardSwipe.getItemCount()) {
+        if (0 == adapterCardSwipeMovie.getItemCount()) {
             if (onCardSwipeListener != null){
                 onCardSwipeListener.onSwipedClear();
             }

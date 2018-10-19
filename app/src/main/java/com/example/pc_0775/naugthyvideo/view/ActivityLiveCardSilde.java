@@ -1,10 +1,12 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,20 +20,23 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeMovie;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeRight;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LivePlatform;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterCardSwipeCollection;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,7 +46,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityCardSilde extends BaseActivity {
+
+public class ActivityLiveCardSilde extends BaseActivity {
 
     //view
     @ViewInject(R.id.dl_card_slide)
@@ -49,20 +55,23 @@ public class ActivityCardSilde extends BaseActivity {
     @ViewInject(R.id.rv_card_slide)
     private RecyclerView rv_cardSlide;
     @ViewInject(R.id.rl_right_layout)
-    private RelativeLayout rl_leftLayout;
-    @ViewInject(R.id.rl_left_layout)
     private RelativeLayout rl_rightLayout;
+    @ViewInject(R.id.rl_left_layout)
+    private RelativeLayout rl_leftLayout;
     @ViewInject(R.id.btn_card_swipe_left_video)
     private Button btn_cardSwipeLeftVideo;
     @ViewInject(R.id.btn_card_swipe_left_live)
     private Button btn_cardSwipeLeftLive;
     @ViewInject(R.id.rv_card_slide_right_list)
     private RecyclerView rv_cardSlideRightList;
+    @ViewInject(R.id.rv_live_collection)
+    private RecyclerView rv_liveCollection;
 
 
     //adapter
     private AdapterCardSwipeMovie adapterCardSwipeMovie;
     private AdapterCardSwipeRight adapterCardSwipeRight;
+    private AdapterCardSwipeCollection adapterCardSwipeCollection;
     //other
     /**
      * 滑动ItemTouchHelper的回调函数
@@ -71,35 +80,38 @@ public class ActivityCardSilde extends BaseActivity {
 
     private ActionBarDrawerToggle drawerbar;
 
+    //sharePreferences
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     //data
     private List videoInfoDataList = new ArrayList();
     private List livePlatformList = new ArrayList();
-    private List<Integer> list = new ArrayList<>();
-    private List<String> stringList = new ArrayList<>();
+    /**
+     * 用户收藏
+     */
+    private List<LiveRoomInfo> collectionList = new ArrayList<>();
 
     private Uri uri;
 
     //handler
     private MyHandler myHandler = new MyHandler(this);
     private static class MyHandler extends Handler{
-        WeakReference<ActivityCardSilde> weakReference;
+        WeakReference<ActivityLiveCardSilde> weakReference;
 
-        public MyHandler(ActivityCardSilde activityCardSilde){
-            weakReference = new WeakReference<ActivityCardSilde>(activityCardSilde);
+        public MyHandler(ActivityLiveCardSilde activityCardSilde){
+            weakReference = new WeakReference<ActivityLiveCardSilde>(activityCardSilde);
         }
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            final ActivityCardSilde activity = weakReference.get();
+            final ActivityLiveCardSilde activity = weakReference.get();
             if(null == msg.obj){
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
             }
             switch (msg.what){
-                case Constants.CARTOON_VIDEO_REQUEST:
-                    break;
                 case Constants.LIVE_PLATFORM_REQUEST:
                     activity.livePlatformList.clear();
                     activity.livePlatformList.addAll(NetWorkUtil.parseJsonArray(msg.obj.toString(), LivePlatform.class));
@@ -121,14 +133,13 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        Bundle bundle = getIntent().getExtras();
-        this.uri = Uri.parse(bundle.getString(Constants.INTENT_URI));
-        this.videoInfoDataList = (List)bundle.getSerializable(Constants.INTENT_RESULT_LIST);
+        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
+        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
     }
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_card_silde;
+        return R.layout.activity_live_card_silde;
     }
 
     @Override
@@ -138,6 +149,10 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Override
     public void initView(final View view) {
+
+        //本地化存储
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
 
         //注册eventBus
         EventBus.getDefault().register(this);
@@ -154,12 +169,16 @@ public class ActivityCardSilde extends BaseActivity {
         touchHelper.attachToRecyclerView(rv_cardSlide);
         initDrawer();
 
-        //右侧抽屉布局
+        //左侧抽屉布局
         adapterCardSwipeRight = new AdapterCardSwipeRight(livePlatformList, myHandler);
         rv_cardSlideRightList.setAdapter(adapterCardSwipeRight);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_cardSlideRightList.setLayoutManager(layoutManager);
 
+        adapterCardSwipeCollection = new AdapterCardSwipeCollection(collectionList);
+        rv_liveCollection.setAdapter(adapterCardSwipeCollection);
+        RecyclerView.LayoutManager collectionManager = new LinearLayoutManager(this);
+        rv_liveCollection.setLayoutManager(collectionManager);
     }
 
     @Override
@@ -186,12 +205,19 @@ public class ActivityCardSilde extends BaseActivity {
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);
-//                Toast.makeText(ActivityCardSilde.this, ItemTouchHelper.LEFT == direction ? "swiped left" : "swiped right", Toast.LENGTH_SHORT).show();
+                if (ItemTouchHelper.RIGHT == direction) {
+                    LiveRoomInfo liveRoomInfo = new LiveRoomInfo();
+                    liveRoomInfo.setAddress(cardShowInfoBean.getVideoInfo().getUrl());
+                    liveRoomInfo.setTitle(cardShowInfoBean.getVideoInfo().getTitle());
+                    collectionList.add(liveRoomInfo);
+
+                    saveList("collectionList", collectionList);
+                }
             }
 
             @Override
             public void onSwipedClear() {
-                Toast.makeText(ActivityCardSilde.this, "已经没有了，去看看其他频道吧", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityLiveCardSilde.this, "已经没有了，去看看其他频道吧", Toast.LENGTH_SHORT).show();
                 //这是什么函数：延迟3秒执行线程
                 /*rv_cardSlide.postDelayed(new Runnable() {
                     @Override
@@ -225,10 +251,10 @@ public class ActivityCardSilde extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        initData();
         int count = rv_cardSlide.getAdapter().getItemCount();
         Log.d(TAG, "initView: "+count);
     }
+
 
     @Override
     protected void onDestroy() {
@@ -236,17 +262,6 @@ public class ActivityCardSilde extends BaseActivity {
         if(EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
         }
-    }
-
-    public void initData(){
-        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
-        stringList.add("https://i.postimg.cc/59857TX8/image.png");
-        stringList.add("https://i.postimg.cc/8kykSPfG/config.png");
-        stringList.add("https://i.postimg.cc/vZnGfrq8/github.png");
-        stringList.add("https://i.postimg.cc/mrVJHhs2/Blog.png");
-        stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
-        stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
-        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
     }
 
     public void initDrawer(){
@@ -272,5 +287,33 @@ public class ActivityCardSilde extends BaseActivity {
     public void Event(MessageEvent messageEvent){
     }
 
+    /**
+     * 保存list
+     * @param tag
+     * @param list
+     * @param <T>
+     */
+    public <T> void saveList(String tag, List<T> list){
+        if (null == list || list.size() <= 0) {
+            return;
+        }
+        Gson gson = new Gson();
+        //转换成json数据，在保存
+        String strJson = gson.toJson(list);
+        editor.putString(tag, strJson);
+        editor.commit();
+    }
 
+    public <T> List<T> getList(String tag){
+        List<T> list = new ArrayList<>();
+        String strJson = preferences.getString(tag, null);
+        if (null == strJson) {
+            return list;
+        }
+        Gson gson = new Gson();
+        list = gson.fromJson(strJson, new TypeToken<List<T>>(){
+        }.getType());
+
+        return list;
+    }
 }
