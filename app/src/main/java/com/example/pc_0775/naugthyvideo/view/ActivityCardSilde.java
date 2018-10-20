@@ -52,10 +52,6 @@ public class ActivityCardSilde extends BaseActivity {
     private RelativeLayout rl_leftLayout;
     @ViewInject(R.id.rl_left_layout)
     private RelativeLayout rl_rightLayout;
-    @ViewInject(R.id.btn_card_swipe_left_video)
-    private Button btn_cardSwipeLeftVideo;
-    @ViewInject(R.id.btn_card_swipe_left_live)
-    private Button btn_cardSwipeLeftLive;
     @ViewInject(R.id.rv_card_slide_right_list)
     private RecyclerView rv_cardSlideRightList;
 
@@ -202,8 +198,6 @@ public class ActivityCardSilde extends BaseActivity {
                 }, 3000L);*/
             }
         });
-        btn_cardSwipeLeftLive.setOnClickListener(this);
-        btn_cardSwipeLeftVideo.setOnClickListener(this);
 
     }
 
@@ -211,13 +205,6 @@ public class ActivityCardSilde extends BaseActivity {
 //    @OnClick({R.id.btn_card_swipe_left_video, R.id.btn_card_swipe_left_live})//暂时没用
     public void widgetClick(View v) throws Exception {
         switch (v.getId()){
-            case R.id.btn_card_swipe_left_video:
-//                showToast("click video");
-                break;
-            case R.id.btn_card_swipe_left_live:
-                NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
-                NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
-                break;
             default:
                 break;
         }

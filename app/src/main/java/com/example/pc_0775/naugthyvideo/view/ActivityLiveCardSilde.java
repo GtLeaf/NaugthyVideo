@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -54,19 +53,13 @@ public class ActivityLiveCardSilde extends BaseActivity {
     private DrawerLayout dl_cardSlide;
     @ViewInject(R.id.rv_card_slide)
     private RecyclerView rv_cardSlide;
-    @ViewInject(R.id.rl_right_layout)
-    private RelativeLayout rl_rightLayout;
-    @ViewInject(R.id.rl_left_layout)
-    private RelativeLayout rl_leftLayout;
-    @ViewInject(R.id.btn_card_swipe_left_video)
-    private Button btn_cardSwipeLeftVideo;
-    @ViewInject(R.id.btn_card_swipe_left_live)
-    private Button btn_cardSwipeLeftLive;
     @ViewInject(R.id.rv_card_slide_right_list)
     private RecyclerView rv_cardSlideRightList;
     @ViewInject(R.id.rv_live_collection)
     private RecyclerView rv_liveCollection;
 
+    //
+    private static final String COLLECTION_LIST = "collectionList";
 
     //adapter
     private AdapterCardSwipeMovie adapterCardSwipeMovie;
@@ -90,7 +83,7 @@ public class ActivityLiveCardSilde extends BaseActivity {
     /**
      * 用户收藏
      */
-    private List<LiveRoomInfo> collectionList = new ArrayList<>();
+    private List<LiveRoomInfo> userCollectionList;
 
     private Uri uri;
 
@@ -153,6 +146,7 @@ public class ActivityLiveCardSilde extends BaseActivity {
         //本地化存储
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
+        userCollectionList = getDataList(COLLECTION_LIST);
 
         //注册eventBus
         EventBus.getDefault().register(this);
@@ -175,7 +169,8 @@ public class ActivityLiveCardSilde extends BaseActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_cardSlideRightList.setLayoutManager(layoutManager);
 
-        adapterCardSwipeCollection = new AdapterCardSwipeCollection(collectionList);
+        //右侧抽屉布局
+        adapterCardSwipeCollection = new AdapterCardSwipeCollection(userCollectionList);
         rv_liveCollection.setAdapter(adapterCardSwipeCollection);
         RecyclerView.LayoutManager collectionManager = new LinearLayoutManager(this);
         rv_liveCollection.setLayoutManager(collectionManager);
@@ -206,12 +201,30 @@ public class ActivityLiveCardSilde extends BaseActivity {
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);
                 if (ItemTouchHelper.RIGHT == direction) {
-                    LiveRoomInfo liveRoomInfo = new LiveRoomInfo();
-                    liveRoomInfo.setAddress(cardShowInfoBean.getVideoInfo().getUrl());
-                    liveRoomInfo.setTitle(cardShowInfoBean.getVideoInfo().getTitle());
-                    collectionList.add(liveRoomInfo);
+                    LiveRoomInfo mLiveRoomInfo = new LiveRoomInfo();
+                    mLiveRoomInfo.setAddress(cardShowInfoBean.getVideoInfo().getUrl());
+                    mLiveRoomInfo.setTitle(cardShowInfoBean.getVideoInfo().getTitle());
 
-                    saveList("collectionList", collectionList);
+                    List<LiveRoomInfo> collectionList = getDataList(COLLECTION_LIST);
+                    if (0 == collectionList.size()) {
+                        collectionList.add(mLiveRoomInfo);
+                        userCollectionList.add(mLiveRoomInfo);
+                        saveList(COLLECTION_LIST, collectionList);
+                        adapterCardSwipeCollection.notifyDataSetChanged();
+                    }else {
+                        //用for(:)会报错ConcurrentModificationException
+                        for (int i = 0; i<collectionList.size(); i++){
+                            //只有地址不同才加入
+                            if (collectionList.get(i).getAddress().equals(mLiveRoomInfo.getAddress())) {
+                                return;
+                            }
+                        }
+                        collectionList.add(mLiveRoomInfo);
+                        userCollectionList.add(mLiveRoomInfo);
+                        saveList(COLLECTION_LIST, collectionList);
+                        adapterCardSwipeCollection.notifyDataSetChanged();
+                    }
+
                 }
             }
 
@@ -228,8 +241,6 @@ public class ActivityLiveCardSilde extends BaseActivity {
                 }, 3000L);*/
             }
         });
-        btn_cardSwipeLeftLive.setOnClickListener(this);
-        btn_cardSwipeLeftVideo.setOnClickListener(this);
 
     }
 
@@ -237,13 +248,6 @@ public class ActivityLiveCardSilde extends BaseActivity {
 //    @OnClick({R.id.btn_card_swipe_left_video, R.id.btn_card_swipe_left_live})//暂时没用
     public void widgetClick(View v) throws Exception {
         switch (v.getId()){
-            case R.id.btn_card_swipe_left_video:
-//                showToast("click video");
-                break;
-            case R.id.btn_card_swipe_left_live:
-                NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
-                NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
-                break;
             default:
                 break;
         }
@@ -304,14 +308,19 @@ public class ActivityLiveCardSilde extends BaseActivity {
         editor.commit();
     }
 
-    public <T> List<T> getList(String tag){
-        List<T> list = new ArrayList<>();
+    /**
+     * 获取collectionList
+     * @param tag
+     * @return
+     */
+    public List<LiveRoomInfo> getDataList(String tag){
+        List<LiveRoomInfo> list = new ArrayList<>();
         String strJson = preferences.getString(tag, null);
         if (null == strJson) {
             return list;
         }
         Gson gson = new Gson();
-        list = gson.fromJson(strJson, new TypeToken<List<T>>(){
+        list = gson.fromJson(strJson, new TypeToken<List<LiveRoomInfo>>(){
         }.getType());
 
         return list;

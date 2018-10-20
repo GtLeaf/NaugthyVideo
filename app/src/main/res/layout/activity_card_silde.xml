@@ -29,7 +29,7 @@
         android:focusable="true">
 
         <include
-            layout="@layout/card_silde_left_layout"/>
+            layout="@layout/card_silde_collection_layout"/>
     </LinearLayout>
     <!--右侧抽屉-->
     <LinearLayout

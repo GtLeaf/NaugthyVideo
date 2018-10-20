@@ -20,7 +20,7 @@
 
     <!--右侧抽屉-->
     <LinearLayout
-        android:id="@+id/rl_left_layout"
+        android:id="@+id/rl_right_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -33,7 +33,7 @@
 
     <!--左侧抽屉-->
     <LinearLayout
-        android:id="@+id/rl_right_layout"
+        android:id="@+id/rl_left_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -43,7 +43,7 @@
         android:focusable="true">
 
         <include
-            layout="@layout/card_silde_left_layout"/>
+            layout="@layout/card_silde_collection_layout"/>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

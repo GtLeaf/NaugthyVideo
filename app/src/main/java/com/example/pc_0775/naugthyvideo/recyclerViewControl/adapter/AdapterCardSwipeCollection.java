@@ -57,7 +57,7 @@ public class AdapterCardSwipeCollection extends RecyclerView.Adapter<AdapterCard
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if (!(collectionList.get(0) instanceof LiveRoomInfo)) {
+        if (!(collectionList.get(position) instanceof LiveRoomInfo)) {
             return;
         }
         final LiveRoomInfo liveRoomInfo = collectionList.get(position);
@@ -66,7 +66,7 @@ public class AdapterCardSwipeCollection extends RecyclerView.Adapter<AdapterCard
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
-                    case R.id.tv_card_swipe_right_title:
+                    case R.id.tv_card_swipe_collection:
                         Toast.makeText(context, "请稍等...", Toast.LENGTH_SHORT).show();
                         ActivityLivePlay.actionStart(context, liveRoomInfo.getAddress());
                         break;
