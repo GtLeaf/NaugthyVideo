@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwip
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeRight;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
+import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.SwipeLayout;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
@@ -174,6 +176,22 @@ public class ActivityLiveCardSilde extends BaseActivity {
         rv_liveCollection.setAdapter(adapterCardSwipeCollection);
         RecyclerView.LayoutManager collectionManager = new LinearLayoutManager(this);
         rv_liveCollection.setLayoutManager(collectionManager);
+        rv_liveCollection.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    SwipeLayout preLayout = adapterCardSwipeCollection.getPreLayout();
+                    if (preLayout != null) {
+                        preLayout.close();
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     @Override
@@ -239,6 +257,53 @@ public class ActivityLiveCardSilde extends BaseActivity {
                         rv_cardSlide.getAdapter().notifyDataSetChanged();
                     }
                 }, 3000L);*/
+            }
+        });
+
+        adapterCardSwipeCollection.setOnItemClickListener(new AdapterCardSwipeCollection.OnItemClickListener() {
+            @Override
+            public void onOpen(SwipeLayout layout) {
+//                showToast("打开");
+            }
+
+            @Override
+            public void onClose(SwipeLayout layout) {
+//                showToast("关闭");
+            }
+
+            @Override
+            public void onSwiping(SwipeLayout layout) {
+//                showToast("正在打开");
+            }
+
+            @Override
+            public void onStartOpen(SwipeLayout layout) {
+//                showToast("开始打开");
+            }
+
+            @Override
+            public void onStartClose(SwipeLayout layout) {
+//                showToast("开始关闭");
+            }
+
+            @Override
+            public void onpLacedTop(int position) {
+
+            }
+
+            @Override
+            public void onNoRead(int position) {
+
+            }
+
+            @Override
+            public void onDelete(int position) {
+                showToast("删除"+userCollectionList.get(position).getTitle());
+            }
+
+            @Override
+            public void onItemClick(int position) {
+                showToast(userCollectionList.get(position).getTitle());
             }
         });
 
