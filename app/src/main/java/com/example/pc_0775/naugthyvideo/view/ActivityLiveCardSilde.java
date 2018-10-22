@@ -14,6 +14,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
@@ -176,22 +179,9 @@ public class ActivityLiveCardSilde extends BaseActivity {
         rv_liveCollection.setAdapter(adapterCardSwipeCollection);
         RecyclerView.LayoutManager collectionManager = new LinearLayoutManager(this);
         rv_liveCollection.setLayoutManager(collectionManager);
-        rv_liveCollection.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    SwipeLayout preLayout = adapterCardSwipeCollection.getPreLayout();
-                    if (preLayout != null) {
-                        preLayout.close();
-                    }
-                }
-            }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
+//        this.registerForContextMenu(rv_liveCollection);
+
     }
 
     @Override
@@ -223,23 +213,20 @@ public class ActivityLiveCardSilde extends BaseActivity {
                     mLiveRoomInfo.setAddress(cardShowInfoBean.getVideoInfo().getUrl());
                     mLiveRoomInfo.setTitle(cardShowInfoBean.getVideoInfo().getTitle());
 
-                    List<LiveRoomInfo> collectionList = getDataList(COLLECTION_LIST);
-                    if (0 == collectionList.size()) {
-                        collectionList.add(mLiveRoomInfo);
+                    if (0 == userCollectionList.size()) {
                         userCollectionList.add(mLiveRoomInfo);
-                        saveList(COLLECTION_LIST, collectionList);
+                        saveList(COLLECTION_LIST, userCollectionList);
                         adapterCardSwipeCollection.notifyDataSetChanged();
                     }else {
                         //用for(:)会报错ConcurrentModificationException
-                        for (int i = 0; i<collectionList.size(); i++){
+                        for (int i = 0; i<userCollectionList.size(); i++){
                             //只有地址不同才加入
-                            if (collectionList.get(i).getAddress().equals(mLiveRoomInfo.getAddress())) {
+                            if (userCollectionList.get(i).getAddress().equals(mLiveRoomInfo.getAddress())) {
                                 return;
                             }
                         }
-                        collectionList.add(mLiveRoomInfo);
                         userCollectionList.add(mLiveRoomInfo);
-                        saveList(COLLECTION_LIST, collectionList);
+                        saveList(COLLECTION_LIST, userCollectionList);
                         adapterCardSwipeCollection.notifyDataSetChanged();
                     }
 
@@ -257,53 +244,6 @@ public class ActivityLiveCardSilde extends BaseActivity {
                         rv_cardSlide.getAdapter().notifyDataSetChanged();
                     }
                 }, 3000L);*/
-            }
-        });
-
-        adapterCardSwipeCollection.setOnItemClickListener(new AdapterCardSwipeCollection.OnItemClickListener() {
-            @Override
-            public void onOpen(SwipeLayout layout) {
-//                showToast("打开");
-            }
-
-            @Override
-            public void onClose(SwipeLayout layout) {
-//                showToast("关闭");
-            }
-
-            @Override
-            public void onSwiping(SwipeLayout layout) {
-//                showToast("正在打开");
-            }
-
-            @Override
-            public void onStartOpen(SwipeLayout layout) {
-//                showToast("开始打开");
-            }
-
-            @Override
-            public void onStartClose(SwipeLayout layout) {
-//                showToast("开始关闭");
-            }
-
-            @Override
-            public void onpLacedTop(int position) {
-
-            }
-
-            @Override
-            public void onNoRead(int position) {
-
-            }
-
-            @Override
-            public void onDelete(int position) {
-                showToast("删除"+userCollectionList.get(position).getTitle());
-            }
-
-            @Override
-            public void onItemClick(int position) {
-                showToast(userCollectionList.get(position).getTitle());
             }
         });
 
@@ -331,6 +271,28 @@ public class ActivityLiveCardSilde extends BaseActivity {
         if(EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.live_swipe_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int positon = adapterCardSwipeCollection.getPosition();
+        switch (item.getItemId()){
+            case 1:
+                LiveRoomInfo liveRoomInfo = userCollectionList.remove(positon);
+                saveList(COLLECTION_LIST, userCollectionList);
+                adapterCardSwipeCollection.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public void initDrawer(){
