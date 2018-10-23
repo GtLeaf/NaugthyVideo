@@ -18,8 +18,6 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
@@ -27,11 +25,10 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeMovie;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeLive;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeRight;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
-import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.SwipeLayout;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
@@ -67,7 +64,7 @@ public class ActivityLiveCardSilde extends BaseActivity {
     private static final String COLLECTION_LIST = "collectionList";
 
     //adapter
-    private AdapterCardSwipeMovie adapterCardSwipeMovie;
+    private AdapterCardSwipeLive adapterCardSwipeLive;
     private AdapterCardSwipeRight adapterCardSwipeRight;
     private AdapterCardSwipeCollection adapterCardSwipeCollection;
     //other
@@ -118,10 +115,10 @@ public class ActivityLiveCardSilde extends BaseActivity {
                 case Constants.LIVE_ROOM_REQUEST:
                     activity.videoInfoDataList.clear();
                     activity.videoInfoDataList.addAll(NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class));
-                    activity.adapterCardSwipeMovie = new AdapterCardSwipeMovie(activity.getApplicationContext(),
+                    activity.adapterCardSwipeLive = new AdapterCardSwipeLive(activity.getApplicationContext(),
                             activity.videoInfoDataList, null);
-                    activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeMovie);
-                    activity.cardCallback.setAdapterCardSwipeMovie(activity.adapterCardSwipeMovie);
+                    activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeLive);
+                    activity.cardCallback.setAdapterCardSwipeLive(activity.adapterCardSwipeLive);
                     break;
                 default:
                     break;
@@ -152,14 +149,14 @@ public class ActivityLiveCardSilde extends BaseActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
         userCollectionList = getDataList(COLLECTION_LIST);
-
+        showToast("收藏数量"+userCollectionList.size()+":"+userCollectionList.get(0).toString());
         //注册eventBus
         EventBus.getDefault().register(this);
 
-        adapterCardSwipeMovie = new AdapterCardSwipeMovie(this, videoInfoDataList, uri);
+        adapterCardSwipeLive = new AdapterCardSwipeLive(this, videoInfoDataList, uri);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
-        rv_cardSlide.setAdapter(adapterCardSwipeMovie);
-        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeMovie);
+        rv_cardSlide.setAdapter(adapterCardSwipeLive);
+        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeLive);
 
         //ItemTouchHelper的用法
         ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
@@ -190,7 +187,7 @@ public class ActivityLiveCardSilde extends BaseActivity {
         cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<CardShowInfoBean>() {
             @Override
             public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
-                AdapterCardSwipeMovie.ViewHolder holder = (AdapterCardSwipeMovie.ViewHolder) viewHolder;
+                AdapterCardSwipeLive.ViewHolder holder = (AdapterCardSwipeLive.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1 - Math.abs(ratio) * 0.2f);
                 if (CardConfig.SWIPING_LEFT == direction) {
                     holder.iv_dislike.setAlpha(Math.abs(ratio));
@@ -204,7 +201,7 @@ public class ActivityLiveCardSilde extends BaseActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, CardShowInfoBean cardShowInfoBean, int direction) {
-                AdapterCardSwipeMovie.ViewHolder holder = (AdapterCardSwipeMovie.ViewHolder) viewHolder;
+                AdapterCardSwipeLive.ViewHolder holder = (AdapterCardSwipeLive.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);

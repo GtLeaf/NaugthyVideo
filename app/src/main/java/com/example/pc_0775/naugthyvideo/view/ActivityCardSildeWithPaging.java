@@ -26,7 +26,7 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeMovie;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeLive;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
@@ -49,7 +49,7 @@ public class ActivityCardSildeWithPaging extends BaseActivity {
     private RelativeLayout rl_rightLayout;
 
     //adapter
-    private AdapterCardSwipeMovie adapterCardSwipeMovie;
+    private AdapterCardSwipeLive adapterCardSwipeLive;
 
     //other
     /**
@@ -87,11 +87,11 @@ public class ActivityCardSildeWithPaging extends BaseActivity {
     @Override
     public void initView(final View view) {
 
-        adapterCardSwipeMovie = new AdapterCardSwipeMovie(this, videoInfoDataList, uri);
+        adapterCardSwipeLive = new AdapterCardSwipeLive(this, videoInfoDataList, uri);
         initPaging();
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
-        rv_cardSlide.setAdapter(adapterCardSwipeMovie);
-        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeMovie);
+        rv_cardSlide.setAdapter(adapterCardSwipeLive);
+        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeLive);
 
         //ItemTouchHelper的用法
         ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
@@ -109,7 +109,7 @@ public class ActivityCardSildeWithPaging extends BaseActivity {
         cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<CardShowInfoBean>() {
             @Override
             public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
-                AdapterCardSwipeMovie.ViewHolder holder = (AdapterCardSwipeMovie.ViewHolder) viewHolder;
+                AdapterCardSwipeLive.ViewHolder holder = (AdapterCardSwipeLive.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1 - Math.abs(ratio) * 0.2f);
                 if (CardConfig.SWIPING_LEFT == direction) {
                     holder.iv_dislike.setAlpha(Math.abs(ratio));
@@ -123,7 +123,7 @@ public class ActivityCardSildeWithPaging extends BaseActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, CardShowInfoBean cardShowInfoBean, int direction) {
-                AdapterCardSwipeMovie.ViewHolder holder = (AdapterCardSwipeMovie.ViewHolder) viewHolder;
+                AdapterCardSwipeLive.ViewHolder holder = (AdapterCardSwipeLive.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);

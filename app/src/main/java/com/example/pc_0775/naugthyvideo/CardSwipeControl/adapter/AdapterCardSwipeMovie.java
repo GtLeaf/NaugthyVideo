@@ -22,13 +22,11 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.ListObservable;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.ListObserver;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
-import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -42,10 +40,6 @@ import java.util.List;
 public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHolder> implements ListObserver {
 
     /**
-     * 外部传入的图片地址
-     */
-//    private List<T> mDataList;
-    /**
      * 从网络获取的视频信息
      */
     private List mCardInfoDataList;
@@ -57,10 +51,6 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
      * 通过glide获取，缓存的图片
      */
     private List<CardShowInfoBean> mCardShowInfoBeanList = new ArrayList<>();
-    /**
-     * 测试数据-网络图片
-     */
-    private List<String> stringList = new ArrayList<>();
 
     /**
      * 数据源地址
@@ -110,10 +100,6 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
         updateGlideDrawableList();
     }
 
-//    public void setmDataList(List<T> dataList){
-//        this.mDataList = dataList;
-//    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (null == mContext) {
@@ -133,12 +119,7 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
             public void onClick(View v) {
                 Toast.makeText(mContext, cardShowInfo.getVideoInfo().getUrl(), Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new MessageEvent(cardShowInfo.getVideoInfo().getUrl()));
-                if (Constants.LIVE_TYPE == cardShowInfo.getType()) {
-                    ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
-                }
-                if (Constants.VIDEO_TYPE == cardShowInfo.getType()) {
-                    ActivityVideoPlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
-                }
+                ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
             }
         });
     }
@@ -187,24 +168,6 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
      */
     private CardShowInfoBean setcardShowInfoBean(Object object){
         CardShowInfoBean cardShowInfoBean = new CardShowInfoBean();
-        //VideoInfo
-        if (object instanceof VideoInfo) {
-            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
-            cardShowInfoBean.setVideoInfo((VideoInfo) object);
-            return cardShowInfoBean;
-
-        }
-        //EuropeVideoInfo
-        if (object instanceof EuropeVideoInfo) {
-            VideoInfo videoInfo = new VideoInfo();
-            videoInfo.setImg(((EuropeVideoInfo) object).getImage_small());
-            videoInfo.setTitle(((EuropeVideoInfo) object).getName());
-            videoInfo.setUrl(((EuropeVideoInfo) object).getUrl());
-
-            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
-            cardShowInfoBean.setVideoInfo(videoInfo);
-            return cardShowInfoBean;
-        }
         //LiveRoomInfo
         if (object instanceof LiveRoomInfo) {
             VideoInfo videoInfo = new VideoInfo();
@@ -231,25 +194,5 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
             listObservable.setUrl(url);
         }
     }
-
-    public void listClear(){
-        mCardInfoDataList.clear();
-        mCacheList.clear();
-        mCardShowInfoBeanList.clear();
-    }
-
-    /**
-     * 测试方法
-     */
-    /*public void initData(){
-        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
-        stringList.add("https://i.postimg.cc/59857TX8/image.png");
-        stringList.add("https://i.postimg.cc/8kykSPfG/config.png");
-        stringList.add("https://i.postimg.cc/vZnGfrq8/github.png");
-        stringList.add("https://i.postimg.cc/mrVJHhs2/Blog.png");
-        stringList.add("https://i.postimg.cc/VkRn0SyD/Card_View_border.jpg");
-        stringList.add("https://i.postimg.cc/66mHTmVy/Card_View.jpg");
-        stringList.add("https://i.postimg.cc/L5zT2CBW/QQ_20171007202548.jpg");
-    }*/
 
 }

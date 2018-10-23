@@ -42,6 +42,10 @@ import java.util.List;
 public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolder> implements ListObserver {
 
     /**
+     * 外部传入的图片地址
+     */
+//    private List<T> mDataList;
+    /**
      * 从网络获取的视频信息
      */
     private List mCardInfoDataList;
@@ -53,6 +57,12 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
      * 通过glide获取，缓存的图片
      */
     private List<CardShowInfoBean> mCardShowInfoBeanList = new ArrayList<>();
+    private List<String> imgUrlList = new ArrayList<>();
+
+    /**
+     * 测试数据-网络图片
+     */
+    private List<String> stringList = new ArrayList<>();
 
     /**
      * 数据源地址
@@ -102,6 +112,10 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
         updateGlideDrawableList();
     }
 
+//    public void setmDataList(List<T> dataList){
+//        this.mDataList = dataList;
+//    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (null == mContext) {
@@ -121,7 +135,12 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
             public void onClick(View v) {
                 Toast.makeText(mContext, cardShowInfo.getVideoInfo().getUrl(), Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new MessageEvent(cardShowInfo.getVideoInfo().getUrl()));
-                ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                if (Constants.LIVE_TYPE == cardShowInfo.getType()) {
+                    ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                }
+                if (Constants.VIDEO_TYPE == cardShowInfo.getType()) {
+                    ActivityVideoPlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                }
             }
         });
     }
@@ -170,6 +189,24 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
      */
     private CardShowInfoBean setcardShowInfoBean(Object object){
         CardShowInfoBean cardShowInfoBean = new CardShowInfoBean();
+        //VideoInfo
+        if (object instanceof VideoInfo) {
+            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
+            cardShowInfoBean.setVideoInfo((VideoInfo) object);
+            return cardShowInfoBean;
+
+        }
+        //EuropeVideoInfo
+        if (object instanceof EuropeVideoInfo) {
+            VideoInfo videoInfo = new VideoInfo();
+            videoInfo.setImg(((EuropeVideoInfo) object).getImage_small());
+            videoInfo.setTitle(((EuropeVideoInfo) object).getName());
+            videoInfo.setUrl(((EuropeVideoInfo) object).getUrl());
+
+            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
+            cardShowInfoBean.setVideoInfo(videoInfo);
+            return cardShowInfoBean;
+        }
         //LiveRoomInfo
         if (object instanceof LiveRoomInfo) {
             VideoInfo videoInfo = new VideoInfo();
@@ -195,6 +232,12 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
                     Constants.PAGE_NUMBER, currentPageNumber+1+"");
             listObservable.setUrl(url);
         }
+    }
+
+    public void listClear(){
+        mCardInfoDataList.clear();
+        mCacheList.clear();
+        mCardShowInfoBeanList.clear();
     }
 
 }

@@ -13,13 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeMovie;
+import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeLive;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeRight;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
@@ -57,7 +56,7 @@ public class ActivityCardSilde extends BaseActivity {
 
 
     //adapter
-    private AdapterCardSwipeMovie adapterCardSwipeMovie;
+    private AdapterCardSwipeLive adapterCardSwipeLive;
     private AdapterCardSwipeRight adapterCardSwipeRight;
     //other
     /**
@@ -104,10 +103,10 @@ public class ActivityCardSilde extends BaseActivity {
                 case Constants.LIVE_ROOM_REQUEST:
                     activity.videoInfoDataList.clear();
                     activity.videoInfoDataList.addAll(NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class));
-                    activity.adapterCardSwipeMovie = new AdapterCardSwipeMovie(activity.getApplicationContext(),
+                    activity.adapterCardSwipeLive = new AdapterCardSwipeLive(activity.getApplicationContext(),
                             activity.videoInfoDataList, null);
-                    activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeMovie);
-                    activity.cardCallback.setAdapterCardSwipeMovie(activity.adapterCardSwipeMovie);
+                    activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeLive);
+                    activity.cardCallback.setAdapterCardSwipeLive(activity.adapterCardSwipeLive);
                     break;
                 default:
                     break;
@@ -138,10 +137,10 @@ public class ActivityCardSilde extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
 
-        adapterCardSwipeMovie = new AdapterCardSwipeMovie(this, videoInfoDataList, uri);
+        adapterCardSwipeLive = new AdapterCardSwipeLive(this, videoInfoDataList, uri);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
-        rv_cardSlide.setAdapter(adapterCardSwipeMovie);
-        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeMovie);
+        rv_cardSlide.setAdapter(adapterCardSwipeLive);
+        cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeLive);
 
         //ItemTouchHelper的用法
         ItemTouchHelper touchHelper = new ItemTouchHelper(cardCallback);
@@ -164,7 +163,7 @@ public class ActivityCardSilde extends BaseActivity {
         cardCallback.setOnCardSwipeListener(new OnCardSwipeListener<CardShowInfoBean>() {
             @Override
             public void onSwiping(RecyclerView.ViewHolder viewHolder, float ratio, int direction) {
-                AdapterCardSwipeMovie.ViewHolder holder = (AdapterCardSwipeMovie.ViewHolder) viewHolder;
+                AdapterCardSwipeLive.ViewHolder holder = (AdapterCardSwipeLive.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1 - Math.abs(ratio) * 0.2f);
                 if (CardConfig.SWIPING_LEFT == direction) {
                     holder.iv_dislike.setAlpha(Math.abs(ratio));
@@ -178,7 +177,7 @@ public class ActivityCardSilde extends BaseActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, CardShowInfoBean cardShowInfoBean, int direction) {
-                AdapterCardSwipeMovie.ViewHolder holder = (AdapterCardSwipeMovie.ViewHolder) viewHolder;
+                AdapterCardSwipeLive.ViewHolder holder = (AdapterCardSwipeLive.ViewHolder) viewHolder;
                 viewHolder.itemView.setAlpha(1f);
                 holder.iv_dislike.setAlpha(0f);
                 holder.iv_like.setAlpha(0f);
