@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-public class MainActivity extends BaseActivity implements FragmentFunction.OnFragmentFunctionInteractionListener,
+public class ActivityLog extends BaseActivity implements FragmentFunction.OnFragmentFunctionInteractionListener,
         FragmentHome.OnFragmentHomeInteractionListener,
         FragmentUser.OnFragmentUserInteractionListener {
 
@@ -28,9 +28,9 @@ public class MainActivity extends BaseActivity implements FragmentFunction.OnFra
     private TextView tv_homeTabHome;
     private TextView tv_homeTabUser;
 
-    private LinearLayout ll_homeTabFunction;
+    /*private LinearLayout ll_homeTabFunction;
     private LinearLayout ll_homeTabHome;
-    private LinearLayout ll_homeTabUser;
+    private LinearLayout ll_homeTabUser;*/
 
     private FragmentFunction fragmentFunction;
     private FragmentHome fragmentHome;
@@ -64,9 +64,6 @@ public class MainActivity extends BaseActivity implements FragmentFunction.OnFra
         tv_homeTabHome = $(R.id.tv_home_tab_home);
         tv_homeTabUser = $(R.id.tv_home_tab_user);
 
-        ll_homeTabFunction = $(R.id.ll_home_tab_function);
-        ll_homeTabHome = $(R.id.ll_home_tab_home);
-        ll_homeTabUser = $(R.id.ll_home_tab_user);
 
         fragmentManager = getFragmentManager();
         fragmentHome = FragmentHome.newInstance("FragmentHome", "FragmentHome");
