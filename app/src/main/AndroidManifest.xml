@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.ActivityHome"
+            android:name=".view.ActivityLogin"
             android:label="NaugthyVideo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
         <activity android:name=".view.Main2Activity" />
         <activity android:name=".view.ActivityFunctionVideo" />
         <activity android:name=".view.ActivityVideoPlay" />
-        <activity android:name=".view.ActivityLog" />
+        <activity android:name=".view.ActivityHome" />
         <activity android:name=".view.ActivityFunction" />
         <activity android:name=".view.ActivityPartSlide" />
         <activity android:name=".view.ActivityCardSilde" />
