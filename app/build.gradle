@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+// 添加短信验证插件
+apply plugin: 'com.mob.sdk'
 
 android {
     signingConfigs {
@@ -14,7 +16,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.pc_0775.naugthyvideo"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -25,7 +27,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.GtLeaf
         }
@@ -74,5 +76,12 @@ configurations.all {
 }
 repositories {
     mavenCentral()
+}
+// 在MobSDK的扩展中注册SMSSDK的相关信息
+MobSDK {
+    appKey "285f84a09dc69"
+    appSecret "068c288ea306d5500d5e0f1c9eb79b59"
+
+    SMSSDK {}
 }
 
