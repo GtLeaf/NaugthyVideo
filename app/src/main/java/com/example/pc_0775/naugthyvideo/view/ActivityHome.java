@@ -88,10 +88,6 @@ public class ActivityHome extends BaseActivity {
             switch (msg.what){
                 case Constants.CLASS_TWO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-                    /*if(activity.dataList.size() == 0){
-                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-                        return;
-                    }*/
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
@@ -99,10 +95,6 @@ public class ActivityHome extends BaseActivity {
 
                 case Constants.EUROPE_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
-                    /*if(activity.dataList.size() == 0){
-                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-                        return;
-                    }*/
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSildeWithPaging();
                     }
@@ -110,10 +102,6 @@ public class ActivityHome extends BaseActivity {
 
                 case Constants.CARTOON_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-                    /*if(activity.dataList.size() == 0){
-                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-                        return;
-                    }*/
                     if (activity.isStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
@@ -121,10 +109,6 @@ public class ActivityHome extends BaseActivity {
 
                 case Constants.LIVE_ROOM_REQUEST:
                     List<LiveRoomInfo> liveRoomInfos = NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class);
-                    /*if (liveRoomInfos.size() == 0) {
-                        Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-                        return;
-                    }*/
 
                     break;
 

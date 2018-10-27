@@ -1,0 +1,86 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.pc_0775.naugthyvideo.fragment.FragmentLogin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_login_name"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/tv_login_name"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/phone_numbwe"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/et_login_name"
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_login_name"
+
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_login_password"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/rl_login_name">
+
+            <TextView
+                android:id="@+id/tv_login_password"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/password"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/et_login_passowrd"
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/tv_login_password"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <Switch
+            android:id="@+id/switch_login_if_show"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@id/rl_login_password"
+            android:layout_toRightOf="@id/rl_login_password"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_password_icon"
+            android:switchMinWidth="24dp"
+            android:textOff=" "
+            android:textOn=" "
+            android:thumb="@drawable/switch_track_login"
+            android:thumbTextPadding="6dp"
+            android:track="@drawable/switch_track_login" />
+
+        <Button
+            android:id="@+id/btn_fragment_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_below="@id/rl_login_password"
+            android:text="@string/login"
+            android:textSize="20dp"/>
+
+
+
+    </RelativeLayout>
+
+</FrameLayout>

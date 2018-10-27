@@ -56,7 +56,6 @@ public class AdapterPagingCardSwipe extends PagedListAdapter<EuropeVideoInfo, Ad
 
         public void bindTo(EuropeVideoInfo europeVideoInfo){
 
-
         }
 
         public void clear(){}

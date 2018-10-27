@@ -1,6 +1,9 @@
 package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter;
 
+import android.arch.paging.PagedListAdapter;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +29,15 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by PC-0775 on 2018/8/21.
  */
 
-public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVideo.ViewHolder>{
+public class AdapterFunctionVideoWithPaging extends PagedListAdapter<VideoInfo, AdapterFunctionVideoWithPaging.ViewHolder> {
 
-    private List<VideoInfo> videoInfoList;
     private Context mContext;
 
+    public static final DiffUtil.ItemCallback<VideoInfo> mDiffCallback = new VideoInfoItemCallback();
+
+    protected AdapterFunctionVideoWithPaging() {
+        super(mDiffCallback);
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -47,9 +54,6 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         }
     }
 
-    public AdapterFunctionVideo(List videoInfoList){
-        this.videoInfoList = videoInfoList;
-    }
 
 
     @Override
@@ -63,7 +67,7 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final VideoInfo videoInfo = videoInfoList.get(position);
+        final VideoInfo videoInfo = getItem(position);
         String imgUrl = videoInfo.getImg();
         String title = videoInfo.getTitle();
         holder.tv_functionVideoCover.setText(title);
@@ -86,10 +90,15 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         });
     }
 
+    private static class VideoInfoItemCallback extends DiffUtil.ItemCallback<VideoInfo>{
+        @Override
+        public boolean areItemsTheSame(VideoInfo oldItem, VideoInfo newItem) {
+            return oldItem.getUrl() == newItem.getUrl();
+        }
 
-
-    @Override
-    public int getItemCount() {
-        return videoInfoList.size();
+        @Override
+        public boolean areContentsTheSame(VideoInfo oldItem, VideoInfo newItem) {
+            return (oldItem == newItem);
+        }
     }
 }

@@ -13,9 +13,23 @@
     <string name="nav_card_slide">卡片滑动</string>
     <string name="nav_live_broadcast_play">直播</string>
     <string name="nav_settings">设置</string>
+    <!--login&register-->
+    <string name="login">登     录</string>
+    <string name="register">注      册</string>
+    <string name="phone_numbwe">手机号：</string>
+    <string name="password">密码：</string>
+    <string name="password_repeat">重复：</string>
+    <string name="nickname">昵称：</string>
+    <string name="identifying_code">验证码：</string>
+    <string name="sex">性别：</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+
+
     <string name="dl_open">打开</string>
     <string name="dl_close">关闭</string>
     <string name="live_swipe_delete">删除</string>
+
     <string-array name="right_title_name">
         <item>最新价</item>
         <item>涨幅</item>

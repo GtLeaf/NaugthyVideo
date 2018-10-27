@@ -1,36 +1,39 @@
 package com.example.pc_0775.naugthyvideo.view;
 
+import android.annotation.SuppressLint;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Switch;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.fragment.FragmentLogin;
+import com.example.pc_0775.naugthyvideo.fragment.FragmentRegister;
+
+import cdc.sed.yff.AdManager;
 
 
-public class ActivityLogin extends BaseActivity{
+public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragmentInteractionListener, FragmentRegister.OnFragmentInteractionListener{
 
     //view
-    @ViewInject(R.id.et_login_username)
-    private EditText et_loginUsername;
-    @ViewInject(R.id.et_login_passowrd)
-    private EditText et_loginPassowrd;
-    @ViewInject(R.id.switch_login_if_show)
-    private Switch switch_loginIfShow;
+    @ViewInject(R.id.fl_login_register)
+    private FrameLayout fl_loginRegister;
+    @ViewInject(R.id.tv_login)
+    private TextView tv_login;
+    @ViewInject(R.id.tv_register)
+    private TextView tv_register;
 
+    //fragment
+    private FragmentManager fragmentManager;
+    private FragmentLogin fragmentLogin;
+    private FragmentRegister fragmentRegister;
 
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void initParams(Bundle params) {
@@ -50,31 +53,41 @@ public class ActivityLogin extends BaseActivity{
     @Override
     public void initView(View view) {
 
-
-
+//        AdManager.getInstance(this).init("bc4d84addcc41885", "10ce84d0a1eb333a", true);
+        fragmentManager = getFragmentManager();
+        fragmentLogin = new FragmentLogin();
+        fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentLogin).commit();
 
     }
 
     @Override
     public void setListener() {
-        switch_loginIfShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    //密码可见
-                    et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
-                }else {
-                    //密码不可见
-                    et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                }
-            }
-        });
+        tv_login.setOnClickListener(this);
+        tv_register.setOnClickListener(this);
     }
 
     @Override
     public void widgetClick(View v) throws Exception {
+        reset();
         switch (v.getId()){
-
+            case R.id.tv_login:
+                if (null == fragmentLogin) {
+                    fragmentLogin = new FragmentLogin();
+                    fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentLogin).commit();
+                }else {
+                    fragmentManager.beginTransaction().show(fragmentLogin).commit();
+                }
+                break;
+            case R.id.tv_register:
+                if (null == fragmentRegister){
+                    fragmentRegister = new FragmentRegister();
+                    fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentRegister).commit();
+                }else {
+                    fragmentManager.beginTransaction().show(fragmentRegister).commit();
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -83,5 +96,33 @@ public class ActivityLogin extends BaseActivity{
 
     }
 
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState, outPersistentState);
+    }
 
+    /**
+     *  重置Fragment和TextView的状态
+     */
+    public void reset(){
+        //重置textView的颜色
+        tv_login.setTextColor(getResources().getColor(R.color.gray));
+        tv_register.setTextColor(getResources().getColor(R.color.gray));
+
+        //隐藏Fragment防止重影
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (null != fragmentLogin) {
+            transaction.hide(fragmentLogin);
+        }
+        if (null != fragmentRegister) {
+            transaction.hide(fragmentRegister);
+        }
+        transaction.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }

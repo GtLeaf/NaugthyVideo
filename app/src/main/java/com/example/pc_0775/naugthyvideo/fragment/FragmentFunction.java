@@ -43,7 +43,7 @@ public class FragmentFunction extends Fragment implements View.OnClickListener{
 
     private OnFragmentFunctionInteractionListener mListener;
 
-    //view
+    //mView
     private View view;
     private Context mContext;
     private Button btn_classOne;
