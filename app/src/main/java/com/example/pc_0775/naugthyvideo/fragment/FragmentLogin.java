@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,9 +85,15 @@ public class FragmentLogin extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_login, container, false);
+        return mView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ViewInjectUtils.fragmentInject(this);
         init();
         setListener();
-        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -129,9 +136,6 @@ public class FragmentLogin extends Fragment{
     }
 
     private void init(){
-        ActivityLogin activity = (ActivityLogin)getActivity();
-        ViewInjectUtils.inject(activity);
-        switch_loginIfShow = mView.findViewById(R.id.switch_login_if_show);
     }
 
     private void setListener(){

@@ -1,6 +1,7 @@
 package com.example.pc_0775.naugthyvideo.Anno.annoUtil;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.View;
 
@@ -8,6 +9,7 @@ import com.example.pc_0775.naugthyvideo.Anno.ContentView;
 import com.example.pc_0775.naugthyvideo.Anno.DynamicHandler;
 import com.example.pc_0775.naugthyvideo.Anno.EventBase;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
+import com.example.pc_0775.naugthyvideo.R;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -27,6 +29,10 @@ public class ViewInjectUtils {
         injectContentView(activity);
         injectViews(activity);
         injectEvents(activity);
+    }
+
+    public static void fragmentInject(Fragment fragment){
+        fragmentInjectViews(fragment);
     }
 
     /**注入布局文件
@@ -70,6 +76,36 @@ public class ViewInjectUtils {
                         Object resView = method.invoke(activity, viewId);
                         field.setAccessible(true);
                         field.set(activity, resView);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 为fragment注入所有的控件
+     *
+     * @param fragment
+     */
+    private static void fragmentInjectViews(Fragment fragment){
+        Class<? extends View> viewClass = fragment.getView().getClass();
+        Class<? extends Fragment> fragmentClass = fragment.getClass();
+        Field[] fields = fragmentClass.getDeclaredFields();
+        //遍历所有成员对象
+        for(Field field : fields){
+            ViewInject viewInjectAnnotation = field.getAnnotation(ViewInject.class);
+            if (viewInjectAnnotation != null) {
+                int viewId = viewInjectAnnotation.value();
+                if(viewId != -1){
+                    Log.e("TAG", "injectViews: "+viewId);
+                    //初始化View
+                    try {
+                        Method method = viewClass.getMethod(METHOD_FIND_VIEW_BY_ID, int.class);
+                        Object resView = method.invoke(fragment.getView(), viewId);
+                        field.setAccessible(true);
+                        field.set(fragment, resView);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
