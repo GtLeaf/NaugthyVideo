@@ -2,6 +2,7 @@ package com.example.pc_0775.naugthyvideo.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -16,6 +18,7 @@ import android.widget.Switch;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.view.ActivityHome;
 import com.example.pc_0775.naugthyvideo.view.ActivityLogin;
 
 /**
@@ -47,6 +50,8 @@ public class FragmentLogin extends Fragment{
     private EditText et_loginName;
     @ViewInject(R.id.et_login_passowrd)
     private EditText et_loginPassowrd;
+    @ViewInject(R.id.btn_fragment_login)
+    private Button btn_fragment_login;
 
     public FragmentLogin() {
         // Required empty public constructor
@@ -149,6 +154,14 @@ public class FragmentLogin extends Fragment{
                     //密码不可见
                     et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 }
+            }
+        });
+
+        btn_fragment_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                startActivity(intent);
             }
         });
     }

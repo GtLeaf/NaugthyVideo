@@ -31,7 +31,7 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     private TextView tv_login;
     @ViewInject(R.id.tv_register)
     private TextView tv_register;
-
+    @ViewInject(R.id.btn_register_get_identifying_code)
     private Button btn_registergetidentifyingCode;
     //fragment
     private FragmentManager fragmentManager;
@@ -68,12 +68,12 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     public void setListener() {
         tv_login.setOnClickListener(this);
         tv_register.setOnClickListener(this);
-        btn_registergetidentifyingCode.setOnClickListener(new View.OnClickListener() {
+        /*btn_registergetidentifyingCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
     }
 
     @Override
