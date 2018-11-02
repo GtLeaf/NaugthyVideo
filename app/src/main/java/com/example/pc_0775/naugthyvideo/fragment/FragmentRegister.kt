@@ -4,10 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
+import android.text.Editable
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 
@@ -32,19 +36,24 @@ class FragmentRegister : Fragment() {
     internal var eh: EventHandler = object : EventHandler() {
 
         override fun afterEvent(event: Int, result: Int, data: Any?) {
-
+            var i:Int = 0
             if (result == SMSSDK.RESULT_COMPLETE) {
                 //回调完成
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     //提交验证码成功
+                    i = 1
                 } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     //获取验证码成功
+                    i = 2
                 } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                     //返回支持发送验证码的国家列表
+                    i = 3
                 }
             } else {
+                i = 4
                 (data as Throwable).printStackTrace()
             }
+            System.out.println(i)
         }
     }
 
@@ -67,9 +76,16 @@ class FragmentRegister : Fragment() {
 
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        init();
+        setListener();
+    }
+
     public override fun onDetach() {
         super.onDetach()
-
+        SMSSDK.unregisterEventHandler(eh)
     }
 
     companion object {
@@ -102,7 +118,32 @@ class FragmentRegister : Fragment() {
     }
 
     private fun setListener(){
-        btn_register_get_identifying_code.setOnClickListener(View.OnClickListener { })
+        btn_register_get_identifying_code.setOnClickListener(View.OnClickListener {
+            if (isMobileNO(et_register_phone_number.text.toString())){
+                SMSSDK.getVerificationCode("86", et_register_phone_number.text.toString());
+            }else{
+                Toast.makeText(activity, "手机号错误", Toast.LENGTH_SHORT)
+            }
+
+        })
     }
+
+    public fun isMobileNO(mobileNums:String):Boolean {
+        /**
+         * 判断字符串是否符合手机号码格式
+         * 移动号段: 134,135,136,137,138,139,147,150,151,152,157,158,159,170,178,182,183,184,187,188
+         * 联通号段: 130,131,132,145,155,156,170,171,175,176,185,186
+         * 电信号段: 133,149,153,170,173,177,180,181,189
+         * @param str
+         * @return 待检测的字符串
+         */
+        var telRegex = Regex("^((13[0-9])|(14[5,7,9])|(15[^4])|(18[0-9])|(17[0,1,3,5,6,7,8]))\\d{8}$")// "[1]"代表下一位为数字可以是几，"[0-9]"代表可以为0-9中的一个，"[5,7,9]"表示可以是5,7,9中的任意一位,[^4]表示除4以外的任何一个,\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(mobileNums))
+            return false;
+        else
+            return telRegex.matches(mobileNums);
+    }
+
+
 }// Required empty public constructor
 

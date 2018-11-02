@@ -22,7 +22,7 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 
-public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragmentInteractionListener, FragmentRegister.OnFragmentInteractionListener{
+public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragmentInteractionListener{
 
     //view
     @ViewInject(R.id.fl_login_register)
