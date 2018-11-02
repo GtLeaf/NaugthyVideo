@@ -21,6 +21,7 @@
     <string name="password_repeat">重复：</string>
     <string name="nickname">昵称：</string>
     <string name="identifying_code">验证码：</string>
+    <string name="get_identifying_code">获取验证码</string>
     <string name="sex">性别：</string>
     <string name="male">男</string>
     <string name="female">女</string>

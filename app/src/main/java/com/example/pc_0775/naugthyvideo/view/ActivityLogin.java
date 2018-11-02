@@ -7,6 +7,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ import com.example.pc_0775.naugthyvideo.fragment.FragmentLogin;
 import com.example.pc_0775.naugthyvideo.fragment.FragmentRegister;
 
 import cdc.sed.yff.AdManager;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 
 public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragmentInteractionListener, FragmentRegister.OnFragmentInteractionListener{
@@ -28,7 +31,8 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     private TextView tv_login;
     @ViewInject(R.id.tv_register)
     private TextView tv_register;
-
+    @ViewInject(R.id.btn_register_get_identifying_code)
+    private Button btn_registergetidentifyingCode;
     //fragment
     private FragmentManager fragmentManager;
     private FragmentLogin fragmentLogin;
@@ -64,6 +68,12 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     public void setListener() {
         tv_login.setOnClickListener(this);
         tv_register.setOnClickListener(this);
+        /*btn_registergetidentifyingCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
     }
 
     @Override
@@ -100,6 +110,11 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     @Override
     public void onSaveInstanceState(Bundle outState) {
 //        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     /**
