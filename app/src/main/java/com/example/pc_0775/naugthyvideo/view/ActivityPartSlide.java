@@ -13,7 +13,7 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.CoinInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.myRecyclerView.HRecyclerView;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
-import com.example.pc_0775.naugthyvideo.viewHolder.CommonViewHolder;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.viewHolder.CommonViewHolder;
 
 import java.util.ArrayList;
 

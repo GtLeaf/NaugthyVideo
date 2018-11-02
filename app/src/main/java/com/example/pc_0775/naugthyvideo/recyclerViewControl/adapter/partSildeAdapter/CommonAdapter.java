@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.viewHolder.CommonViewHolder;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.viewHolder.CommonViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

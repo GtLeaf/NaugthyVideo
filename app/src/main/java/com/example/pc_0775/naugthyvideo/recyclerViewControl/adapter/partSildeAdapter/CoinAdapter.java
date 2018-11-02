@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.CoinInfo;
-import com.example.pc_0775.naugthyvideo.viewHolder.CommonViewHolder;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.viewHolder.CommonViewHolder;
 
 import java.util.List;
 

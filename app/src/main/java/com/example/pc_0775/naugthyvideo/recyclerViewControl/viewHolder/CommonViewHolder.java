@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.viewHolder;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.viewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
