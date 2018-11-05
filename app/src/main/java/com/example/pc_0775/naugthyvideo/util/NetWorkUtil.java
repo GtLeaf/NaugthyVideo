@@ -87,6 +87,8 @@ public class NetWorkUtil {
         }).start();
     }
 
+
+
     public static Uri createUri(String url, HashMap<String, String> parameters){
         Uri.Builder uriBuilder = Uri.parse(url).buildUpon();
 

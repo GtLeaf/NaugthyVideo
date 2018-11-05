@@ -1,10 +1,13 @@
 package com.example.pc_0775.naugthyvideo.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -14,12 +17,29 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.view.ActivityHome;
 import com.example.pc_0775.naugthyvideo.view.ActivityLogin;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +61,9 @@ public class FragmentLogin extends Fragment{
 
     private OnFragmentInteractionListener mListener;
     //context
-    View mView;
+    private View mView;
+
+    private Activity activity;
 
     //mView
     @ViewInject(R.id.switch_login_if_show)
@@ -52,6 +74,29 @@ public class FragmentLogin extends Fragment{
     private EditText et_loginPassowrd;
     @ViewInject(R.id.btn_fragment_login)
     private Button btn_fragment_login;
+
+    //handler
+    private MyHandler handler = new MyHandler(this);
+    public static class MyHandler extends Handler{
+        WeakReference<FragmentLogin> weakReference;
+
+        MyHandler(FragmentLogin fragmentLogin){
+            weakReference = new WeakReference<>(fragmentLogin);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            FragmentLogin fragmentLogin = weakReference.get();
+            switch (msg.what){
+                case Constants.LOGIN_SUCCESS:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+    }
 
     public FragmentLogin() {
         // Required empty public constructor
@@ -97,6 +142,7 @@ public class FragmentLogin extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ViewInjectUtils.fragmentInject(this);
+        activity = getActivity();
         init();
         setListener();
     }
@@ -160,8 +206,52 @@ public class FragmentLogin extends Fragment{
         btn_fragment_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
-                startActivity(intent);
+                sendPostRequest(et_loginName.getText().toString(), et_loginPassowrd.getText().toString());
+            }
+        });
+    }
+
+    public void sendPostRequest(String phoneNumber, String password){
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(Constants.MEDIA_TYPE_JSON)
+                .addFormDataPart("phone_number", phoneNumber)
+                .addFormDataPart("password", password)
+                .build();
+        final Request request = new Request.Builder()
+                .url(Constants.LOGIN_URL)
+                .post(requestBody)
+                .build();
+        final OkHttpClient client = new OkHttpClient();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Message message = Message.obtain();
+                message.what = Constants.LOGIN_SUCCESS;
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), "连接服务器失败...", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        boolean success = false;
+                        try {
+                            success = new JSONObject(response.body().string()).getBoolean("success");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (success) {
+                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), ActivityHome.class);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(getActivity(), "登录失败", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
             }
         });
     }

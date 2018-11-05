@@ -1,5 +1,7 @@
 package com.example.pc_0775.naugthyvideo.Constants;
 
+import okhttp3.MediaType;
+
 /**
  * Created by PC-0775 on 2018/8/18.
  */
@@ -48,6 +50,14 @@ public class Constants {
      */
     public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
 
+    /**
+     * 登录接口
+     */
+    public static final String LOGIN_URL = "http://101.201.236.217:8888/login";
+    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/x-www-form-urlencoded");//; charset=utf-8
+
+
+
     //paramter
     public static final String PAGE_NUMBER = "yeshu";
 
@@ -62,6 +72,9 @@ public class Constants {
     public static final int CARTOON_VIDEO_REQUEST = 3105;
     public static final int LIVE_PLATFORM_REQUEST = 3106;
     public static final int LIVE_ROOM_REQUEST = 3107;
+
+    //登录的what常量
+    public static final int LOGIN_SUCCESS = 1011;
 
     public static final String INTENT_URI = "uri";
     public static final String INTENT_VIDEO_URL = "videoUrl";
