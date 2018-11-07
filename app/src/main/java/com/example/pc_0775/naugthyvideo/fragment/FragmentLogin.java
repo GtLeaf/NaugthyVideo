@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -194,12 +197,13 @@ public class FragmentLogin extends Fragment{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    //密码可见
-                    et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
-                }else {
                     //密码不可见
                     et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }else {
+                    //密码可见
+                    et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
                 }
+                et_loginPassowrd.setSelection(et_loginPassowrd.getText().length());
             }
         });
 
@@ -212,15 +216,17 @@ public class FragmentLogin extends Fragment{
     }
 
     public void sendPostRequest(String phoneNumber, String password){
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(Constants.MEDIA_TYPE_JSON)
-                .addFormDataPart("phone_number", phoneNumber)
-                .addFormDataPart("password", password)
+        RequestBody requestBody = new FormBody.Builder()
+                .add("phone_number", phoneNumber)
+                .add("password", password)
                 .build();
         final Request request = new Request.Builder()
                 .url(Constants.LOGIN_URL)
                 .post(requestBody)
                 .build();
+//        String paramsStr="phone_number=15662360528&password=root";
+//        RequestBody body = RequestBody.create(Constants.MEDIA_TYPE_JSON, paramsStr);
+
         final OkHttpClient client = new OkHttpClient();
         new Thread(new Runnable() {
             @Override
@@ -231,7 +237,6 @@ public class FragmentLogin extends Fragment{
                     @Override
                     public void onFailure(Call call, IOException e) {
                         e.printStackTrace();
-                        Toast.makeText(getActivity(), "连接服务器失败...", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -243,16 +248,19 @@ public class FragmentLogin extends Fragment{
                             e.printStackTrace();
                         }
                         if (success) {
-                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), ActivityHome.class);
                             startActivity(intent);
                         }else {
-                            Toast.makeText(getActivity(), "登录失败", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), "登录失败", Toast.LENGTH_SHORT).show();
+                            Log.d("login", "onResponse: 登录失败");
                         }
 
                     }
                 });
             }
-        });
+        }).start();
     }
+
+
 }
