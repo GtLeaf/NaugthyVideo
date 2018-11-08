@@ -6,8 +6,11 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -62,6 +65,7 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
         fragmentLogin = new FragmentLogin();
         fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentLogin).commit();
 
+        tv_login.setTextColor(getResources().getColor(R.color.black));
     }
 
     @Override
@@ -81,6 +85,7 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
         reset();
         switch (v.getId()){
             case R.id.tv_login:
+                ((TextView)v).setTextColor(getResources().getColor(R.color.black));
                 if (null == fragmentLogin) {
                     fragmentLogin = new FragmentLogin();
                     fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentLogin).commit();
@@ -89,6 +94,7 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
                 }
                 break;
             case R.id.tv_register:
+                ((TextView)v).setTextColor(getResources().getColor(R.color.black));
                 if (null == fragmentRegister){
                     fragmentRegister = new FragmentRegister();
                     fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentRegister).commit();

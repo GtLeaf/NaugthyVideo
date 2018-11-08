@@ -224,8 +224,6 @@ public class FragmentLogin extends Fragment{
                 .url(Constants.LOGIN_URL)
                 .post(requestBody)
                 .build();
-//        String paramsStr="phone_number=15662360528&password=root";
-//        RequestBody body = RequestBody.create(Constants.MEDIA_TYPE_JSON, paramsStr);
 
         final OkHttpClient client = new OkHttpClient();
         new Thread(new Runnable() {

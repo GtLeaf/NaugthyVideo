@@ -5,12 +5,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
 import android.text.Editable
+import android.text.InputType
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.EditText
 import android.widget.Toast
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
@@ -124,8 +128,71 @@ class FragmentRegister : Fragment() {
             }else{
                 Toast.makeText(activity, "手机号错误", Toast.LENGTH_SHORT)
             }
-
         })
+
+        et_register_phone_number.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable) {
+                if (isMobileNO(s.toString())){
+                    iv_register_phone_number_tip.setImageResource(R.drawable.circle_green);
+                }else{
+                    iv_register_phone_number_tip.setImageResource(R.drawable.circle_red);
+                }
+            }
+        })
+
+        //检查两次密码是否一致
+        et_register_password.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                var password = et_register_password.text.toString()
+                var password_repeat = et_register_password_repeat.text.toString()
+                if (password.equals(password_repeat)){
+                    iv_register_password_tip.setImageResource(R.drawable.circle_green)
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
+                }else{
+                    iv_register_password_tip.setImageResource(R.drawable.circle_red);
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red);
+                }
+            }
+        })
+
+        //检查两次密码是否一致
+        et_register_password_repeat.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                var password = et_register_password.text.toString()
+                var password_repeat = et_register_password_repeat.text.toString()
+                if (password.equals(password_repeat)){
+                    iv_register_password_tip.setImageResource(R.drawable.circle_green)
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
+                }else{
+                    iv_register_password_tip.setImageResource(R.drawable.circle_red);
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red);
+                }
+            }
+        })
+
+        switch_register_if_show.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                //密码不可见
+                et_register_password.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                et_register_password_repeat.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            } else {
+                //密码可见
+                et_register_password.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+                et_register_password_repeat.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+            }
+            et_register_password.setSelection(et_register_password.getText().length)
+            et_register_password_repeat.setSelection(et_register_password_repeat.getText().length)
+        })
+
     }
 
     public fun isMobileNO(mobileNums:String):Boolean {
