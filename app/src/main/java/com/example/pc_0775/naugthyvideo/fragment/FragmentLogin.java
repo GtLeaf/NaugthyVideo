@@ -210,7 +210,9 @@ public class FragmentLogin extends Fragment{
         btn_fragment_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendPostRequest(et_loginName.getText().toString(), et_loginPassowrd.getText().toString());
+                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                startActivity(intent);
+//                sendPostRequest(et_loginName.getText().toString(), et_loginPassowrd.getText().toString());
             }
         });
     }

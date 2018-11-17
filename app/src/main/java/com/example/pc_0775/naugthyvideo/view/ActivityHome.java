@@ -1,11 +1,18 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.app.ActionBar;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.paging.DataSource;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
+import android.arch.paging.PositionalDataSource;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -23,6 +30,7 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
@@ -54,6 +62,7 @@ public class ActivityHome extends BaseActivity {
      */
     private boolean isStartActivityCardSilde = false;
 
+
     //data
     /**
      * rv_homeList的数据源
@@ -62,6 +71,15 @@ public class ActivityHome extends BaseActivity {
     private List<VideoInfo> videoInfoList;
     private List dataList;
 
+
+    //豆瓣电影top250 data
+    private DoubanMovie doubanMovie;
+    /**
+     * 判断doubanMovie是否为新的数据
+     */
+    private boolean isDataFresh = false;
+    private int start = 0;
+    private int count = 10;
     //handler
     private ActivityHome.MyHandler handler = new ActivityHome.MyHandler(this);
     private static class MyHandler<T> extends Handler {
@@ -79,7 +97,7 @@ public class ActivityHome extends BaseActivity {
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
             }
-            //服务器返回数据null时
+            //服务器返回数据null时（接口改变，已经不适用）
             List list = NetWorkUtil.parseJsonArray(msg.obj.toString(), Object.class);
             if(list.size() == 0){
                 Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
@@ -96,7 +114,6 @@ public class ActivityHome extends BaseActivity {
                 case Constants.EUROPE_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
                     if (activity.isStartActivityCardSilde){
-                        activity.startActivityCardSildeWithPaging();
                     }
                     break;
 
@@ -110,6 +127,10 @@ public class ActivityHome extends BaseActivity {
                 case Constants.LIVE_ROOM_REQUEST:
                     List<LiveRoomInfo> liveRoomInfos = NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class);
 
+                    break;
+                case Constants.DOUBAN_MOVIE_REQUEST:
+                    activity.doubanMovie = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), DoubanMovie.class);
+                    activity.isDataFresh = true;
                     break;
 
                 default:
@@ -147,15 +168,15 @@ public class ActivityHome extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
         //配置rv_homeList
-        adapterHomeInfo = new AdapterHomeInfo(homeInfoDataList);
+        initPaging();
+        adapterHomeInfo = new AdapterHomeInfo();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_homeList.setLayoutManager(layoutManager);
         rv_homeList.setAdapter(adapterHomeInfo);
 
         nav_headerView.setCheckedItem(R.id.nav_home);
-        requestVideoInfoData(handler);
+        requestMovieListData(handler);
     }
 
     @Override
@@ -178,7 +199,7 @@ public class ActivityHome extends BaseActivity {
                         if (null != videoInfoList && 0 != videoInfoList.size()) {
                             startActivityCardSilde();
                         }else {
-                            requestVideoInfoData(handler);
+                            requestMovieListData(handler);
                         }
                         break;
                     case R.id.nav_live_card_slide:
@@ -248,16 +269,13 @@ public class ActivityHome extends BaseActivity {
 //        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
     }
 
-    private void requestVideoInfoData(Handler myHandler){
-        HashMap classTowparameters = new HashMap();
-        classTowparameters.put("yeshu", "1");
-        classTowparameters.put("type", "18");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);
-        NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.CARTOON_VIDEO_REQUEST, myHandler );
-    }
-
-    private void requestLiveRoomInfoData(Handler myHandler){
-        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
+    private void requestMovieListData(Handler myHandler){
+        HashMap doubanMovieList = new HashMap();
+        doubanMovieList.put("start", start+"");
+        doubanMovieList.put("count", count+"");
+        Uri classTowUri = NetWorkUtil.createUri(Constants.DOUBAN_MOVIE_URL, doubanMovieList);
+        NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.DOUBAN_MOVIE_REQUEST, myHandler );
+        start += 10;
     }
 
     private void startActivityCardSilde(){
@@ -271,24 +289,69 @@ public class ActivityHome extends BaseActivity {
         startActivity(ActivityCardSilde.class, bundle);
     }
 
-    private void startActivityLiveCardSilde(){
-        HashMap classTowparameters = new HashMap();
-        classTowparameters.put("yeshu", "1");
-        classTowparameters.put("type", "18");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);
-        Bundle bundle = new Bundle();
-        bundle.putString("uri", classTowUri.toString());
-        bundle.putSerializable("resultList", (Serializable)dataList);
-        startActivity(ActivityCardSilde.class, bundle);
+    /**
+     * 进行网络请求
+     *
+     * @param startPosition
+     * @param count
+     * @return
+     */
+    private List<DoubanMovie.SubjectsBean> loadData(int startPosition, int count){
+        List<DoubanMovie.SubjectsBean> subjectsBeanList = new ArrayList<>();
+        if (true == isDataFresh) {
+            subjectsBeanList = doubanMovie.getSubjects();
+            //显示数据之后，将标志设置为false，等待下一次网络请求，数据更新完成
+            isDataFresh = false;
+            //启动下一次数据刷新
+            requestMovieListData(handler);
+        }
+        return subjectsBeanList;
     }
 
-    private void startActivityCardSildeWithPaging(){
-        HashMap classTowparameters = new HashMap();
-        classTowparameters.put("yeshu", "1");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.EUROPE_VIDEO_URL, classTowparameters);
-        Bundle bundle = new Bundle();
-        bundle.putString("uri", classTowUri.toString());
-        bundle.putSerializable("resultList", (Serializable)dataList);
-        startActivity(ActivityCardSildeWithPaging.class, bundle);
+    private class MyDataSource extends PositionalDataSource<DoubanMovie.SubjectsBean>{
+
+        @Override
+        public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<DoubanMovie.SubjectsBean> callback) {
+            callback.onResult(loadData(0, 10), start, count);
+        }
+
+        @Override
+        public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<DoubanMovie.SubjectsBean> callback) {
+            callback.onResult(loadData(params.startPosition, count));
+        }
+    }
+
+    private class MyDataSourceFactory extends DataSource.Factory<Integer, DoubanMovie.SubjectsBean>{
+
+        @Override
+        public DataSource<Integer, DoubanMovie.SubjectsBean> create() {
+            return new MyDataSource();
+        }
+    }
+
+    private void initPaging(){
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setPageSize(10)    //每页显示的词条数
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(10) //首次加载的数据量
+                .setPrefetchDistance(5)     //距离底部还有多少条数据时开始预加载
+                .build();
+
+        /**
+         * LiveData<PagedList<DataBean>> 用LivePagedListBuilder生成
+         * LivePagedListBuilder 用 DataSource.Factory<Integer,DataBean> 和PagedList.Config.Builder 生成
+         * DataSource.Factory<Integer,DataBean> 用 PositionalDataSource<DataBean>
+         */
+        LiveData<PagedList<DoubanMovie.SubjectsBean>> liveData = new LivePagedListBuilder(new MyDataSourceFactory(), config)
+//                .setBoundaryCallback(null)
+//                .setFetchExecutor(null)
+                .build();
+        liveData.observe(this, new Observer<PagedList<DoubanMovie.SubjectsBean>>() {
+
+            @Override
+            public void onChanged(@Nullable PagedList<DoubanMovie.SubjectsBean> subjectsBeans) {
+                adapterHomeInfo.submitList(subjectsBeans);
+            }
+        });
     }
 }

@@ -6,8 +6,9 @@
     android:layout_margin="5dp"
     android:orientation="horizontal">
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:id="@+id/iv_item_home_movie"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
         android:background="#e1bb6a"/>
     <LinearLayout
         android:layout_width="match_parent"

@@ -49,7 +49,10 @@ public class Constants {
      * 测试用的静态地址
      */
     public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
-
+    /**
+     * 豆瓣top250 api接口
+     */
+    public static String DOUBAN_MOVIE_URL = "http://api.douban.com/v2/movie/top250";
     /**
      * 登录接口
      */
@@ -72,6 +75,7 @@ public class Constants {
     public static final int CARTOON_VIDEO_REQUEST = 3105;
     public static final int LIVE_PLATFORM_REQUEST = 3106;
     public static final int LIVE_ROOM_REQUEST = 3107;
+    public static final int DOUBAN_MOVIE_REQUEST = 3108;
 
     //登录的what常量
     public static final int LOGIN_SUCCESS = 1011;
