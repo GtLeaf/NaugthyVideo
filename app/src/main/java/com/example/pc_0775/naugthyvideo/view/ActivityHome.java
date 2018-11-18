@@ -78,6 +78,7 @@ public class ActivityHome extends BaseActivity {
      * 判断doubanMovie是否为新的数据
      */
     private boolean isDataFresh = false;
+    private boolean isInitPaging = false;
     private int start = 0;
     private int count = 10;
     //handler
@@ -101,7 +102,7 @@ public class ActivityHome extends BaseActivity {
             List list = NetWorkUtil.parseJsonArray(msg.obj.toString(), Object.class);
             if(list.size() == 0){
                 Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-                return;
+//                return;
             }
             switch (msg.what){
                 case Constants.CLASS_TWO_REQUEST:
@@ -131,6 +132,10 @@ public class ActivityHome extends BaseActivity {
                 case Constants.DOUBAN_MOVIE_REQUEST:
                     activity.doubanMovie = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), DoubanMovie.class);
                     activity.isDataFresh = true;
+                    if (!activity.isInitPaging) {
+                        activity.initPaging();
+                        activity.isInitPaging = true;
+                    }
                     break;
 
                 default:
@@ -169,7 +174,7 @@ public class ActivityHome extends BaseActivity {
         }
 
         //配置rv_homeList
-        initPaging();
+
         adapterHomeInfo = new AdapterHomeInfo();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_homeList.setLayoutManager(layoutManager);
@@ -312,7 +317,7 @@ public class ActivityHome extends BaseActivity {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<DoubanMovie.SubjectsBean> callback) {
-            callback.onResult(loadData(0, 10), start, count);
+            callback.onResult(loadData(0, 10), 0, 10);
         }
 
         @Override

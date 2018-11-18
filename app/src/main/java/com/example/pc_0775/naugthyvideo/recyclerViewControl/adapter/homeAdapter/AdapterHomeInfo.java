@@ -50,7 +50,7 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
 
         public InfoViewHolder(View itemView) {
             super(itemView);
-            tv_itemHomeTitle = itemView.findViewById(R.id.tv_item_home_describe);
+            tv_itemHomeTitle = itemView.findViewById(R.id.tv_item_home_title);
             tv_itemHomeDescribe = itemView.findViewById(R.id.tv_item_home_describe);
             iv_itemHomeMovie = itemView.findViewById(R.id.iv_item_home_movie);
         }
@@ -90,7 +90,7 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof InfoViewHolder) {
             DoubanMovie.SubjectsBean movie = getItem(position);
-            Glide.with(context).load(movie.getImages()).into(((InfoViewHolder) holder).iv_itemHomeMovie);
+            Glide.with(context).load(movie.getImages().getMedium()).into(((InfoViewHolder) holder).iv_itemHomeMovie);
             ((InfoViewHolder) holder).tv_itemHomeTitle.setText(movie.getTitle());
             ((InfoViewHolder) holder).tv_itemHomeDescribe.setText(movie.getRating().getAverage()+"");
         }
