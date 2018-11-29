@@ -313,6 +313,7 @@ public class ActivityHome extends BaseActivity {
         return subjectsBeanList;
     }
 
+    //定义MyDataSource类，继承自DataSource三个子类之一
     private class MyDataSource extends PositionalDataSource<DoubanMovie.SubjectsBean>{
 
         @Override
@@ -325,7 +326,7 @@ public class ActivityHome extends BaseActivity {
             callback.onResult(loadData(params.startPosition, count));
         }
     }
-
+    //定义MyDataSourceFactory，是DataSource.Factory的实现类
     private class MyDataSourceFactory extends DataSource.Factory<Integer, DoubanMovie.SubjectsBean>{
 
         @Override
@@ -334,6 +335,7 @@ public class ActivityHome extends BaseActivity {
         }
     }
 
+    //将生产config和liveData的代码封装在这个方法中
     private void initPaging(){
         PagedList.Config config = new PagedList.Config.Builder()
                 .setPageSize(10)    //每页显示的词条数
@@ -351,6 +353,7 @@ public class ActivityHome extends BaseActivity {
 //                .setBoundaryCallback(null)
 //                .setFetchExecutor(null)
                 .build();
+        //观察者模式，将Adapter注册进去，当liveData发生改变事通知Adapter
         liveData.observe(this, new Observer<PagedList<DoubanMovie.SubjectsBean>>() {
 
             @Override
