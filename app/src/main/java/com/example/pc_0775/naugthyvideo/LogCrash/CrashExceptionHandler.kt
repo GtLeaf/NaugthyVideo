@@ -1,12 +1,10 @@
 package com.example.pc_0775.naugthyvideo.LogCrash
 
-import android.app.usage.ExternalStorageStats
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.util.Log
-import io.vov.vitamio.utils.Log.TAG
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,8 +63,8 @@ class CrashExceptionHandler private constructor(context:Context):Thread.Uncaught
         val time = formatter.format(Date())
         val fileName = "$time-$timestamp.txt"
         try {
-//            val file1 = ExternalStorageUtils.getDiskCacheDir(context!!, "crash")
-            val file = File(" ")
+            val file = getDiskCacheDir(context!!, "crash")
+//            val file = File(" ")
             if (!file.exists()){
                 file.mkdirs()
             }
@@ -127,15 +125,15 @@ class CrashExceptionHandler private constructor(context:Context):Thread.Uncaught
 
     fun getDiskCacheDir(context: Context, uniqueName:String):File{
         var cachePath = context.cacheDir.path
-        try {
-            if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() ){
-
+        //SDK额外存储，需要ExternalStorageUtils类
+        /*try {
+            if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !ExternalStorageUtils.isExternalStorageRemovable) {
+            cachePath = ExternalStorageUtils.getExternalCacheDir(context)!!.path
             }
         }catch (e:Exception){
             e.printStackTrace()
             Log.e("getDiskCacheDir", e.message)
-        }
-
+        }*/
         return File(cachePath + File.separator + uniqueName)
     }
 }
