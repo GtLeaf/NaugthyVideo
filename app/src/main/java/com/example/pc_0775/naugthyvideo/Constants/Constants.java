@@ -49,6 +49,11 @@ public class Constants {
      * 测试用的静态地址
      */
     public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
+    //以上接口已经废弃-------------------------------------------------------------------------------------------------
+
+    //接口
+    public static String WEREWOLF_URL = "https://www.86rrxx.com/";
+
     /**
      * 豆瓣top250 api接口
      */
@@ -89,6 +94,10 @@ public class Constants {
     public static final String TITLE = "title";
     public static final String IMG = "img";
     public static final String URL = "url";
+
+    //文件存储地址
+    public static final String LOCAL_FILE_PATH = "/mnt/sdcard/newVotingSystem/";
+    public static final String FILEPATH = LOCAL_FILE_PATH + "/文件/";
 
     public static enum ITEM_TYPE{
         ITEM_TYPE_INFO,

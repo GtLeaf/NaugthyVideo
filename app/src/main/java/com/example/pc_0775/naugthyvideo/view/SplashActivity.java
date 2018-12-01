@@ -84,7 +84,8 @@ public class SplashActivity extends YoumiBaseActivity {
 	 */
 	private void runApp() {
 		//初始化SDK
-		AdManager.getInstance(mContext).init("85aa56a59eac8b3d", "a14006f66f58d5d7", true);
+		AdManager.getInstance(this).init("bc4d84addcc41885", "10ce84d0a1eb333a", true);
+//		AdManager.getInstance(mContext).init("85aa56a59eac8b3d", "a14006f66f58d5d7", true);
 		preloadAd();
 		setupSplashAd(); // 如果需要首次展示开屏，请注释掉本句代码
 	}
@@ -136,7 +137,7 @@ public class SplashActivity extends YoumiBaseActivity {
 		//		// 设置是否展示失败自动跳转，默认自动跳转
 		//		splashViewSettings.setAutoJumpToTargetWhenShowFailed(false);
 		// 设置跳转的窗口类
-		splashViewSettings.setTargetClass(ActivityHome.class);
+		splashViewSettings.setTargetClass(ActivityLogin.class);
 		// 设置开屏的容器
 		splashViewSettings.setSplashViewContainer(splashLayout);
 		

@@ -172,6 +172,7 @@ public class FragmentLogin extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
     }
 
     /**
@@ -212,6 +213,7 @@ public class FragmentLogin extends Fragment{
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ActivityHome.class);
                 startActivity(intent);
+                activity.finish();
 //                sendPostRequest(et_loginName.getText().toString(), et_loginPassowrd.getText().toString());
             }
         });
@@ -251,6 +253,7 @@ public class FragmentLogin extends Fragment{
 //                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), ActivityHome.class);
                             startActivity(intent);
+                            activity.finish();
                         }else {
 //                            Toast.makeText(getActivity(), "登录失败", Toast.LENGTH_SHORT).show();
                             Log.d("login", "onResponse: 登录失败");

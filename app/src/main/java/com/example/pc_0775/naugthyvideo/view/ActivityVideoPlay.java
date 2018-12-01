@@ -172,9 +172,10 @@ public class ActivityVideoPlay extends BaseActivity {
                 super.onPageFinished(view, url);
                 String js1 = "if($('.top_box') != null){$('.top_box').remove();}";
                 String js2 = "if($('.footer') != null){$('.footer').nextAll().remove();}";
+                String js3 = "if($('#title_content_meiyuan') != null){$('#title_content_meiyuan').remove();}";
 
 
-//                wv_functionVideoPlay.loadUrl("javascript:"+js2+js1);
+                wv_functionVideoPlay.loadUrl("javascript:"+js3);
             }
         });
 
@@ -216,14 +217,10 @@ public class ActivityVideoPlay extends BaseActivity {
         webSettings.setDefaultTextEncodingName("utf-8");
     }
     private void destroyWebView(){
-
-        if(wv_functionVideoPlay != null){
-            wv_functionVideoPlay.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            wv_functionVideoPlay.clearHistory();
-
-            ((ViewGroup)wv_functionVideoPlay.getParent()).removeView(wv_functionVideoPlay);
+        if (wv_functionVideoPlay != null){
             wv_functionVideoPlay.destroy();
             wv_functionVideoPlay = null;
         }
+
     }
 }

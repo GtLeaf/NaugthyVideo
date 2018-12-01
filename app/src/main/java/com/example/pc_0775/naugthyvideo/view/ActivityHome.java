@@ -19,10 +19,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
@@ -42,6 +44,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import cdc.sed.yff.nm.cm.ErrorCode;
+import cdc.sed.yff.nm.sp.SpotListener;
+import cdc.sed.yff.nm.sp.SpotManager;
 
 public class ActivityHome extends BaseActivity {
 
@@ -105,18 +111,6 @@ public class ActivityHome extends BaseActivity {
 //                return;
             }
             switch (msg.what){
-                case Constants.CLASS_TWO_REQUEST:
-                    activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-                    if (activity.isStartActivityCardSilde){
-                        activity.startActivityCardSilde();
-                    }
-                    break;
-
-                case Constants.EUROPE_VIDEO_REQUEST:
-                    activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), EuropeVideoInfo.class);
-                    if (activity.isStartActivityCardSilde){
-                    }
-                    break;
 
                 case Constants.CARTOON_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
@@ -173,8 +167,10 @@ public class ActivityHome extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //配置rv_homeList
+        // 设置插屏广告
+        setupSpotAd();
 
+        //配置rv_homeList
         adapterHomeInfo = new AdapterHomeInfo();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_homeList.setLayoutManager(layoutManager);
@@ -216,6 +212,10 @@ public class ActivityHome extends BaseActivity {
                 return true;
             }
         });
+
+        // 展示插屏广告
+        showSpotAd();
+
     }
 
     @Override
@@ -226,6 +226,37 @@ public class ActivityHome extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 点击后退关闭插屏广告
+        if (SpotManager.getInstance(ActivityHome.this).isSpotShowing()) {
+            SpotManager.getInstance(ActivityHome.this).hideSpot();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 插屏广告
+        SpotManager.getInstance(ActivityHome.this).onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // 插屏广告
+        SpotManager.getInstance(ActivityHome.this).onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 插屏广告
+        SpotManager.getInstance(ActivityHome.this).onDestroy();
     }
 
     @Override
@@ -359,6 +390,79 @@ public class ActivityHome extends BaseActivity {
             @Override
             public void onChanged(@Nullable PagedList<DoubanMovie.SubjectsBean> subjectsBeans) {
                 adapterHomeInfo.submitList(subjectsBeans);
+            }
+        });
+    }
+
+    /**
+     * 设置插屏广告
+     */
+    private void setupSpotAd() {
+        // 设置插屏图片类型，默认竖图
+        //		// 横图
+        //		SpotManager.getInstance(mContext).setImageType(SpotManager
+        // .IMAGE_TYPE_HORIZONTAL);
+        // 竖图
+        SpotManager.getInstance(ActivityHome.this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+
+        // 设置动画类型，默认高级动画
+        //		// 无动画
+        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+        //				.ANIMATION_TYPE_NONE);
+        //		// 简单动画
+        //		SpotManager.getInstance(mContext)
+        //		                    .setAnimationType(SpotManager.ANIMATION_TYPE_SIMPLE);
+        // 高级动画
+        SpotManager.getInstance(ActivityHome.this)
+                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+    }
+
+
+    /**
+     * 展示插屏广告
+     */
+    private void showSpotAd(){
+        SpotManager.getInstance(ActivityHome.this).showSpot(ActivityHome.this, new SpotListener() {
+
+            @Override
+            public void onShowSuccess() {
+                Log.i(TAG, "插屏展示成功");
+            }
+
+            @Override
+            public void onShowFailed(int errorCode) {
+                Log.e(TAG, "插屏展示失败");
+                switch (errorCode) {
+                    case ErrorCode.NON_NETWORK:
+                        showToast("网络异常");
+                        break;
+                    case ErrorCode.NON_AD:
+                        showToast("暂无插屏广告");
+                        break;
+                    case ErrorCode.RESOURCE_NOT_READY:
+                        showToast("插屏资源还没准备好");
+                        break;
+                    case ErrorCode.SHOW_INTERVAL_LIMITED:
+                        showToast("请勿频繁展示");
+                        break;
+                    case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
+                        showToast("请设置插屏为可见状态");
+                        break;
+                    default:
+                        showToast("请稍后再试");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSpotClosed() {
+                Log.d(TAG, "插屏被关闭");
+            }
+
+            @Override
+            public void onSpotClicked(boolean isWebPage) {
+                Log.d(TAG, "插屏被点击");
+                Log.i(TAG, String.format("是否是网页广告？%s", isWebPage ? "是" : "不是"));
             }
         });
     }

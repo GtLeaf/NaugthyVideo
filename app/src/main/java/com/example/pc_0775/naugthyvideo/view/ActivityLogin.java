@@ -60,7 +60,6 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     @Override
     public void initView(View view) {
 
-//        AdManager.getInstance(this).init("bc4d84addcc41885", "10ce84d0a1eb333a", true);
         fragmentManager = getFragmentManager();
         fragmentLogin = new FragmentLogin();
         fragmentManager.beginTransaction().add(R.id.fl_login_register, fragmentLogin).commit();

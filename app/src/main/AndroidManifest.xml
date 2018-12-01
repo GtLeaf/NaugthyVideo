@@ -26,7 +26,7 @@
         android:theme="@style/AppTheme"
         android:name=".myApplication">
         <activity
-            android:name=".view.ActivityLogin"
+            android:name=".view.SplashActivity"
             android:label="NaugthyVideo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
         <activity android:name=".view.Main2Activity" />
         <activity android:name=".view.ActivityFunctionVideo" />
         <activity android:name=".view.ActivityVideoPlay" />
-        <activity android:name=".view.SplashActivity" />
+        <activity android:name=".view.ActivityLogin" />
         <activity android:name=".view.ActivityFunction" />
         <activity android:name=".view.ActivityPartSlide" />
         <activity android:name=".view.ActivityCardSilde" />

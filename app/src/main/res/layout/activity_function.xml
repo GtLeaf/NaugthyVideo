@@ -40,6 +40,12 @@
             android:layout_height="wrap_content"
             android:text="test"
             android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btn_function_werewolf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="狼人"
+            android:textSize="18sp"/>
     </LinearLayout>
     <EditText
         android:id="@+id/et_function_url"
