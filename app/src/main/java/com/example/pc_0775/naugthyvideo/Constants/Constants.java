@@ -28,7 +28,7 @@ public class Constants {
     /**
      * http://new.xkapi.xyz/index/g/oumei/?yeshu=1
      */
-    public static final String EUROPE_VIDEO_URL = "http://new.xkapi.xyz/index/g/oumei/";
+//    public static final String EUROPE_VIDEO_URL = "http://new.xkapi.xyz/index/g/oumei/";
 
     /**
      * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=23 cartoon
@@ -36,7 +36,7 @@ public class Constants {
      * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=22 yes
      * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=18 中文
      */
-    public static final String CARTOON_VIDEO_URL = "http://new.xkapi.xyz/index/g/av/";
+//    public static final String CARTOON_VIDEO_URL = "http://new.xkapi.xyz/index/g/av/";
     /**
      * http://new.xkapi.xyz/index/g/zhibo/
      */
@@ -53,6 +53,14 @@ public class Constants {
 
     //直播
     public static String MIMI_LIVE_URL = "http://mimiapp.hanya168.com/rar.ashx?action=homelive";
+    //video地址
+    //http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50&pageindex=1&type=1
+    public static String EUROPE_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";
+    public static String JAPAN_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";
+    public static String CARTOON_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";
+    //video地址参数
+    public static final String VIDEO_PARAMTER_PAGEINDEX = "pageindex";
+    public static final String VIDEO_PARAMTER_TYPE = "type";
 
 
     //接口
@@ -81,11 +89,12 @@ public class Constants {
     public static final int CLASS_TWO_REQUEST = 3102;
     public static final int CLASS_THREE_REQUEST = 3103;
     public static final int EUROPE_VIDEO_REQUEST = 3104;
-    public static final int CARTOON_VIDEO_REQUEST = 3105;
-    public static final int LIVE_PLATFORM_REQUEST = 3106;
-    public static final int LIVE_ROOM_REQUEST = 3107;
-    public static final int LIVE_PLATFORM_MIMI_REQUEST = 3108;
-    public static final int DOUBAN_MOVIE_REQUEST = 3109;
+    public static final int JAPAN_VIDEO_REQUEST = 3105;
+    public static final int CARTOON_VIDEO_REQUEST = 3106;
+    public static final int LIVE_PLATFORM_REQUEST = 3107;
+    public static final int LIVE_ROOM_REQUEST = 3108;
+    public static final int LIVE_PLATFORM_MIMI_REQUEST = 3109;
+    public static final int DOUBAN_MOVIE_REQUEST = 3110;
 
     //登录的what常量
     public static final int LOGIN_SUCCESS = 1011;

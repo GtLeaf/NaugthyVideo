@@ -83,8 +83,6 @@ public class ActivityFunctionVideo extends BaseActivity {
             activity.videoInfoList.clear();
             activity.videoInfoList.addAll(resultList);
             activity.adapterFunctionVideo.notifyDataSetChanged();
-
-           
         }
     }
 
@@ -174,7 +172,8 @@ public class ActivityFunctionVideo extends BaseActivity {
         if(null != tv_functionPageNumber){
             tv_functionPageNumber.setText("-"+pageNumber+"-");
         }
-        Uri videoListUri = uri.buildUpon().appendQueryParameter("yeshu", pageNumber+"").build();
-        NetWorkUtil.sendRequestWithOkHttp(videoListUri.toString(), Constants.CLASS_ONE_REQUEST, handler);
+        int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
+        String url = NetWorkUtil.replace(uri.toString(), Constants.PAGE_NUMBER, currentPageNumber+1+"");
+        NetWorkUtil.sendRequestWithOkHttp(url, Constants.CLASS_ONE_REQUEST, handler);
     }
 }
