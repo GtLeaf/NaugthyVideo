@@ -22,11 +22,11 @@ import com.example.pc_0775.naugthyvideo.CardSwipeControl.ListObservable;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.ListObserver;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
-import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.myAdapterInterface.OnDataUpdateListen;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 
@@ -39,12 +39,8 @@ import java.util.List;
  * Created by PC-0775 on 2018/10/8.
  */
 
-public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolder> implements ListObserver {
+public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolder> implements ListObserver<LiveRoomMiMi>{
 
-    /**
-     * 外部传入的图片地址
-     */
-//    private List<T> mDataList;
     /**
      * 从网络获取的视频信息
      */
@@ -77,13 +73,26 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
     private boolean isSendRequest = false;
     private Context mContext;
 
+    /**
+     * 数据更新监听(未完成)
+     */
+    private OnDataUpdateListen dataUpdateListen = new OnDataUpdateListen() {
+        @Override
+        public void onUpdateData() {
+
+        }
+    };
+
     @Override
-    public void onUpdate(List list) {
-        mCacheList = list;
+    public void onUpdate(LiveRoomMiMi liveRoomMiMi) {
+        mCacheList = liveRoomMiMi.getLives();
         if (isSendRequest) {
             updateGlideDrawableList();
+            isSendRequest = false;
         }
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -156,7 +165,7 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
 
             requestCacheData();
 
-            if (mCardInfoDataList.size() <= 0) {
+            if (mCardInfoDataList.size() <= CardConfig.PER_FETCH_DISTABCE) {
                 if (mCacheList.size() <= 0) {
                     return;
                 }
@@ -196,17 +205,6 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
             return cardShowInfoBean;
 
         }
-        //EuropeVideoInfo
-        if (object instanceof EuropeVideoInfo) {
-            VideoInfo videoInfo = new VideoInfo();
-            videoInfo.setImg(((EuropeVideoInfo) object).getImage_small());
-            videoInfo.setTitle(((EuropeVideoInfo) object).getName());
-            videoInfo.setUrl(((EuropeVideoInfo) object).getUrl());
-
-            cardShowInfoBean.setType(Constants.VIDEO_TYPE);
-            cardShowInfoBean.setVideoInfo(videoInfo);
-            return cardShowInfoBean;
-        }
         //LiveRoomInfo
         if (object instanceof LiveRoomInfo) {
             VideoInfo videoInfo = new VideoInfo();
@@ -217,20 +215,33 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
             cardShowInfoBean.setType(Constants.LIVE_TYPE);
             cardShowInfoBean.setVideoInfo(videoInfo);
         }
+
+        //LiveRoomInfo
+        if (object instanceof LiveRoomMiMi.LivesBean) {
+            VideoInfo videoInfo = new VideoInfo();
+            videoInfo.setImg(((LiveRoomMiMi.LivesBean) object).getCover());
+            videoInfo.setUrl((((LiveRoomMiMi.LivesBean) object).getLiveSrc()));
+            videoInfo.setTitle(((LiveRoomMiMi.LivesBean) object).getLiveId()+"");
+
+            cardShowInfoBean.setType(Constants.LIVE_TYPE);
+            cardShowInfoBean.setVideoInfo(videoInfo);
+        }
         return cardShowInfoBean;
     }
 
     private void requestCacheData(){
         //当没发送网络请求，而且mCardInfoDataList小于预加载临界数时
         if (!isSendRequest && (mCardInfoDataList.size() <= CardConfig.PER_FETCH_DISTABCE)) {
-            //uri为空不必下一页
-            if (null == uri) {
+            //uri为空不必下一页(不再使用uri---------2)
+            /*if (null == uri) {
                 return;
-            }
-            int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
+            }*/
+            /*int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
             String url = NetWorkUtil.replace(uri.toString(),
-                    Constants.PAGE_NUMBER, currentPageNumber+1+"");
-            listObservable.setUrl(url);
+                    Constants.PAGE_NUMBER, currentPageNumber+1+"");*/
+            dataUpdateListen.onUpdateData();
+            listObservable.setUrl(Constants.MIMI_LIVE_URL);
+            isSendRequest = true;
         }
     }
 

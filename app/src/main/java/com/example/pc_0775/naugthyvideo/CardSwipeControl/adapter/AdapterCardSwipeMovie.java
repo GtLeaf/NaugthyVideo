@@ -25,6 +25,7 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 
@@ -37,7 +38,7 @@ import java.util.List;
  * Created by PC-0775 on 2018/10/8.
  */
 
-public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHolder> implements ListObserver {
+public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHolder> implements ListObserver<LiveRoomMiMi> {
 
     /**
      * 从网络获取的视频信息
@@ -66,8 +67,8 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
     private Context mContext;
 
     @Override
-    public void onUpdate(List list) {
-        mCacheList = list;
+    public void onUpdate(LiveRoomMiMi liveRoomMiMi) {
+        mCacheList = liveRoomMiMi.getLives();
         if (isSendRequest) {
             updateGlideDrawableList();
         }

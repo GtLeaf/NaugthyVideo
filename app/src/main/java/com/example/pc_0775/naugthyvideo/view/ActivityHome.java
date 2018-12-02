@@ -24,16 +24,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
@@ -66,7 +65,7 @@ public class ActivityHome extends BaseActivity {
     /**
      * 是否允许启动ActivityCardSilde页面，当用户点击后为真
      */
-    private boolean isStartActivityCardSilde = false;
+    private boolean isAllowStartActivityCardSilde = false;
 
 
     //data
@@ -74,7 +73,7 @@ public class ActivityHome extends BaseActivity {
      * rv_homeList的数据源
      */
     private List<HomeInfoData> homeInfoDataList = new ArrayList(){};
-    private List<VideoInfo> videoInfoList;
+    private List<LiveRoomMiMi> liveInfoList;
     private List dataList;
 
 
@@ -104,17 +103,11 @@ public class ActivityHome extends BaseActivity {
                 Toast.makeText(activity, "获取数据失败，请检查网络", Toast.LENGTH_SHORT).show();
                 return;
             }
-            //服务器返回数据null时（接口改变，已经不适用）
-            List list = NetWorkUtil.parseJsonArray(msg.obj.toString(), Object.class);
-            if(list.size() == 0){
-                Toast.makeText(activity, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
-//                return;
-            }
             switch (msg.what){
 
                 case Constants.CARTOON_VIDEO_REQUEST:
                     activity.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
-                    if (activity.isStartActivityCardSilde){
+                    if (activity.isAllowStartActivityCardSilde){
                         activity.startActivityCardSilde();
                     }
                     break;
@@ -141,7 +134,6 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        initData();
     }
 
     @Override
@@ -196,8 +188,8 @@ public class ActivityHome extends BaseActivity {
                         startActivity(ActivityPartSlide.class);
                         break;
                     case R.id.nav_card_slide:
-                        isStartActivityCardSilde = true;
-                        if (null != videoInfoList && 0 != videoInfoList.size()) {
+                        isAllowStartActivityCardSilde = true;
+                        if (null != liveInfoList && 0 != liveInfoList.size()) {
                             startActivityCardSilde();
                         }else {
                             requestMovieListData(handler);
@@ -283,17 +275,6 @@ public class ActivityHome extends BaseActivity {
         return true;
     }
 
-    private void initData(){
-        for (int i = 0; i<20; i++){
-            int type = Constants.ITEM_TYPE.ITEM_TYPE_INFO.ordinal();
-            if(2 == i || 3 == i){
-                type = Constants.ITEM_TYPE.ITEM_TYPE_LIST.ordinal();
-            }
-            HomeInfoData homeInfoData = new HomeInfoData("title:"+i, "describe:"+i, type);
-            homeInfoDataList.add(homeInfoData);
-        }
-    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return super.dispatchTouchEvent(ev);
@@ -320,7 +301,7 @@ public class ActivityHome extends BaseActivity {
         classTowparameters.put("type", "18");
         Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);
         Bundle bundle = new Bundle();
-        bundle.putString("uri", classTowUri.toString());
+//        bundle.putString("uri", classTowUri.toString());
         bundle.putSerializable("resultList", (Serializable)dataList);
         startActivity(ActivityCardSilde.class, bundle);
     }

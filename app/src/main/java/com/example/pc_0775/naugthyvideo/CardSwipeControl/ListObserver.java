@@ -1,12 +1,11 @@
 package com.example.pc_0775.naugthyvideo.CardSwipeControl;
 
 
-import java.util.List;
-
 /**
  * Created by PC-0775 on 2018/10/14.
  */
 
-public interface ListObserver {
-    public void onUpdate(List list);
+//需要用泛型封装
+public interface ListObserver<T> {
+    public void onUpdate(T t);
 }

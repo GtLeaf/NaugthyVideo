@@ -34,6 +34,7 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LivePlatform;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterCardSwipeCollection;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.google.gson.Gson;
@@ -120,6 +121,15 @@ public class ActivityLiveCardSilde extends BaseActivity {
                     activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeLive);
                     activity.cardCallback.setAdapterCardSwipeLive(activity.adapterCardSwipeLive);
                     break;
+                case Constants.LIVE_PLATFORM_MIMI_REQUEST:
+                    activity.videoInfoDataList.clear();
+                    LiveRoomMiMi liveRoomMiMi = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), LiveRoomMiMi.class);
+                    activity.videoInfoDataList.addAll(liveRoomMiMi.getLives());
+                    activity.adapterCardSwipeLive = new AdapterCardSwipeLive(activity.getApplicationContext(),
+                            activity.videoInfoDataList, null);
+                    activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeLive);
+                    activity.cardCallback.setAdapterCardSwipeLive(activity.adapterCardSwipeLive);
+                    break;
                 default:
                     break;
             }
@@ -128,8 +138,9 @@ public class ActivityLiveCardSilde extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
-        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
+//        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_PLATFORM_URL, Constants.LIVE_PLATFORM_REQUEST, myHandler);
+//        NetWorkUtil.sendRequestWithOkHttp(Constants.LIVE_ROOM_URL+"?url=jsonchunban.txt", Constants.LIVE_ROOM_REQUEST, myHandler);
+        NetWorkUtil.sendRequestWithOkHttp(Constants.MIMI_LIVE_URL, Constants.LIVE_PLATFORM_MIMI_REQUEST, myHandler);
     }
 
     @Override

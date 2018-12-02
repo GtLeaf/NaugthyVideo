@@ -34,6 +34,7 @@ public class NetWorkUtil {
     private static NetWorkUtil netWorkUtil;
     private static final Gson gson = new Gson();
     private static final OkHttpClient client = new OkHttpClient();
+    public static final HashMap<String, String> emptyMap = new HashMap<>();
 
     private NetWorkUtil(){
 

@@ -51,6 +51,10 @@ public class Constants {
     public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
     //以上接口已经废弃-------------------------------------------------------------------------------------------------
 
+    //直播
+    public static String MIMI_LIVE_URL = "http://mimiapp.hanya168.com/rar.ashx?action=homelive";
+
+
     //接口
     public static String WEREWOLF_URL = "https://www.86rrxx.com/";
 
@@ -80,7 +84,8 @@ public class Constants {
     public static final int CARTOON_VIDEO_REQUEST = 3105;
     public static final int LIVE_PLATFORM_REQUEST = 3106;
     public static final int LIVE_ROOM_REQUEST = 3107;
-    public static final int DOUBAN_MOVIE_REQUEST = 3108;
+    public static final int LIVE_PLATFORM_MIMI_REQUEST = 3108;
+    public static final int DOUBAN_MOVIE_REQUEST = 3109;
 
     //登录的what常量
     public static final int LOGIN_SUCCESS = 1011;

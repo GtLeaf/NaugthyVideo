@@ -2,13 +2,13 @@ package com.example.pc_0775.naugthyvideo.CardSwipeControl;
 
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import java.lang.ref.WeakReference;
@@ -37,6 +37,7 @@ public class ListObservable {
      * 请求得到的数据
      */
     private List dataList;
+    private LiveRoomMiMi liveRoomMiMi;
 
     private MyHandler myHandler = new MyHandler(this);
 
@@ -59,6 +60,14 @@ public class ListObservable {
                 case Constants.CARTOON_VIDEO_REQUEST:
                     listObservable.dataList = NetWorkUtil.parseJsonArray(msg.obj.toString(), VideoInfo.class);
                     if(listObservable.dataList.size() == 0){
+                        Toast.makeText(listObservable.context, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    listObservable.onChange();
+                    break;
+                case Constants.LIVE_PLATFORM_MIMI_REQUEST:
+                    listObservable.liveRoomMiMi = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), LiveRoomMiMi.class);
+                    if(listObservable.liveRoomMiMi == null){
                         Toast.makeText(listObservable.context, "获取数据失败，请重试", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -89,10 +98,10 @@ public class ListObservable {
             if (null == observer) {
                 continue;
             }
-            if (null == dataList) {
+            if (null == liveRoomMiMi) {
                 return;
             }
-            observer.onUpdate(dataList);
+            observer.onUpdate(liveRoomMiMi);
         }
     }
 
@@ -112,6 +121,6 @@ public class ListObservable {
      * 发送网络请求
      */
     public void requestDataList(String url){
-        NetWorkUtil.sendRequestWithOkHttp(url, Constants.CARTOON_VIDEO_REQUEST, myHandler );
+        NetWorkUtil.sendRequestWithOkHttp(url, Constants.LIVE_PLATFORM_MIMI_REQUEST, myHandler );
     }
 }
