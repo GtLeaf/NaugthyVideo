@@ -104,7 +104,7 @@ public class ActivityCardSilde extends BaseActivity {
                     activity.videoInfoDataList.clear();
                     activity.videoInfoDataList.addAll(NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class));
                     activity.adapterCardSwipeLive = new AdapterCardSwipeLive(activity.getApplicationContext(),
-                            activity.videoInfoDataList, null);
+                            activity.videoInfoDataList);
                     activity.rv_cardSlide.setAdapter(activity.adapterCardSwipeLive);
                     activity.cardCallback.setAdapterCardSwipeLive(activity.adapterCardSwipeLive);
                     break;
@@ -137,7 +137,7 @@ public class ActivityCardSilde extends BaseActivity {
         //注册eventBus
         EventBus.getDefault().register(this);
 
-        adapterCardSwipeLive = new AdapterCardSwipeLive(this, videoInfoDataList, uri);
+        adapterCardSwipeLive = new AdapterCardSwipeLive(this, videoInfoDataList);
         rv_cardSlide.setItemAnimator(new DefaultItemAnimator());//设置动画
         rv_cardSlide.setAdapter(adapterCardSwipeLive);
         cardCallback = new CardItemTouchHelperCallback(adapterCardSwipeLive);

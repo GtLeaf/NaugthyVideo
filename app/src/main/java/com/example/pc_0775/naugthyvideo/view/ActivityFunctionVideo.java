@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.VideoInfoMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterFunctionVideo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
@@ -23,6 +24,7 @@ import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityFunctionVideo extends BaseActivity {
@@ -87,15 +89,15 @@ public class ActivityFunctionVideo extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void initParams(Bundle params) {
         //获得Uri进行后网络请求
         this.uri = Uri.parse(getIntent().getStringExtra(INTENT_URI));
         this.videoInfoList = (List) getIntent().getSerializableExtra(INTENT_RESULT_LIST);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -118,7 +120,7 @@ public class ActivityFunctionVideo extends BaseActivity {
         tv_functionPageNumber.setText("-"+pageNumber+"-");
         LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_functionVideoList.setLayoutManager(layoutManager);
-        adapterFunctionVideo = new AdapterFunctionVideo(videoInfoList);
+        adapterFunctionVideo = new AdapterFunctionVideo(videoMiMiToVideoInfo(videoInfoList));
         rv_functionVideoList.setAdapter(adapterFunctionVideo);
 
     }
@@ -175,5 +177,24 @@ public class ActivityFunctionVideo extends BaseActivity {
         int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
         String url = NetWorkUtil.replace(uri.toString(), Constants.PAGE_NUMBER, currentPageNumber+1+"");
         NetWorkUtil.sendRequestWithOkHttp(url, Constants.CLASS_ONE_REQUEST, handler);
+    }
+
+    /**
+     * 将VideoInfoMiMi.VideoBean转为VideoInfo
+     * @param videoInfoList
+     * @return
+     */
+    private List<VideoInfo> videoMiMiToVideoInfo(List videoInfoList){
+        List<VideoInfoMiMi.VideoBean> videoMiMiList;
+        List<VideoInfo> list = new ArrayList<>();
+        if (videoInfoList.size() == 0) return list;
+        if(!(videoInfoList.get(0) instanceof VideoInfoMiMi.VideoBean)){
+            return list;
+        }
+        videoMiMiList = videoInfoList;
+        for (VideoInfoMiMi.VideoBean miMi : videoMiMiList){
+            list.add(new VideoInfo(miMi.getTitle(), miMi.getVurl(), miMi.getCoverimg(), miMi.getUpdatedate()));
+        }
+        return list;
     }
 }

@@ -76,8 +76,6 @@ public class Constants {
     public static final String LOGIN_URL = "http://101.201.236.217:8888/login";
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/x-www-form-urlencoded");//; charset=utf-8
 
-
-
     //paramter
     public static final String PAGE_NUMBER = "yeshu";
 
@@ -110,12 +108,19 @@ public class Constants {
     public static final String URL = "url";
 
     //文件存储地址
-    public static final String LOCAL_FILE_PATH = "/mnt/sdcard/newVotingSystem/";
-    public static final String FILEPATH = LOCAL_FILE_PATH + "/文件/";
+    public static final String LOCAL_FILE_PATH = "/mnt/sdcard/NaugthyVideo/";
+    public static final String FILE_PATH = LOCAL_FILE_PATH + "/file/";
+    public static final String VIDEO_PATH = LOCAL_FILE_PATH + "/video/";
 
     public static enum ITEM_TYPE{
         ITEM_TYPE_INFO,
         ITEM_TYPE_LIST
     }
+
+    //Setting
+    //播放模式,0为网页，1为直播播放器
+    public static int PLAY_MODE = 0;
+    //是否边下边播，0为否，1为是
+    public static boolean DOWNLOAD_AT_THE_SAME_TIME = true;
 
 }

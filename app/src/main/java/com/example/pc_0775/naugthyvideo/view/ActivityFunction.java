@@ -115,7 +115,6 @@ public class ActivityFunction extends BaseActivity {
         btn_functionTest.setOnClickListener(this);
         btn_functionWerewolf.setOnClickListener(this);
 
-
         et_functionUrl.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

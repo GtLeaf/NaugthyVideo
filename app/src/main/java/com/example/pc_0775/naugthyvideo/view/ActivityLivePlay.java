@@ -16,6 +16,8 @@ import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 
+import java.io.File;
+
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.widget.MediaController;
@@ -58,6 +60,7 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
 
     public void initParams(){
         path = getIntent().getExtras().getString(Constants.INTENT_VIDEO_URL);
+
     }
 
     public void initView() {
@@ -70,11 +73,11 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
                             + " variable to your media file URL/path", Toast.LENGTH_LONG).show();
             return;
         }else {
-            Uri uri = Uri.parse(path);
+            Uri uri = Uri.parse(isDownloadAtTheSameTime(path));
             vv_liveVitamio.setVideoURI(uri);
             vv_liveVitamio.setMediaController(new MediaController(this));
             vv_liveVitamio.requestFocus();
-            vv_liveVitamio.setBufferSize(10240);//设置视频缓冲大小。默认1024KB，单位byte
+            vv_liveVitamio.setBufferSize(10240*2);//设置视频缓冲大小10240*5KB。默认1024KB，单位byte
             vv_liveVitamio.setOnInfoListener(this);
             vv_liveVitamio.setOnBufferingUpdateListener(this);
             vv_liveVitamio.setVideoQuality(MediaPlayer.VIDEOQUALITY_HIGH);//好像没啥用
@@ -118,7 +121,7 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
             //开始缓冲
             case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                 if (vv_liveVitamio.isPlaying()) {
-                    vv_liveVitamio.pause();
+//                    vv_liveVitamio.pause();
                     pb_live.setVisibility(View.VISIBLE);
                     tv_bufferPercent.setText("");
                     tv_netSpeed.setText("");
@@ -148,5 +151,18 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
         intent.putExtras(bundle);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         context.startActivity(intent);
+    }
+
+    private String isDownloadAtTheSameTime(String path){
+        if (Constants.DOWNLOAD_AT_THE_SAME_TIME){
+            File videoFile = new File(Constants.VIDEO_PATH);
+            if (!videoFile.exists()){
+                videoFile.mkdirs();
+            }
+            String fileName = "download_"+System.currentTimeMillis()+".mp4";
+            path="cache:"+Constants.VIDEO_PATH+fileName+":"+path;
+        }
+
+        return path;
     }
 }

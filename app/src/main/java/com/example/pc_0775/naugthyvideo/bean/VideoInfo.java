@@ -51,13 +51,12 @@ public class VideoInfo implements Serializable{
         this.info = info;
     }
 
-    @Override
-    public String toString() {
-        return "VideoInfo{" +
-                "title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                ", img='" + img + '\'' +
-                ", info='" + info + '\'' +
-                '}';
+    public VideoInfo(){}
+
+    public VideoInfo(String title, String url, String img, String info) {
+        this.title = title;
+        this.url = url;
+        this.img = img;
+        this.info = info;
     }
 }

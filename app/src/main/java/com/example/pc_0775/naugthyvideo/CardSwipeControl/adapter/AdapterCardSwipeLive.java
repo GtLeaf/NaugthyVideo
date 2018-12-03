@@ -63,7 +63,6 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
     /**
      * 数据源地址
      */
-    private Uri uri;
 
     private ListObservable listObservable;
 
@@ -112,10 +111,9 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
         }
     }
 
-    public AdapterCardSwipeLive(Context context, List videoInfoDataList, Uri uri){
+    public AdapterCardSwipeLive(Context context, List videoInfoDataList){
         this.mCardInfoDataList = videoInfoDataList;
         this.mContext = context;
-        this.uri = uri;
         listObservable = new ListObservable(context);
         listObservable.registerObserver(this);
         updateGlideDrawableList();

@@ -3,7 +3,6 @@ package com.example.pc_0775.naugthyvideo.LogCrash
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Environment
 import android.util.Log
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import java.io.*
@@ -65,7 +64,7 @@ class CrashExceptionHandler private constructor(context:Context):Thread.Uncaught
         val fileName = "$time-$timestamp.txt"
         try {
 //            val file = getDiskCacheDir(context!!, "crash")
-            val file = File(Constants.FILEPATH)
+            val file = File(Constants.FILE_PATH)
 //            val file = File(" ")
             if (!file.exists()){
                 file.mkdirs()

@@ -10,10 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.util.GifCacheUtil;
+import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 
 import org.greenrobot.eventbus.EventBus;
@@ -81,7 +83,12 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
             public void onClick(View v) {
                 Toast.makeText(mContext, videoInfo.getUrl(), Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new MessageEvent(videoInfo.getUrl()));
-                ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
+                if (0 == Constants.PLAY_MODE){
+                    ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
+                }else {
+                    ActivityLivePlay.actionStart(mContext, videoInfo.getUrl());
+                }
+
             }
         });
     }

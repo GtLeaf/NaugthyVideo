@@ -198,6 +198,9 @@ public class ActivityHome extends BaseActivity {
                     case R.id.nav_live_card_slide:
                         startActivity(ActivityLiveCardSilde.class);
                         break;
+                    case R.id.nav_settings:
+                        startActivity(ActivitySetting.class);
+                        break;
                     default:
                         break;
                 }

@@ -6,7 +6,7 @@
     <color name="voteblue">#386491</color><!--投票主题蓝-->
     <color name="voteselectedblue">#1f4369</color><!--主题选中蓝 -->
     <color name="white">#ffffff</color>
-    <color name="gray">#b3b3b3</color>
+    <color name="gray">#c4c4c4</color>
     <color name="table_text_normal_color">#A9A9A9</color>
     <color name="divide_line_color">#f0f0f0</color>
 
