@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
+import com.example.pc_0775.naugthyvideo.MyApplication;
 import com.example.pc_0775.naugthyvideo.R;
 
 import java.io.File;
@@ -74,7 +75,9 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
             return;
         }else {
             Uri uri = Uri.parse(isDownloadAtTheSameTime(path));
-            vv_liveVitamio.setVideoURI(uri);
+//            vv_liveVitamio.setVideoPath(path);
+            String str = MyApplication.getProxy(this).getProxyUrl(path);
+            vv_liveVitamio.setVideoPath(str);
             vv_liveVitamio.setMediaController(new MediaController(this));
             vv_liveVitamio.requestFocus();
             vv_liveVitamio.setBufferSize(10240*2);//设置视频缓冲大小10240*5KB。默认1024KB，单位byte
@@ -153,6 +156,11 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
         context.startActivity(intent);
     }
 
+    /**
+     * vitamio自带缓存，只能缓存不到2M，差评，已弃用
+     * @param path
+     * @return
+     */
     private String isDownloadAtTheSameTime(String path){
         if (Constants.DOWNLOAD_AT_THE_SAME_TIME){
             File videoFile = new File(Constants.VIDEO_PATH);

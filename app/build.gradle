@@ -63,6 +63,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.danikula:videocache:2.6.4'
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     //paging
     implementation 'android.arch.paging:runtime:1.0.0'
