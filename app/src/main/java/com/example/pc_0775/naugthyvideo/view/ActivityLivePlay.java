@@ -74,10 +74,8 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
                             + " variable to your media file URL/path", Toast.LENGTH_LONG).show();
             return;
         }else {
-            Uri uri = Uri.parse(isDownloadAtTheSameTime(path));
-//            vv_liveVitamio.setVideoPath(path);
-            String str = MyApplication.getProxy(this).getProxyUrl(path);
-            vv_liveVitamio.setVideoPath(str);
+//            Uri uri = Uri.parse(isDownloadAtTheSameTime(path));
+            vv_liveVitamio.setVideoPath(path);
             vv_liveVitamio.setMediaController(new MediaController(this));
             vv_liveVitamio.requestFocus();
             vv_liveVitamio.setBufferSize(10240*2);//设置视频缓冲大小10240*5KB。默认1024KB，单位byte
@@ -124,7 +122,7 @@ public class ActivityLivePlay extends AppCompatActivity implements MediaPlayer.O
             //开始缓冲
             case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                 if (vv_liveVitamio.isPlaying()) {
-//                    vv_liveVitamio.pause();
+                    vv_liveVitamio.pause();
                     pb_live.setVisibility(View.VISIBLE);
                     tv_bufferPercent.setText("");
                     tv_netSpeed.setText("");

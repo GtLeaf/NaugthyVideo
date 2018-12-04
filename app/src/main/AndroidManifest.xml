@@ -52,7 +52,8 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".view.ActivitySetting"></activity>
+        <activity android:name=".view.ActivitySetting" />
+        <activity android:name=".view.ActivityIjkLivePlay"></activity>
     </application>
 
 </manifest>

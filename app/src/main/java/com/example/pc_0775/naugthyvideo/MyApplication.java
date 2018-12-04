@@ -5,8 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.danikula.videocache.file.FileNameGenerator;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.LogCrash.CrashExceptionHandler;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -23,7 +22,6 @@ import okhttp3.internal.Util;
 
 public class MyApplication extends Application {
     private List<Activity> oList;//用于存放所有启动的Activity的集合
-    private HttpProxyCacheServer proxy;//缓存代理
 
     public void onCreate() {
         super.onCreate();
@@ -60,30 +58,6 @@ public class MyApplication extends Application {
         //通过循环，把集合中的所有Activity销毁
         for (Activity activity : oList) {
             activity.finish();
-        }
-    }
-
-    public static HttpProxyCacheServer getProxy(Context context){
-        MyApplication myApplication = (MyApplication) context.getApplicationContext();
-        return myApplication.proxy == null ? (myApplication.proxy = myApplication.newProxy()) : myApplication.proxy;
-    }
-
-    private HttpProxyCacheServer newProxy(){
-        return new HttpProxyCacheServer.Builder(this).cacheDirectory(getVideoCacheDir(this))
-                .fileNameGenerator(new MyFileNameGenerator()).build();
-    }
-
-    private File getVideoCacheDir(Context context){
-        return new File(context.getExternalFilesDir("DCIM"), "video-cache");
-    }
-
-    /**
-     * 缓存的命名规则
-     */
-    public class MyFileNameGenerator implements FileNameGenerator{
-        @Override
-        public String generate(String url) {
-            return "download_"+System.currentTimeMillis()+".mp4";
         }
     }
 }

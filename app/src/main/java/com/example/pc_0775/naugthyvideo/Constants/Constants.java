@@ -1,5 +1,9 @@
 package com.example.pc_0775.naugthyvideo.Constants;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+
 import okhttp3.MediaType;
 
 /**
@@ -120,7 +124,20 @@ public class Constants {
     //Setting
     //播放模式,0为网页，1为直播播放器
     public static int PLAY_MODE = 0;
+    //0为vitamio播放器，1为Ijk播放器
+    public static int PLAYER_SELECT = 0;
     //是否边下边播，0为否，1为是
     public static boolean DOWNLOAD_AT_THE_SAME_TIME = true;
+
+    //可以用变长参数来优化，待优化
+    public static void createAlertDialog(Context context, String title, String message,
+                                         String buttonText, DialogInterface.OnClickListener listener) {
+        new AlertDialog
+                .Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(buttonText, listener)
+                .show();
+    }
 
 }

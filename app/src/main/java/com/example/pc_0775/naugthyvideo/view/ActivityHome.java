@@ -138,7 +138,7 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_home;
+        return R.layout.activity_home_my;
     }
 
     @Override

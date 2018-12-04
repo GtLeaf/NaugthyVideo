@@ -33,10 +33,18 @@ class ActivitySetting : BaseActivity() {
 
         if (1 == Constants.PLAY_MODE){
             switch_play_mode.isChecked = true
+            setPlayMode(true)
+        }else{
+            switch_play_mode.isChecked = false
+            setPlayMode(false)
         }
 
-        if (Constants.DOWNLOAD_AT_THE_SAME_TIME){
-            switch_download_at_the_same_time.isChecked = true
+        if (1 == Constants.PLAYER_SELECT){
+            switch_player_select.isChecked = true
+            setPlayer(true)
+        }else{
+            switch_player_select.isChecked = false
+            setPlayer(false)
         }
     }
 
@@ -44,21 +52,13 @@ class ActivitySetting : BaseActivity() {
         switch_play_mode.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
             buttonView, isChecked ->
 
-            Constants.PLAY_MODE = 0
-            tv_setting_play_mode.text = "播放：网页模式"
-            if (isChecked){
-                Constants.PLAY_MODE = 1
-                tv_setting_play_mode.text = "播放：播放器模式"
-            }
+            setPlayMode(isChecked);
         })
 
-        switch_download_at_the_same_time.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
+        switch_player_select.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
             buttonView, isChecked ->
 
-            Constants.DOWNLOAD_AT_THE_SAME_TIME = false
-            if (isChecked){
-                Constants.DOWNLOAD_AT_THE_SAME_TIME = true
-            }
+            setPlayer(isChecked)
         })
     }
 
@@ -78,5 +78,29 @@ class ActivitySetting : BaseActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun setPlayMode(isChecked:Boolean){
+        if (isChecked){
+            Constants.PLAY_MODE = 1
+            tv_setting_play_mode.text = "播放：播放器模式"
+            view_setting_player_line.visibility = View.VISIBLE
+            ll_setting_player.visibility = View.VISIBLE
+        }else{
+            Constants.PLAY_MODE = 0
+            tv_setting_play_mode.text = "播放：网页模式"
+            view_setting_player_line.visibility = View.GONE
+            ll_setting_player.visibility = View.GONE
+        }
+    }
+
+    fun setPlayer(isChecked: Boolean){
+        if (isChecked){
+            Constants.PLAYER_SELECT = 1
+            tv_setting_player_name.text = getString(R.string.ijk_player)
+        }else{
+            Constants.PLAYER_SELECT = 0
+            tv_setting_player_name.text = getString(R.string.vitamio_player)
+        }
     }
 }

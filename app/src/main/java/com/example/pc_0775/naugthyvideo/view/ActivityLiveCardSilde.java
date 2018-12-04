@@ -160,7 +160,7 @@ public class ActivityLiveCardSilde extends BaseActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
         userCollectionList = getDataList(COLLECTION_LIST);
-        showToast("收藏数量"+userCollectionList.size()+":"+userCollectionList.get(0).toString());
+        showToast("收藏数量"+userCollectionList.size());
         //注册eventBus
         EventBus.getDefault().register(this);
 

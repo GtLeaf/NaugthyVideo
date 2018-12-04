@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="TITLE"
+            android:text="Naugthy Video"
             android:textSize="50dp"
             android:textColor="@color/blue"/>
     </LinearLayout>
@@ -59,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 

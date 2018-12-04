@@ -15,6 +15,7 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.util.GifCacheUtil;
+import com.example.pc_0775.naugthyvideo.view.ActivityIjkLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 
@@ -86,7 +87,11 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
                 if (0 == Constants.PLAY_MODE){
                     ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
                 }else {
-                    ActivityLivePlay.actionStart(mContext, videoInfo.getUrl());
+                    if (Constants.DOWNLOAD_AT_THE_SAME_TIME){
+                        ActivityLivePlay.actionStart(mContext, videoInfo.getUrl());
+                    }else {
+                        ActivityIjkLivePlay.Companion.actionStart(mContext, videoInfo.getUrl());
+                    }
                 }
 
             }
