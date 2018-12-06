@@ -25,20 +25,16 @@ import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.view.ActivityHome;
-import com.example.pc_0775.naugthyvideo.view.ActivityLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -52,7 +48,7 @@ import okhttp3.Response;
  * Use the {@link FragmentLogin#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentLogin extends Fragment{
+public class FragmentLogin extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -80,18 +76,26 @@ public class FragmentLogin extends Fragment{
 
     //handler
     private MyHandler handler = new MyHandler(this);
-    public static class MyHandler extends Handler{
+
+    public static class MyHandler extends Handler {
         WeakReference<FragmentLogin> weakReference;
 
-        MyHandler(FragmentLogin fragmentLogin){
+        MyHandler(FragmentLogin fragmentLogin) {
             weakReference = new WeakReference<>(fragmentLogin);
         }
 
         @Override
         public void handleMessage(Message msg) {
             FragmentLogin fragmentLogin = weakReference.get();
-            switch (msg.what){
-                case Constants.LOGIN_SUCCESS:
+            switch (msg.what) {
+                case Constants.USER_LOGIN:
+                    String loginMessage = null;
+                    try {
+                        loginMessage = new JSONObject(msg.obj.toString()).getString("message");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Constants.createAlertDialog(fragmentLogin.activity, loginMessage);
                     break;
                 default:
                     break;
@@ -190,17 +194,17 @@ public class FragmentLogin extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    private void init(){
+    private void init() {
     }
 
-    private void setListener(){
+    private void setListener() {
         switch_loginIfShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //密码不可见
                     et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                }else {
+                } else {
                     //密码可见
                     et_loginPassowrd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
                 }
@@ -211,15 +215,26 @@ public class FragmentLogin extends Fragment{
         btn_fragment_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
-                startActivity(intent);
-                activity.finish();
-//                sendPostRequest(et_loginName.getText().toString(), et_loginPassowrd.getText().toString());
+                String phone_number = et_loginName.getText().toString();
+                String password = et_loginPassowrd.getText().toString();
+                if (phone_number.equals("")){
+                    Constants.createAlertDialog(activity, "手机号不能为空");
+                    return;
+                }
+                if (!Constants.isMobileNO(phone_number)){
+                    Constants.createAlertDialog(activity, "手机号格式错误");
+                    return;
+                }
+                if (password.equals("")){
+                    Constants.createAlertDialog(activity, "密码不能为空");
+                    return;
+                }
+                sendPostRequest(phone_number, password);
             }
         });
     }
 
-    public void sendPostRequest(String phoneNumber, String password){
+    public void sendPostRequest(String phoneNumber, String password) {
         RequestBody requestBody = new FormBody.Builder()
                 .add("phone_number", phoneNumber)
                 .add("password", password)
@@ -234,7 +249,7 @@ public class FragmentLogin extends Fragment{
             @Override
             public void run() {
                 final Message message = Message.obtain();
-                message.what = Constants.LOGIN_SUCCESS;
+                message.what = Constants.USER_LOGIN;
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -243,20 +258,21 @@ public class FragmentLogin extends Fragment{
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        boolean success = false;
+                        String loginMessage = "";
+                        String json = response.body().string();
                         try {
-                            success = new JSONObject(response.body().string()).getBoolean("success");
+                            loginMessage = new JSONObject(json).getString("message");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if (success) {
-//                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
+                        if (loginMessage.equals("success")) {
                             Intent intent = new Intent(getActivity(), ActivityHome.class);
                             startActivity(intent);
                             activity.finish();
-                        }else {
+                        } else {
 //                            Toast.makeText(getActivity(), "登录失败", Toast.LENGTH_SHORT).show();
-                            Log.d("login", "onResponse: 登录失败");
+                            message.obj = json;
+                            handler.sendMessage(message);
                         }
 
                     }

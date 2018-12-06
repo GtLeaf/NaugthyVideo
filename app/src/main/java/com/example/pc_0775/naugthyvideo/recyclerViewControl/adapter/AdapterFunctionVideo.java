@@ -87,7 +87,7 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
                 if (0 == Constants.PLAY_MODE){
                     ActivityVideoPlay.actionStart(mContext, videoInfo.getUrl());
                 }else {
-                    if (Constants.DOWNLOAD_AT_THE_SAME_TIME){
+                    if (0 == Constants.PLAYER_SELECT){
                         ActivityLivePlay.actionStart(mContext, videoInfo.getUrl());
                     }else {
                         ActivityIjkLivePlay.Companion.actionStart(mContext, videoInfo.getUrl());
