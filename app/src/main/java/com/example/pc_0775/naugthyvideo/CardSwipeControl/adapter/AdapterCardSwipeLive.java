@@ -218,7 +218,7 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
         if (object instanceof LiveRoomMiMi.LivesBean) {
             VideoInfo videoInfo = new VideoInfo();
             videoInfo.setImg(((LiveRoomMiMi.LivesBean) object).getCover());
-            videoInfo.setUrl((((LiveRoomMiMi.LivesBean) object).getLiveSrc()));
+            videoInfo.setUrl(((LiveRoomMiMi.LivesBean) object).getLiveSrc());
             videoInfo.setTitle(((LiveRoomMiMi.LivesBean) object).getLiveId()+"");
 
             cardShowInfoBean.setType(Constants.LIVE_TYPE);

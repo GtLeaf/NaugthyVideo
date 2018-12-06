@@ -27,7 +27,7 @@ public class MyApplication extends Application {
         super.onCreate();
         oList = new ArrayList<Activity>();
         CrashReport.initCrashReport(getApplicationContext(), "f93662b4ee", false);
-        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));
+//        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));
     }
 
     /**

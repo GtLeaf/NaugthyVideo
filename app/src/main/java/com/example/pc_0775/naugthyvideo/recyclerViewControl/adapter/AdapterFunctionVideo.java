@@ -1,6 +1,9 @@
 package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter;
 
+import android.arch.paging.PagedListAdapter;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.VideoInfoMiMi;
 import com.example.pc_0775.naugthyvideo.util.GifCacheUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityIjkLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
@@ -29,10 +33,15 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by PC-0775 on 2018/8/21.
  */
 
-public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVideo.ViewHolder>{
+public class AdapterFunctionVideo extends PagedListAdapter<VideoInfo ,AdapterFunctionVideo.ViewHolder> {
 
-    private List<VideoInfo> videoInfoList;
     private Context mContext;
+
+    private static final DiffUtil.ItemCallback<VideoInfo> mDiffCallback = new AdapterFunctionVideo.videolistItemCallback();
+
+    public AdapterFunctionVideo() {
+        super(mDiffCallback);
+    }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -50,10 +59,6 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         }
     }
 
-    public AdapterFunctionVideo(List videoInfoList){
-        this.videoInfoList = videoInfoList;
-    }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -64,11 +69,12 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         return new ViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final VideoInfo videoInfo = videoInfoList.get(position);
+        final VideoInfo videoInfo = getItem(position);
         String imgUrl = videoInfo.getImg();
-        String title = videoInfo.getTitle();
+        String title = videoInfo.getTitle()+"--"+position;
         holder.tv_functionVideoCover.setText(title);
         String[] strs = imgUrl.split("[.]");
         //通过后缀判断图片格式
@@ -78,7 +84,7 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         }else {
             Glide.with(mContext).load(imgUrl).into(holder.giv_functionVideoCover);
         }
-;
+
         holder.ll_videoInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,10 +104,16 @@ public class AdapterFunctionVideo extends RecyclerView.Adapter<AdapterFunctionVi
         });
     }
 
+    private static class videolistItemCallback extends DiffUtil.ItemCallback<VideoInfo>{
+        @Override
+        public boolean areItemsTheSame(VideoInfo oldItem, VideoInfo newItem) {
+            return oldItem.getUrl() == newItem.getUrl();
+        }
 
-
-    @Override
-    public int getItemCount() {
-        return videoInfoList.size();
+        @Override
+        public boolean areContentsTheSame(VideoInfo oldItem, VideoInfo newItem) {
+            return (oldItem == newItem);
+        }
     }
+
 }

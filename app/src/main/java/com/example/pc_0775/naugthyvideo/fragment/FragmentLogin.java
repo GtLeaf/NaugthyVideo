@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -73,9 +76,15 @@ public class FragmentLogin extends Fragment {
     private EditText et_loginPassowrd;
     @ViewInject(R.id.btn_fragment_login)
     private Button btn_fragment_login;
+    @ViewInject(R.id.cb_remember_pass)
+    private CheckBox cb_rememberPass;
 
     //handler
     private MyHandler handler = new MyHandler(this);
+
+    //sharePreferences本地存储
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     public static class MyHandler extends Handler {
         WeakReference<FragmentLogin> weakReference;
@@ -195,6 +204,8 @@ public class FragmentLogin extends Fragment {
     }
 
     private void init() {
+        /**Description:获取记录在本地的登录账号以及密码*/
+        takePassword();
     }
 
     private void setListener() {
@@ -217,6 +228,7 @@ public class FragmentLogin extends Fragment {
             public void onClick(View v) {
                 String phone_number = et_loginName.getText().toString();
                 String password = et_loginPassowrd.getText().toString();
+                rememberPassword(phone_number, password);
                 if (phone_number.equals("")){
                     Constants.createAlertDialog(activity, "手机号不能为空");
                     return;
@@ -281,5 +293,42 @@ public class FragmentLogin extends Fragment {
         }).start();
     }
 
+    private void initPreferences(){
+        if (null == preferences){
+            preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            editor = preferences.edit();
+        }
+        if (null == editor){
+            if (null == preferences){
+                return;//获取不到
+            }
+            editor = preferences.edit();
+        }
+    }
 
+    /**
+     * 记住密码
+     * @param phone_number
+     * @param password
+     */
+    private void rememberPassword(String phone_number, String password){
+        initPreferences();
+        if (cb_rememberPass.isChecked()){
+            editor.putBoolean("isRemember", true);
+            editor.putString("phone_number", phone_number);
+            editor.putString("password", password);
+        }
+        editor.commit();
+    }
+
+    /**
+     * 获取本地数据库中的账号密码
+     */
+    private void takePassword(){
+        initPreferences();
+        if(preferences.getBoolean("isRemember", false)){
+            et_loginName.setText(preferences.getString("phone_number", ""));
+            et_loginPassowrd.setText(preferences.getString("password", ""));
+        }
+    }
 }

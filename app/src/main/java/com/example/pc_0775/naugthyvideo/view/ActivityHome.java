@@ -185,15 +185,17 @@ public class ActivityHome extends BaseActivity {
                         ActivityFunction.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_part_slide:
-                        startActivity(ActivityPartSlide.class);
+//                        startActivity(ActivityPartSlide.class);
+                        showToast("功能尚未开放");
                         break;
                     case R.id.nav_card_slide:
-                        isAllowStartActivityCardSilde = true;
+                        showToast("功能尚未开放");
+                        /*isAllowStartActivityCardSilde = true;
                         if (null != liveInfoList && 0 != liveInfoList.size()) {
                             startActivityCardSilde();
                         }else {
-                            requestMovieListData(handler);
-                        }
+//                            requestMovieListData(handler);
+                        }*/
                         break;
                     case R.id.nav_live_card_slide:
                         startActivity(ActivityLiveCardSilde.class);
@@ -318,7 +320,7 @@ public class ActivityHome extends BaseActivity {
      */
     private List<DoubanMovie.SubjectsBean> loadData(int startPosition, int count){
         List<DoubanMovie.SubjectsBean> subjectsBeanList = new ArrayList<>();
-        if (true == isDataFresh) {
+        if (isDataFresh) {
             subjectsBeanList = doubanMovie.getSubjects();
             //显示数据之后，将标志设置为false，等待下一次网络请求，数据更新完成
             isDataFresh = false;

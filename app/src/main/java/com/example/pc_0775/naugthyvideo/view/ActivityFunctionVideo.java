@@ -1,11 +1,19 @@
 package com.example.pc_0775.naugthyvideo.view;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.paging.DataSource;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
+import android.arch.paging.PositionalDataSource;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -15,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.bean.mmBean.VideoInfoMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterFunctionVideo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
@@ -25,6 +34,7 @@ import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ActivityFunctionVideo extends BaseActivity {
@@ -47,6 +57,8 @@ public class ActivityFunctionVideo extends BaseActivity {
     private int pageNumber = 1;
     private Uri uri;
     private int requestNum = 0;
+    private Boolean isDataFresh = true;
+    private int videoIndex = 1;
 
     //handler
     private MyHandler handler = new MyHandler(this);
@@ -65,26 +77,25 @@ public class ActivityFunctionVideo extends BaseActivity {
                 return;
             }
             String string = msg.obj.toString();
-            List<VideoInfo> resultList = NetWorkUtil.parseJsonArray(string, VideoInfo.class);
+            VideoInfoMiMi videoInfoMiMi = NetWorkUtil.parseJsonWithGson(string, VideoInfoMiMi.class);
             //可能出现获取到数据为[]的情况
-            if(0 == resultList.size()){
+            if(null == videoInfoMiMi){
                 if(activity.requestNum >= 5){
                     Toast.makeText(activity, "失败次数过多，请检查网络!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //如果获得的size为0，则重新获取，最多重试5次
-                activity.pageChangeRequest(activity.uri);
+                activity.requestData();
                 activity.requestNum++;
                 return;
             }
             //请求成功后将累计请求次数归零
             activity.requestNum = 0;
-            //videoInfoList此时不为空,重新为recycler设置数据源
-//                    activity.resetRecyclerView();
+
             Toast.makeText(activity, "网络请求成功"+activity.videoInfoList.size(), Toast.LENGTH_SHORT).show();
-            activity.videoInfoList.clear();
-            activity.videoInfoList.addAll(resultList);
-            activity.adapterFunctionVideo.notifyDataSetChanged();
+            activity.videoInfoList = videoInfoMiMi.getVideos();
+//            activity.adapterFunctionVideo.notifyDataSetChanged();
+            activity.isDataFresh = true;
         }
     }
 
@@ -120,9 +131,10 @@ public class ActivityFunctionVideo extends BaseActivity {
         tv_functionPageNumber.setText("-"+pageNumber+"-");
         LayoutManager layoutManager = new LinearLayoutManager(this);
         rv_functionVideoList.setLayoutManager(layoutManager);
-        adapterFunctionVideo = new AdapterFunctionVideo(videoMiMiToVideoInfo(videoInfoList));
+        adapterFunctionVideo = new AdapterFunctionVideo();
         rv_functionVideoList.setAdapter(adapterFunctionVideo);
 
+        initPaging();
     }
 
     @Override
@@ -138,12 +150,10 @@ public class ActivityFunctionVideo extends BaseActivity {
             case R.id.btn_function_per:
                 if(pageNumber >1){
                     pageNumber--;
-                    pageChangeRequest(uri);
                 }
                 break;
             case R.id.btn_function_next:
                 pageNumber++;
-                pageChangeRequest(uri);
                 break;
             default:
                 break;
@@ -166,18 +176,6 @@ public class ActivityFunctionVideo extends BaseActivity {
         context.startActivity(intent);
     }
 
-    /**
-     * 页数发生改变时调用，只依赖传入的uri
-     * @param uri
-     */
-    private void pageChangeRequest(Uri uri){
-        if(null != tv_functionPageNumber){
-            tv_functionPageNumber.setText("-"+pageNumber+"-");
-        }
-        int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.PAGE_NUMBER));
-        String url = NetWorkUtil.replace(uri.toString(), Constants.PAGE_NUMBER, currentPageNumber+1+"");
-        NetWorkUtil.sendRequestWithOkHttp(url, Constants.CLASS_ONE_REQUEST, handler);
-    }
 
     /**
      * 将VideoInfoMiMi.VideoBean转为VideoInfo
@@ -196,5 +194,69 @@ public class ActivityFunctionVideo extends BaseActivity {
             list.add(new VideoInfo(miMi.getTitle(), miMi.getVurl(), miMi.getCoverimg(), miMi.getUpdatedate()));
         }
         return list;
+    }
+
+    private void requestData(){
+        int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.VIDEO_PARAMTER_PAGEINDEX));
+        String url = NetWorkUtil.replace(uri.toString(), Constants.VIDEO_PARAMTER_PAGEINDEX, currentPageNumber+1+"");
+        NetWorkUtil.sendRequestWithOkHttp(url, Constants.EUROPE_VIDEO_REQUEST, handler );
+    }
+
+    /**
+     * 加载更多数据
+     * @return
+     */
+    private List<VideoInfo> loadPagingData(){
+        List<VideoInfo> videoInfos = new ArrayList<>();
+        //上次数据请求成功，才会开启下一次请求
+        if (isDataFresh){
+            requestData();
+            isDataFresh = false;
+            videoInfos = videoMiMiToVideoInfo(videoInfoList);
+        }
+        //是否会发生多次网络请求？
+        return videoInfos;
+    }
+
+    private class MyDataSource extends PositionalDataSource<VideoInfo> {
+
+        @Override
+        public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<VideoInfo> callback) {
+            List<VideoInfo> videoInfoList = loadPagingData();
+            callback.onResult(videoInfoList, 0, videoInfoList.size());
+        }
+
+        @Override
+        public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<VideoInfo> callback) {
+            callback.onResult(loadPagingData());
+        }
+    }
+
+    private class MyDataSourceFactory extends DataSource.Factory<Integer, VideoInfo>{
+
+        @Override
+        public DataSource<Integer, VideoInfo> create() {
+            return new MyDataSource();
+        }
+    }
+
+    private void initPaging(){
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(30)
+                .setPrefetchDistance(5)
+                .build();
+
+        LiveData<PagedList<VideoInfo>> liveData = new LivePagedListBuilder(new MyDataSourceFactory(), config)
+                .build();
+
+        liveData.observe(this, new Observer<PagedList<VideoInfo>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<VideoInfo> videoBeans) {
+
+                adapterFunctionVideo.submitList(videoBeans);
+            }
+        });
     }
 }

@@ -18,6 +18,7 @@
     <string name="register">注      册</string>
     <string name="phone_numbwe">手机号：</string>
     <string name="password">密码：</string>
+    <string name="remember_password">记住密码</string>
     <string name="password_repeat">重复：</string>
     <string name="nickname">昵称：</string>
     <string name="identifying_code">验证码：</string>
