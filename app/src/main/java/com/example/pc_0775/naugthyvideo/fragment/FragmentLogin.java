@@ -329,6 +329,7 @@ public class FragmentLogin extends Fragment {
         if(preferences.getBoolean("isRemember", false)){
             et_loginName.setText(preferences.getString("phone_number", ""));
             et_loginPassowrd.setText(preferences.getString("password", ""));
+            cb_rememberPass.setChecked(true);
         }
     }
 }

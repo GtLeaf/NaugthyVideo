@@ -913,11 +913,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             IRenderView.AR_ASPECT_FIT_PARENT,
             IRenderView.AR_ASPECT_FILL_PARENT,
             IRenderView.AR_ASPECT_WRAP_CONTENT,
-            // IRenderView.AR_MATCH_PARENT,
+            IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
             IRenderView.AR_4_3_FIT_PARENT};
-    private int mCurrentAspectRatioIndex = 0;
-    private int mCurrentAspectRatio = s_allAspectRatio[0];
+    private int mCurrentAspectRatioIndex = 3;//初始为0
+    private int mCurrentAspectRatio = s_allAspectRatio[3];//初始为0
 
     public int toggleAspectRatio() {
         mCurrentAspectRatioIndex++;
@@ -938,7 +938,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     private List<Integer> mAllRenders = new ArrayList<Integer>();
     private int mCurrentRenderIndex = 0;
-    private int mCurrentRender = RENDER_NONE;
+    private int mCurrentRender = RENDER_TEXTURE_VIEW;// RENDER_NONE
+
 
     private void initRenders() {
         mAllRenders.clear();
@@ -1259,5 +1260,16 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     public int getSelectedTrack(int trackType) {
         return MediaPlayerCompat.getSelectedTrack(mMediaPlayer, trackType);
+    }
+
+    //增加下面方法
+    public IRenderView getmRenderView() {
+        return mRenderView;
+    }
+    public int getmVideoWidth() {
+        return mVideoWidth;
+    }
+    public int getmVideoHeight() {
+        return mVideoHeight;
     }
 }
