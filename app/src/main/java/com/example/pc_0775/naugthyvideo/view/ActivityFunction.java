@@ -102,7 +102,6 @@ public class ActivityFunction extends BaseActivity {
         btn_functionWerewolf = $(R.id.btn_function_werewolf);
         et_functionUrl = $(R.id.et_function_url);
 
-
         //注册EventBus
         EventBus.getDefault().register(this);
     }
