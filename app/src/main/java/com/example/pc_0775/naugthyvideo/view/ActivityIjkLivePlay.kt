@@ -31,7 +31,7 @@ class ActivityIjkLivePlay : BaseActivity() {
     private val SIZE_4_3 = 1
     private val SIZE_16_9 = 2
     private var currentSize = SIZE_16_9
-    private val video: IjkVideoView? = null
+//    private val video: IjkVideoView? = null
     private var seekBar: SeekBar? = null
     var screenWidth:Int = 0
     var screenHeight:Int = 0
@@ -62,10 +62,13 @@ class ActivityIjkLivePlay : BaseActivity() {
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so")
         //初始化ijkVideoView
+        seekBar = SeekBar(this)
         mMediaContronller = AndroidMediaController(this, false)
+        IjkVV_live_play.setMediaController(mMediaContronller)
         IjkVV_live_play.setMediaController(mMediaContronller)
         IjkVV_live_play.setVideoPath(path)
         IjkVV_live_play.start()
+
     }
 
     override fun setListener() {
@@ -77,7 +80,7 @@ class ActivityIjkLivePlay : BaseActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                video!!.seekTo(seekBar!!.progress*video!!.duration/1000)
+                IjkVV_live_play.seekTo(seekBar!!.progress*IjkVV_live_play.duration/1000)
             }
         }
 
@@ -104,16 +107,7 @@ class ActivityIjkLivePlay : BaseActivity() {
 
     }
 
-    companion object {
-        fun actionStart(context: Context, viedoUrl: String) {
-            val intent = Intent(context, ActivityIjkLivePlay::class.java)
-            val bundle = Bundle()
-            bundle.putString(Constants.INTENT_VIDEO_URL, viedoUrl)
-            intent.putExtras(bundle)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            context.startActivity(intent)
-        }
-    }
+
 
     override fun onBackPressed() {
         isBackPressed = true
@@ -134,8 +128,8 @@ class ActivityIjkLivePlay : BaseActivity() {
         var height = 0
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {//横屏
             if (rate == SIZE_DEFAULT) {
-                width = video!!.getmVideoWidth()
-                height = video.getmVideoHeight()
+                width = IjkVV_live_play.getmVideoWidth()
+                height = IjkVV_live_play.getmVideoHeight()
             }else if (rate == SIZE_4_3) {
                 width = screenHeight / 3 * 4
                 height = screenHeight
@@ -145,8 +139,8 @@ class ActivityIjkLivePlay : BaseActivity() {
             }
         }else{//竖屏
             if (rate == SIZE_DEFAULT) {
-                width = video!!.getmVideoWidth()
-                height = video.getmVideoHeight()
+                width = IjkVV_live_play.getmVideoWidth()
+                height = IjkVV_live_play.getmVideoHeight()
             }else if (rate == SIZE_4_3) {
                 width = screenWidth / 3 * 4
                 height = screenWidth
@@ -156,10 +150,10 @@ class ActivityIjkLivePlay : BaseActivity() {
             }
         }
         if (width>0 && height>0){
-            val lp = video!!.getmRenderView().view.layoutParams as FrameLayout.LayoutParams
+            val lp = IjkVV_live_play.getmRenderView().view.layoutParams as FrameLayout.LayoutParams
             lp.width = width
             lp.height = height
-            video.getmRenderView().view.layoutParams = lp
+            IjkVV_live_play.getmRenderView().view.layoutParams = lp
         }
     }
 
@@ -178,26 +172,37 @@ class ActivityIjkLivePlay : BaseActivity() {
         //重新获取屏幕宽高
         initScreenInfo();
         if (newConfig!!.orientation == Configuration.ORIENTATION_LANDSCAPE){//切换为横屏
-            var lp = video!!.layoutAnimation as LinearLayout.LayoutParams
+            var lp = IjkVV_live_play.layoutAnimation as LinearLayout.LayoutParams
             lp.height = screenHeight
             lp.width = screenWidth
-            video.layoutParams = lp
+            IjkVV_live_play.layoutParams = lp
         }else{
-            var lp = video!!.layoutAnimation as LinearLayout.LayoutParams
+            var lp = IjkVV_live_play.layoutAnimation as LinearLayout.LayoutParams
             lp.height = screenWidth * 9/16
             lp.width = screenWidth
-            video.layoutParams = lp
+            IjkVV_live_play.layoutParams = lp
         }
         setScreenRate(currentSize)
     }
 
     //播放进度 视频开始播放时使用handle.sendMessageDelayed更新时间显示
     private fun refreshTime(){
-        var totalSeconds = video!!.currentPosition/1000
+        var totalSeconds = IjkVV_live_play.currentPosition/1000
         var seconds = totalSeconds%60
         var minutes = (totalSeconds/60)%60
         var hours = totalSeconds/3600
         val ti = if (hours > 0) String.format("%02d:%02d:%02d", hours, minutes, seconds) else String.format("%02d:%02d", minutes, seconds)
+    }
+
+    companion object {
+        fun actionStart(context: Context, viedoUrl: String) {
+            val intent = Intent(context, ActivityIjkLivePlay::class.java)
+            val bundle = Bundle()
+            bundle.putString(Constants.INTENT_VIDEO_URL, viedoUrl)
+            intent.putExtras(bundle)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        }
     }
 
 }

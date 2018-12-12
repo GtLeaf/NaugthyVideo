@@ -27,6 +27,7 @@ import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.myAdapterInterface.OnDataUpdateListen;
+import com.example.pc_0775.naugthyvideo.view.ActivityIjkLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
 
@@ -143,7 +144,12 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
                 Toast.makeText(mContext, cardShowInfo.getVideoInfo().getUrl(), Toast.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new MessageEvent(cardShowInfo.getVideoInfo().getUrl()));
                 if (Constants.LIVE_TYPE == cardShowInfo.getType()) {
-                    ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                    if (0 == Constants.PLAYER_SELECT){
+                        ActivityLivePlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                    }else {
+                        ActivityIjkLivePlay.Companion.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
+                    }
+
                 }
                 if (Constants.VIDEO_TYPE == cardShowInfo.getType()) {
                     ActivityVideoPlay.actionStart(mContext, cardShowInfo.getVideoInfo().getUrl());
