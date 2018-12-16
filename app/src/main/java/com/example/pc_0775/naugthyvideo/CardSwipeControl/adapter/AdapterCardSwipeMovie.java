@@ -85,7 +85,7 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
         public ViewHolder(View itemView) {
             super(itemView);
             rl_layoutCard = itemView.findViewById(R.id.rl_layout_card);
-            iv_avatar = itemView.findViewById(R.id.iv_avatar);
+            iv_avatar = itemView.findViewById(R.id.iv_detail_movie_img);
             iv_dislike = itemView.findViewById(R.id.iv_dislike);
             iv_like = itemView.findViewById(R.id.iv_like);
             tv_name = itemView.findViewById(R.id.tv_name);

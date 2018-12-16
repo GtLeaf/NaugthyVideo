@@ -37,6 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setWindowConfig();
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
         Log.d(TAG, "BaseActivity-->onCreate()");
@@ -288,6 +289,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     public Bundle getSavedInstanceState() {
         return savedInstanceState;
+    }
+
+    /**
+     * [window相关操作]
+     */
+    public void setWindowConfig(){
+
     }
 
 

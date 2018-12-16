@@ -1,9 +1,16 @@
 package com.example.pc_0775.naugthyvideo.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.View;
@@ -53,6 +60,17 @@ public class Main2Activity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+    }
+
+    private void gotoDetailActivity(Context context, final View avatarImg, final View nameTxt) {
+        Intent intent = new Intent(context,Main2Activity.class);
+        Pair<View,String> pair1 = Pair.create(avatarImg, ViewCompat.getTransitionName(avatarImg));
+        Pair<View,String> pair2 = Pair.create(nameTxt,ViewCompat.getTransitionName(nameTxt));
+        /**
+         *4、生成带有共享元素的Bundle，这样系统才会知道这几个元素需要做动画
+         */
+        ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)context, pair1, pair2);
+        ActivityCompat.startActivity(context,intent,activityOptionsCompat.toBundle());
     }
 
 

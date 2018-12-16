@@ -54,7 +54,7 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".view.ActivitySetting" />
         <activity android:name=".view.ActivityIjkLivePlay" />
-        <activity android:name=".view.ActivityMovieDetail"></activity>
+        <activity android:name=".view.ActivityMovieDetail"/>
     </application>
 
 </manifest>

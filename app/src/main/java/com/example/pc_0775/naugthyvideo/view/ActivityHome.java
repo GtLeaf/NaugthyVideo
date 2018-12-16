@@ -9,21 +9,26 @@ import android.arch.paging.PagedList;
 import android.arch.paging.PositionalDataSource;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
@@ -129,6 +134,22 @@ public class ActivityHome extends BaseActivity {
                     break;
             }
 
+        }
+    }
+
+    @Override
+    public void setWindowConfig() {
+        super.setWindowConfig();
+        //设置转场动画
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+            /**
+             *1、打开FEATURE_CONTENT_TRANSITIONS开关(可选)，这个开关默认是打开的
+             */
+            requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            /**
+             *2、设置除ShareElement外其它View的退出方式(左边滑出)
+             */
+            getWindow().setExitTransition(new Slide(Gravity.LEFT));
         }
     }
 
