@@ -90,7 +90,7 @@ public class ActivityHome extends BaseActivity {
     private boolean isDataFresh = false;
     private boolean isInitPaging = false;
     private int start = 0;
-    private int count = 10;
+    private int count = NetWorkUtil.movieInfoCount;
     //handler
     private ActivityHome.MyHandler handler = new ActivityHome.MyHandler(this);
     private static class MyHandler<T> extends Handler {
@@ -315,10 +315,10 @@ public class ActivityHome extends BaseActivity {
     private void requestMovieListData(Handler myHandler){
         HashMap doubanMovieList = new HashMap();
         doubanMovieList.put("start", start+"");
-        doubanMovieList.put("count", count+"");
+        doubanMovieList.put("movieInfoCount", count+"");
         Uri classTowUri = NetWorkUtil.createUri(Constants.DOUBAN_MOVIE_URL, doubanMovieList);
         NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.DOUBAN_MOVIE_REQUEST, myHandler );
-        start += 10;
+        start += count;
     }
 
     private void startActivityCardSilde(){
@@ -335,19 +335,23 @@ public class ActivityHome extends BaseActivity {
     /**
      * 进行网络请求
      *
-     * @param startPosition
-     * @param count
      * @return
      */
-    private List<DoubanMovie.SubjectsBean> loadData(int startPosition, int count){
+    private List<DoubanMovie.SubjectsBean> loadData(){
         List<DoubanMovie.SubjectsBean> subjectsBeanList = new ArrayList<>();
-        if (isDataFresh) {
+        /*if (isDataFresh) {
             subjectsBeanList = doubanMovie.getSubjects();
             //显示数据之后，将标志设置为false，等待下一次网络请求，数据更新完成
             isDataFresh = false;
             //启动下一次数据刷新
             requestMovieListData(handler);
+        }*/
+        if (doubanMovie != null){
+            subjectsBeanList.addAll(doubanMovie.getSubjects());
+            doubanMovie.getSubjects().clear();
         }
+        NetWorkUtil.getDoubanMovieData(handler);
+//        requestMovieListData(handler);
         return subjectsBeanList;
     }
 
@@ -356,14 +360,17 @@ public class ActivityHome extends BaseActivity {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<DoubanMovie.SubjectsBean> callback) {
-            callback.onResult(loadData(0, 10), 0, 10);
+            callback.onResult(loadData(), 0, count);
         }
 
         @Override
         public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<DoubanMovie.SubjectsBean> callback) {
-            callback.onResult(loadData(params.startPosition, count));
+            callback.onResult(loadData());
         }
+
     }
+
+//    private class MyDataSourecs extends ItemKeyedDataSource
     //定义MyDataSourceFactory，是DataSource.Factory的实现类
     private class MyDataSourceFactory extends DataSource.Factory<Integer, DoubanMovie.SubjectsBean>{
 
@@ -376,10 +383,10 @@ public class ActivityHome extends BaseActivity {
     //将生产config和liveData的代码封装在这个方法中
     private void initPaging(){
         PagedList.Config config = new PagedList.Config.Builder()
-                .setPageSize(10)    //每页显示的词条数
+                .setPageSize(count)    //每页显示的词条数
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(10) //首次加载的数据量
-                .setPrefetchDistance(5)     //距离底部还有多少条数据时开始预加载
+                .setInitialLoadSizeHint(count) //首次加载的数据量
+                .setPrefetchDistance(8)     //距离底部还有多少条数据时开始预加载
                 .build();
 
         /**

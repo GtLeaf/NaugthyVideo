@@ -21,8 +21,10 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
+import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityMovieDetail;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,12 +53,12 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
         private LinearLayout ll_itemMoive;
         private ImageView iv_itemHomeMovie;
         private TextView tv_itemHomeTitle;
-        private TextView tv_itemHomeDescribe;
+        private TextView tv_itemHomeAverage;
 
         public InfoViewHolder(final View itemView) {
             super(itemView);
             tv_itemHomeTitle = itemView.findViewById(R.id.tv_item_home_title);
-            tv_itemHomeDescribe = itemView.findViewById(R.id.tv_item_home_describe);
+            tv_itemHomeAverage = itemView.findViewById(R.id.tv_item_home_average);
             iv_itemHomeMovie = itemView.findViewById(R.id.iv_item_home_movie);
             ll_itemMoive = itemView.findViewById(R.id.ll_item_moive);
 
@@ -94,24 +96,28 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof InfoViewHolder) {
             final DoubanMovie.SubjectsBean movie = getItem(position);
             final InfoViewHolder infoViewHolder = ((InfoViewHolder) holder);
             Glide.with(context).load(movie.getImages().getMedium()).into(((InfoViewHolder) holder).iv_itemHomeMovie);
             infoViewHolder.tv_itemHomeTitle.setText(movie.getTitle());
-            infoViewHolder.tv_itemHomeDescribe.setText(movie.getRating().getAverage()+"");
+            infoViewHolder.tv_itemHomeAverage.setText(movie.getRating().getAverage()+"");
             infoViewHolder.ll_itemMoive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ActivityOptionsCompat compat = null;
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("movieInfo", movie);
+                    List movieInfoList = new ArrayList<DoubanMovie.SubjectsBean>();
+                    movieInfoList.addAll(getCurrentList());
+                    bundle.putSerializable("movieInfoList", (Serializable) movieInfoList);
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
                         Pair imagePair = Pair.create(infoViewHolder.iv_itemHomeMovie, infoViewHolder.iv_itemHomeMovie.getTransitionName());
                         Pair namePair = Pair.create(infoViewHolder.tv_itemHomeTitle, infoViewHolder.tv_itemHomeTitle.getTransitionName());
-                        Pair describePair = Pair.create(infoViewHolder.tv_itemHomeDescribe, infoViewHolder.tv_itemHomeDescribe.getTransitionName());
-                        compat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imagePair, namePair, describePair);
+                        Pair averagePair = Pair.create(infoViewHolder.tv_itemHomeAverage, infoViewHolder.tv_itemHomeAverage.getTransitionName());
+                        compat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imagePair, namePair, averagePair);
+                        NetWorkUtil.movieHomePositon = position;
 
                         ActivityMovieDetail.Companion.actionStart(context, bundle, compat);
                     }else {

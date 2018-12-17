@@ -49,6 +49,7 @@
     <string name="transition_movie_name">transition_movie_name</string>
     <string name="transition_movie_img">transition_movie_img</string>
     <string name="transition_movie_describe">transition_movie_describe</string>
+    <string name="transition_movie_average">transition_movie_average</string>
 
     <!--ijkPlayer-->
     <string name="N_A">N/A</string>

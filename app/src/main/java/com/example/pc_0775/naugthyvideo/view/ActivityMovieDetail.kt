@@ -1,15 +1,21 @@
 package com.example.pc_0775.naugthyvideo.view
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.paging.DataSource
+import android.arch.paging.ItemKeyedDataSource
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat.startActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.transition.TransitionSet
-import android.support.v4.view.ViewCompat
 import android.transition.ChangeBounds
 import android.transition.ChangeTransform
 import android.transition.Fade
@@ -18,17 +24,19 @@ import android.view.View
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterMovieDetail
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 
 class ActivityMovieDetail : BaseActivity() {
 
+
     //bean
-    var movieInfo:DoubanMovie.SubjectsBean? = null
+    var movieInfo:DoubanMovie.SubjectsBean = DoubanMovie.SubjectsBean()
+    var movieInfoList:List<DoubanMovie.SubjectsBean> = ArrayList<DoubanMovie.SubjectsBean>()
 
     override fun initParams(params: Bundle?) {
-        var b = intent.extras
         movieInfo = intent.extras.getSerializable("movieInfo") as DoubanMovie.SubjectsBean
-
+        this.movieInfoList = intent.extras.getSerializable("movieInfoList") as List<DoubanMovie.SubjectsBean>
     }
 
     override fun bindLayout(): Int {
@@ -45,25 +53,7 @@ class ActivityMovieDetail : BaseActivity() {
          * //已经在xml中设置好
          */
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
-            /**
-             * 2、设置WindowTransition,除指定的ShareElement外，其它所有View都会执行这个Transition动画
-             */
-            window.enterTransition = Fade()
-            window.exitTransition = Fade()
-            /**
-             * 3、设置ShareElementTransition,指定的ShareElement会执行这个Transiton动画
-             */
-            var transitionSet = TransitionSet()
-            transitionSet.addTransition(ChangeBounds())
-            transitionSet.addTransition(ChangeTransform())
-            transitionSet.addTarget(iv_detail_movie_img)
-            transitionSet.addTarget(tv_detail_movie_name)
-            transitionSet.addTarget(tv_detail_movie_describe)
-            window.sharedElementEnterTransition = transitionSet
-            window.sharedElementExitTransition = transitionSet
-        }
-
+        setTransition()
     }
 
     override fun setListener() {
@@ -79,6 +69,31 @@ class ActivityMovieDetail : BaseActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
+    }
+
+    /*
+     * 设置动画
+     * */
+    fun setTransition(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+            return
+        }
+        /**
+         * 2、设置WindowTransition,除指定的ShareElement外，其它所有View都会执行这个Transition动画
+         */
+        window.enterTransition = Fade()
+        window.exitTransition = Fade()
+        /*
+         * 3、设置ShareElementTransition,指定的ShareElement会执行这个Transiton动画
+         * */
+        var transitionSet = TransitionSet()
+        transitionSet.addTransition(ChangeBounds())
+        transitionSet.addTransition(ChangeTransform())
+        transitionSet.addTarget(iv_detail_movie)
+        transitionSet.addTarget(tv_detail_movie_average)
+        transitionSet.addTarget(tv_detail_movie_name)
+        window.sharedElementEnterTransition = transitionSet
+        window.sharedElementExitTransition = transitionSet
     }
 
     companion object {

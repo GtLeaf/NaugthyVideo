@@ -4,13 +4,12 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.widget.Toast;
 
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -35,6 +34,10 @@ public class NetWorkUtil {
     private static final Gson gson = new Gson();
     private static final OkHttpClient client = new OkHttpClient();
     public static final HashMap<String, String> emptyMap = new HashMap<>();
+    public static int start = 0;
+    public static int movieInfoCount = 20;
+    public static int movieHomePositon = 0;
+    public static int movieDetailPositon = 0;
 
     private NetWorkUtil(){
 
@@ -51,10 +54,20 @@ public class NetWorkUtil {
         return netWorkUtil;
     }
 
+    /**
+     * 获取内部维护的gson对象
+     * @return
+     */
     public static Gson getGson(){
         return gson;
     }
 
+    /**
+     * 发送get请求
+     * @param address
+     * @param what
+     * @param handler
+     */
     public static void sendRequestWithOkHttp(final String address, final int what, final Handler handler){
         new Thread(new Runnable() {
             @Override
@@ -88,6 +101,14 @@ public class NetWorkUtil {
         }).start();
     }
 
+    public static void getDoubanMovieData(Handler handler){
+        HashMap doubanMovieList = new HashMap();
+        doubanMovieList.put("start", start+"");
+        doubanMovieList.put("movieInfoCount", movieInfoCount +"");
+        Uri classTowUri = createUri(Constants.DOUBAN_MOVIE_URL, doubanMovieList);
+        sendRequestWithOkHttp(classTowUri.toString(), Constants.DOUBAN_MOVIE_REQUEST, handler );
+        start += movieInfoCount;
+    }
 
 
     public static Uri createUri(String url, HashMap<String, String> parameters){

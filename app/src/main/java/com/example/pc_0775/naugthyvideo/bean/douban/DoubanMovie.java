@@ -10,7 +10,7 @@ import java.util.List;
 public class DoubanMovie implements Serializable {
 
     /**
-     * count : 20
+     * movieInfoCount : 20
      * start : 0
      * total : 250
      * subjects :
