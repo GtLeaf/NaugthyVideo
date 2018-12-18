@@ -1,42 +1,35 @@
 package com.example.pc_0775.naugthyvideo.view
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.paging.DataSource
-import android.arch.paging.ItemKeyedDataSource
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.transition.TransitionSet
 import android.transition.ChangeBounds
 import android.transition.ChangeTransform
 import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
+import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterMovieDetail
+import io.vov.vitamio.utils.Base64
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 
 class ActivityMovieDetail : BaseActivity() {
 
-
     //bean
     var movieInfo:DoubanMovie.SubjectsBean = DoubanMovie.SubjectsBean()
-    var movieInfoList:List<DoubanMovie.SubjectsBean> = ArrayList<DoubanMovie.SubjectsBean>()
 
     override fun initParams(params: Bundle?) {
+        if (null == params)
+            return
         movieInfo = intent.extras.getSerializable("movieInfo") as DoubanMovie.SubjectsBean
-        this.movieInfoList = intent.extras.getSerializable("movieInfoList") as List<DoubanMovie.SubjectsBean>
     }
 
     override fun bindLayout(): Int {
@@ -52,7 +45,13 @@ class ActivityMovieDetail : BaseActivity() {
          * 1、设置相同的TransitionName
          * //已经在xml中设置好
          */
-
+        Glide.with(this)
+                .load(movieInfo.images.medium)
+                .skipMemoryCache(false)
+                .dontAnimate()
+                .into(iv_detail_movie)
+        tv_detail_movie_average.text = movieInfo.rating.average.toString()
+        tv_detail_movie_describe.text = movieInfo.alt
         setTransition()
     }
 
@@ -98,7 +97,7 @@ class ActivityMovieDetail : BaseActivity() {
 
     companion object {
 
-        fun actionStart(context: Context, bundle: Bundle, compat: ActivityOptionsCompat){
+        fun actionStart(context: Context, bundle: Bundle, compat: ActivityOptionsCompat?){
             var intent = Intent(context, ActivityMovieDetail::class.java)
             intent.putExtras(bundle)
             /**
@@ -109,7 +108,6 @@ class ActivityMovieDetail : BaseActivity() {
             }else{
                 context.startActivity(intent)
             }
-
         }
     }
 }

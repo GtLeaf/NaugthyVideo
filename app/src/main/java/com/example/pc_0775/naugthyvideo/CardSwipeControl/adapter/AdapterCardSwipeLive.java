@@ -248,10 +248,4 @@ public class AdapterCardSwipeLive extends Adapter<AdapterCardSwipeLive.ViewHolde
         }
     }
 
-    public void listClear(){
-        mCardInfoDataList.clear();
-        mCacheList.clear();
-        mCardShowInfoBeanList.clear();
-    }
-
 }

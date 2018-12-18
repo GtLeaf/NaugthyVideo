@@ -34,10 +34,6 @@ public class NetWorkUtil {
     private static final Gson gson = new Gson();
     private static final OkHttpClient client = new OkHttpClient();
     public static final HashMap<String, String> emptyMap = new HashMap<>();
-    public static int start = 0;
-    public static int movieInfoCount = 20;
-    public static int movieHomePositon = 0;
-    public static int movieDetailPositon = 0;
 
     private NetWorkUtil(){
 
@@ -63,7 +59,7 @@ public class NetWorkUtil {
     }
 
     /**
-     * 发送get请求
+     * 发送get请求，异步
      * @param address
      * @param what
      * @param handler
@@ -85,7 +81,6 @@ public class NetWorkUtil {
                         if (null != handler) {
                             handler.sendMessage(message);
                         }
-
                     }
 
                     @Override
@@ -96,20 +91,23 @@ public class NetWorkUtil {
                         }
                     }
                 });
-
             }
         }).start();
     }
 
-    public static void getDoubanMovieData(Handler handler){
-        HashMap doubanMovieList = new HashMap();
-        doubanMovieList.put("start", start+"");
-        doubanMovieList.put("movieInfoCount", movieInfoCount +"");
-        Uri classTowUri = createUri(Constants.DOUBAN_MOVIE_URL, doubanMovieList);
-        sendRequestWithOkHttp(classTowUri.toString(), Constants.DOUBAN_MOVIE_REQUEST, handler );
-        start += movieInfoCount;
-    }
+    public static <T> T syncRequest(String address, Class<?> cls){
+        Request request = new Request.Builder()
+                .url(address)
+                .build();
+        String response = null;
+        try {
+            response = client.newCall(request).execute().body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        return  parseJsonWithGson(response, cls);
+    }
 
     public static Uri createUri(String url, HashMap<String, String> parameters){
         Uri.Builder uriBuilder = Uri.parse(url).buildUpon();

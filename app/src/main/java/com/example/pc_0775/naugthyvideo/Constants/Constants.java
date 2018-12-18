@@ -75,7 +75,11 @@ public class Constants {
     /**
      * 豆瓣top250 api接口
      */
-    public static String DOUBAN_MOVIE_URL = "http://api.douban.com/v2/movie/top250";
+    public static String DOUBAN_MOVIE_TOP_250_URL = "http://api.douban.com/v2/movie/top250";
+    /**
+     * 最新电影：https://api.douban.com/v2/movie/in_theaters?start=0&count=10
+     */
+    public static String DOUBAN_LATEST_MOVIE_URL = "https://api.douban.com/v2/movie/in_theaters";
     /**
      * 登录接口
      */
@@ -99,6 +103,7 @@ public class Constants {
     public static final int LIVE_ROOM_REQUEST = 3108;
     public static final int LIVE_PLATFORM_MIMI_REQUEST = 3109;
     public static final int DOUBAN_MOVIE_REQUEST = 3110;
+    public static final int DOUBAN_LATEST_MOVIE_REQUEST = 3111;
 
     //登录的what常量
     public static final int USER_LOGIN = 1011;

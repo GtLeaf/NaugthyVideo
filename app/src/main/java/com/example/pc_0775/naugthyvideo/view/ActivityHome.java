@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -38,7 +37,8 @@ import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter.AdapterHomeInfo;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
+import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterMoiveTop250;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
@@ -64,7 +64,7 @@ public class ActivityHome extends BaseActivity {
     private RecyclerView rv_homeList;
 
     //adapter
-    private AdapterHomeInfo adapterHomeInfo;
+    private AdapterHome adapterHome;
 
     //flag
     /**
@@ -83,17 +83,16 @@ public class ActivityHome extends BaseActivity {
 
 
     //豆瓣电影top250 data
-    private DoubanMovie doubanMovie;
+    private DoubanMovie doubanMovie = null;
     /**
      * 判断doubanMovie是否为新的数据
      */
-    private boolean isDataFresh = false;
     private boolean isInitPaging = false;
     private int start = 0;
-    private int count = NetWorkUtil.movieInfoCount;
+    private int count = 5;
     //handler
     private ActivityHome.MyHandler handler = new ActivityHome.MyHandler(this);
-    private static class MyHandler<T> extends Handler {
+    private static class MyHandler extends Handler {
         WeakReference<ActivityHome> weakReference;
 
         public MyHandler(ActivityHome activityHome){
@@ -121,10 +120,9 @@ public class ActivityHome extends BaseActivity {
                     List<LiveRoomInfo> liveRoomInfos = NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class);
 
                     break;
-                case Constants.DOUBAN_MOVIE_REQUEST:
+                case Constants.DOUBAN_LATEST_MOVIE_REQUEST:
                     activity.doubanMovie = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), DoubanMovie.class);
-                    activity.isDataFresh = true;
-                    if (!activity.isInitPaging) {
+                    if (!activity.isInitPaging){
                         activity.initPaging();
                         activity.isInitPaging = true;
                     }
@@ -184,13 +182,14 @@ public class ActivityHome extends BaseActivity {
         setupSpotAd();
 
         //配置rv_homeList
-        adapterHomeInfo = new AdapterHomeInfo();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        adapterHome = new AdapterHome(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv_homeList.setLayoutManager(layoutManager);
-        rv_homeList.setAdapter(adapterHomeInfo);
+        rv_homeList.setAdapter(adapterHome);
 
         nav_headerView.setCheckedItem(R.id.nav_home);
-        requestMovieListData(handler);
+        requestLatestMoviesData(handler);
     }
 
     @Override
@@ -206,8 +205,8 @@ public class ActivityHome extends BaseActivity {
                         ActivityFunction.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_part_slide:
-//                        startActivity(ActivityPartSlide.class);
-                        showToast("功能尚未开放");
+//                        startActivity(ActivityPartSlide.class);//部分滑动的Activity,已经用不上这个了
+                        ActivityMovieTop250.Companion.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_card_slide:
                         showToast("功能尚未开放");
@@ -312,13 +311,30 @@ public class ActivityHome extends BaseActivity {
 //        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
     }
 
-    private void requestMovieListData(Handler myHandler){
-        HashMap doubanMovieList = new HashMap();
-        doubanMovieList.put("start", start+"");
-        doubanMovieList.put("movieInfoCount", count+"");
-        Uri classTowUri = NetWorkUtil.createUri(Constants.DOUBAN_MOVIE_URL, doubanMovieList);
-        NetWorkUtil.sendRequestWithOkHttp(classTowUri.toString(), Constants.DOUBAN_MOVIE_REQUEST, myHandler );
+    /**
+     * 请求豆瓣最新电影数据，异步，初始化使用
+     * @return
+     */
+    private void requestLatestMoviesData(MyHandler myHandler){
+        HashMap parameter = new HashMap();
+        parameter.put("start", start+"");
+        parameter.put("count", count+"");
+        Uri latestMovieUri = NetWorkUtil.createUri(Constants.DOUBAN_LATEST_MOVIE_URL, parameter);
         start += count;
+        NetWorkUtil.sendRequestWithOkHttp(latestMovieUri.toString(), Constants.DOUBAN_LATEST_MOVIE_REQUEST, myHandler);
+    }
+
+    /**
+     * 请求豆瓣最新电影数据，同步，后续加载使用
+     * @return
+     */
+    private DoubanMovie syncRequestLatestMoviesData(){
+        HashMap parameter = new HashMap();
+        parameter.put("start", start+"");
+        parameter.put("count", count+"");
+        Uri latestMovieUri = NetWorkUtil.createUri(Constants.DOUBAN_LATEST_MOVIE_URL, parameter);
+        start += count;
+        return NetWorkUtil.syncRequest(latestMovieUri.toString(), DoubanMovie.class);
     }
 
     private void startActivityCardSilde(){
@@ -332,40 +348,18 @@ public class ActivityHome extends BaseActivity {
         startActivity(ActivityCardSilde.class, bundle);
     }
 
-    /**
-     * 进行网络请求
-     *
-     * @return
-     */
-    private List<DoubanMovie.SubjectsBean> loadData(){
-        List<DoubanMovie.SubjectsBean> subjectsBeanList = new ArrayList<>();
-        /*if (isDataFresh) {
-            subjectsBeanList = doubanMovie.getSubjects();
-            //显示数据之后，将标志设置为false，等待下一次网络请求，数据更新完成
-            isDataFresh = false;
-            //启动下一次数据刷新
-            requestMovieListData(handler);
-        }*/
-        if (doubanMovie != null){
-            subjectsBeanList.addAll(doubanMovie.getSubjects());
-            doubanMovie.getSubjects().clear();
-        }
-        NetWorkUtil.getDoubanMovieData(handler);
-//        requestMovieListData(handler);
-        return subjectsBeanList;
-    }
-
     //定义MyDataSource类，继承自DataSource三个子类之一
     private class MyDataSource extends PositionalDataSource<DoubanMovie.SubjectsBean>{
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<DoubanMovie.SubjectsBean> callback) {
-            callback.onResult(loadData(), 0, count);
+            callback.onResult(doubanMovie.getSubjects(), 0, count);
         }
 
         @Override
         public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<DoubanMovie.SubjectsBean> callback) {
-            callback.onResult(loadData());
+
+            callback.onResult(syncRequestLatestMoviesData().getSubjects());
         }
 
     }
@@ -403,7 +397,7 @@ public class ActivityHome extends BaseActivity {
 
             @Override
             public void onChanged(@Nullable PagedList<DoubanMovie.SubjectsBean> subjectsBeans) {
-                adapterHomeInfo.submitList(subjectsBeans);
+                adapterHome.submitList(subjectsBeans);
             }
         });
     }

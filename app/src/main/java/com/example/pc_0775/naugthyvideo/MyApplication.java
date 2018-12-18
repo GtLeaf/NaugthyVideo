@@ -2,11 +2,7 @@ package com.example.pc_0775.naugthyvideo;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.net.Uri;
 
-import com.example.pc_0775.naugthyvideo.Constants.Constants;
-import com.example.pc_0775.naugthyvideo.LogCrash.CrashExceptionHandler;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
@@ -26,7 +22,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         oList = new ArrayList<Activity>();
-//        CrashReport.initCrashReport(getApplicationContext(), "f93662b4ee", false);
+        CrashReport.initCrashReport(getApplicationContext(), "f93662b4ee", false);
 //        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));
     }
 

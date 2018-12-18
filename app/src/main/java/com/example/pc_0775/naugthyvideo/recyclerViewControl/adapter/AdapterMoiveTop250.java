@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.homeAdapter;
+package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter;
 
 import android.app.Activity;
 import android.arch.paging.PagedListAdapter;
@@ -21,7 +21,6 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
-import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityMovieDetail;
 
 import java.io.Serializable;
@@ -32,18 +31,18 @@ import java.util.List;
  * Created by PC-0775 on 2018/9/22.
  */
 
-public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, RecyclerView.ViewHolder> {
+public class AdapterMoiveTop250 extends PagedListAdapter<DoubanMovie.SubjectsBean, RecyclerView.ViewHolder> {
 
     private Context context;
     private LayoutInflater layoutInflater;
 
-    public static final DiffUtil.ItemCallback<DoubanMovie.SubjectsBean> mDiffCallback = new AdapterHomeInfo.movielistItemCallback();
+    public static final DiffUtil.ItemCallback<DoubanMovie.SubjectsBean> mDiffCallback = new AdapterMoiveTop250.movielistItemCallback();
     /**
      * ListViewHolder中rv_homeListChild1的数据源
      */
     private List<HomeInfoData> homeChild1InfoDataList = new ArrayList(){};
 
-    public AdapterHomeInfo() {
+    public AdapterMoiveTop250() {
         super(mDiffCallback);
     }
 
@@ -76,7 +75,6 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
         }
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(null == context){
@@ -85,9 +83,9 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
         }
 
         //不同的Item有不一样的布局
-        View view = LayoutInflater.from(context).inflate(R.layout.item_home_list_info, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_movie_top250, parent, false);
         if(viewType == Constants.ITEM_TYPE.ITEM_TYPE_INFO.ordinal()){
-            return new InfoViewHolder(layoutInflater.inflate(R.layout.item_home_list_info, parent, false));
+            return new InfoViewHolder(layoutInflater.inflate(R.layout.item_movie_top250, parent, false));
         }
         if (viewType == Constants.ITEM_TYPE.ITEM_TYPE_LIST.ordinal()) {
             return new ListViewHolder(layoutInflater.inflate(R.layout.item_home_list, parent, false));
@@ -117,23 +115,10 @@ public class AdapterHomeInfo extends PagedListAdapter<DoubanMovie.SubjectsBean, 
                         Pair namePair = Pair.create(infoViewHolder.tv_itemHomeTitle, infoViewHolder.tv_itemHomeTitle.getTransitionName());
                         Pair averagePair = Pair.create(infoViewHolder.tv_itemHomeAverage, infoViewHolder.tv_itemHomeAverage.getTransitionName());
                         compat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, imagePair, namePair, averagePair);
-                        NetWorkUtil.movieHomePositon = position;
-
-                        ActivityMovieDetail.Companion.actionStart(context, bundle, compat);
-                    }else {
-                        ActivityMovieDetail.Companion.actionStart(context, bundle, compat);
                     }
-
+                    ActivityMovieDetail.Companion.actionStart(context, bundle, compat);
                 }
             });
-
-        }
-        if (holder instanceof ListViewHolder) {
-            /*initData();
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            ((ListViewHolder) holder).rv_homeListChild1.setLayoutManager(layoutManager);
-            ((ListViewHolder) holder).rv_homeListChild1.setAdapter(new AdapterHomeInfo(homeChild1InfoDataList));*/
 
         }
     }

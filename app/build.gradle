@@ -62,6 +62,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     compile 'com.tencent.bugly:crashreport:2.6.6'
     compile 'com.jwkj:M3U8Manger:v2.3.0'        //缓存m3u8格式
 
@@ -69,7 +70,7 @@ dependencies {
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
     compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'
-    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+
     //paging
     implementation 'android.arch.paging:runtime:1.0.0'
     // RxKotlin
@@ -78,7 +79,10 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     // Lifecycle
     implementation 'android.arch.lifecycle:extensions:1.1.1'
-
+    //retrofit2——暂时先不需要
+    /*compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'*/
     //    compile 'com.danikula:videocache:2.6.4'//不支持HLS流媒体，弃用
 }
 
