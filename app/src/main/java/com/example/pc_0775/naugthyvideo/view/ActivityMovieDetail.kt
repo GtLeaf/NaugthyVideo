@@ -2,10 +2,12 @@ package com.example.pc_0775.naugthyvideo.view
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
@@ -34,6 +36,10 @@ class ActivityMovieDetail : BaseActivity() {
     private var movieDetail: DoubanMovieDetail = DoubanMovieDetail()
     private var movieEntry: DoubanMovieEntry = DoubanMovieEntry()
 
+    //sharePreferences本地存储
+    private var preferences: SharedPreferences? = null
+    private var editor: SharedPreferences.Editor? = null
+
     //handler
     private var handler = MyHandler(this)
     class MyHandler(activity:ActivityMovieDetail) : Handler(){
@@ -59,6 +65,7 @@ class ActivityMovieDetail : BaseActivity() {
                     if (null == activity?.movieEntry){
                         return
                     }
+                    activity?.cacheMovieEntry(activity?.movieEntry)
                     activity?.initViewAfterEntryData()
                 }
             }
@@ -80,6 +87,7 @@ class ActivityMovieDetail : BaseActivity() {
     }
 
     override fun initView(view: View?) {
+
         //电影海报
         Glide.with(this)
                 .load(movieInfo.images.medium)
@@ -200,7 +208,12 @@ class ActivityMovieDetail : BaseActivity() {
     * */
     fun requestMovieDetaildata(){
         NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_DETAIL_URL+movieInfo.id, Constants.DOUBAN_MOVIE_DETAIL_REQUEST, handler)
-        NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_ENTRY_URL+movieInfo.id+"?apikey="+Constants.DOUBAN_MOVIE_APIKEY, Constants.DOUBAN_MOVIE_ENTRY_REQUEST, handler)
+        //没有本地数据，执行网络请求，否则调用本地数据
+        if (!getCacheMovieEntry(movieInfo.id)){
+            NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_ENTRY_URL+movieInfo.id+"?apikey="+Constants.DOUBAN_MOVIE_APIKEY, Constants.DOUBAN_MOVIE_ENTRY_REQUEST, handler)
+        }else{
+            initViewAfterEntryData()
+        }
     }
 
 
@@ -213,6 +226,8 @@ class ActivityMovieDetail : BaseActivity() {
 
         //电影评分人数
         tv_detail_ratings_count.setText(movieDetail?.ratings_count.toString() + "人评价")
+
+
     }
     /*
      * 得到Entry数据后再次初始化某些控件
@@ -268,6 +283,48 @@ class ActivityMovieDetail : BaseActivity() {
             return view
         }
     }
+
+    private fun initPreferences() {
+        if (null == preferences) {
+            preferences = PreferenceManager.getDefaultSharedPreferences(this)
+            editor = preferences?.edit()
+        }
+        if (null == editor) {
+            if (null == preferences) {
+                return //获取不到
+            }
+            editor = preferences?.edit()
+        }
+    }
+
+    //
+    /**
+     * 本地缓存MovieEntry数据
+     * @param phone_number
+     * @param password
+     */
+    fun <T> cacheMovieEntry(t: T):Boolean{
+        //初始化本地存储
+//        initPreferences()
+        editor!!.putString(movieInfo.id, NetWorkUtil.getGson().toJson(t))
+        return editor!!.commit()
+    }
+
+    /**
+     * 记从本地缓存读取,若不为空，直接赋值并返回true，为空返回false
+     * @param moive_id 电影id
+     */
+    private fun getCacheMovieEntry(moive_id: String):Boolean {
+        //初始化本地存储
+        initPreferences()
+        var entryStr = preferences?.getString(moive_id, "")
+        if (entryStr.equals("")){
+            return false
+        }
+        movieEntry = NetWorkUtil.parseJsonWithGson(entryStr, DoubanMovieEntry::class.java)
+        return true
+    }
+
     companion object {
 
         fun actionStart(context: Context, bundle: Bundle, compat: ActivityOptionsCompat?){
