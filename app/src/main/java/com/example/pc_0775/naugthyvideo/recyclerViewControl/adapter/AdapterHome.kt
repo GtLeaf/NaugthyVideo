@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.util.Pair
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.CardView
@@ -17,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
@@ -101,6 +103,9 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
         //view
         private var cv_wholeItem = itemView.findViewById<CardView>(R.id.cv_whole_item)
         private var iv_homeMovieImg = itemView.findViewById<ImageView>(R.id.iv_home_movie_img)
+        private var tv_homeMovieDirect = itemView.findViewById<TextView>(R.id.tv_home_movie_direct)
+        private var tv_homeMovieDate = itemView.findViewById<TextView>(R.id.tv_home_movie_date)
+        private var tv_homeMovieAverge = itemView.findViewById<TextView>(R.id.tv_home_movie_averge)
 
         companion object {
             fun create(parent: ViewGroup):HomeViewHolder{
@@ -110,11 +115,38 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
         }
 
         fun bind(movieInfo: DoubanMovie.SubjectsBean?, context: Context?){
-            Glide.with(context)
-                    .load(movieInfo?.images?.medium)
-                    .asBitmap()
-                    .into(iv_homeMovieImg)
+            //电影海报
+            Glide.with(context).load(movieInfo?.images?.medium).asBitmap().into(iv_homeMovieImg)
 
+            //拼接导演们的名字
+            var directStr = ""
+            var isFirstDirect = true
+            for (direct in movieInfo!!.directors){
+                //第一个导演名字前不用加逗号
+                directStr += if(isFirstDirect) direct.name else ","+direct.name
+                isFirstDirect = false
+            }
+            tv_homeMovieDirect.text = directStr
+
+            //电影的类型
+            var genreStr = ""
+            var isFirstGenre = true
+            for (genre in movieInfo!!.genres){
+                //第一个类型名字前不用加逗号
+                genreStr += if(isFirstGenre) genre else ","+genre
+                isFirstGenre = false
+            }
+            tv_homeMovieDate.text = genreStr
+
+            //电影的评分,当平均分大于8分是，为金色
+            tv_homeMovieAverge.text = movieInfo.rating.average.toString()
+            if (movieInfo.rating.average > 8.0){
+                tv_homeMovieAverge.setTextColor(ContextCompat.getColor(context!!, R.color.gold))
+            }else{
+                tv_homeMovieAverge.setTextColor(ContextCompat.getColor(context!!, R.color.gray))
+            }
+
+            //点击事件
             cv_wholeItem.setOnClickListener(object :View.OnClickListener{
                 override fun onClick(v: View?) {
                     //获取imageView中加载好的图片，传到下一个activity中，防止图片闪烁
@@ -126,7 +158,6 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
                         var imagePair:Pair<View, String> = Pair(iv_homeMovieImg, iv_homeMovieImg.transitionName)
                         compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context, imagePair)
                     }
-
                     ActivityMovieDetail.actionStart(context!!, bundle, compat)
                 }
             })

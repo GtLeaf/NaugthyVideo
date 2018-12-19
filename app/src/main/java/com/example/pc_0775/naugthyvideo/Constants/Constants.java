@@ -81,6 +81,11 @@ public class Constants {
      */
     public static String DOUBAN_LATEST_MOVIE_URL = "https://api.douban.com/v2/movie/in_theaters";
     /**
+     * 电影详情：https://api.douban.com/v2/movie/subject/1292052
+     */
+    public static String DOUBAN_MOVIE_DETAIL_URL = "https://api.douban.com/v2/movie/subject/";
+
+    /**
      * 登录接口
      */
     public static final String LOGIN_URL = "http://101.201.236.217:8888/login";

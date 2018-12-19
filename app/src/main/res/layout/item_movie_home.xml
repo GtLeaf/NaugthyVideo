@@ -1,27 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cv_whole_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="15dp"
-    app:cardCornerRadius="10dp">
+    >
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_whole_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        app:cardCornerRadius="10dp">
 
-        <ImageView
-            android:id="@+id/iv_home_movie_img"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:transitionName="@string/transition_movie_img"/>
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_home_movie_img"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:background="@color/gray"
+                android:scaleType="fitXY"
+                android:transitionName="@string/transition_movie_img"/>
 
 
-    </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/rl_home_movie_direct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_home_movie_img"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp">
 
+                <ImageView
+                    android:id="@+id/iv_home_direct_label_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/label_milk_coffe_header"/>
 
-</android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/tv_home_movie_direct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/iv_home_direct_label_header"
+                    android:paddingLeft="5dp"
+                    android:textSize="15sp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/label_milk_coffe_body"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_home_movie_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rl_home_movie_direct"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:id="@+id/iv_home_date_label_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/label_grapefruit_header"/>
+                <TextView
+                    android:id="@+id/tv_home_movie_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/iv_home_date_label_header"
+                    android:paddingLeft="5dp"
+                    android:textSize="15sp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/label_grapefruit_body" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_home_movie_averge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_home_movie_img"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginBottom="10dp"
+                android:text="9.6"
+                android:textSize="55sp"/>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
+

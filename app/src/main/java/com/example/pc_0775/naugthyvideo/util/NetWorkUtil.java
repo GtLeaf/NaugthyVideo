@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by PC-0775 on 2018/8/19.
@@ -65,14 +69,14 @@ public class NetWorkUtil {
      * @param handler
      */
     public static void sendRequestWithOkHttp(final String address, final int what, final Handler handler){
+        final Request request = new Request.Builder()
+                .url(address)
+                .build();
+        final Message message = Message.obtain();
+        message.what = what;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Request request = new Request.Builder()
-                        .url(address)
-                        .build();
-                final Message message = Message.obtain();
-                message.what = what;
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -105,8 +109,20 @@ public class NetWorkUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return (T)parseJsonWithGson(response,  cls);
+    }
 
-        return  parseJsonWithGson(response, cls);
+    public <T> T syncRequest(String address){
+        Request request = new Request.Builder()
+                .url(address)
+                .build();
+        String response = null;
+        try {
+            response = client.newCall(request).execute().body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return parseJsonWithGson(response);
     }
 
     public static Uri createUri(String url, HashMap<String, String> parameters){
@@ -121,6 +137,19 @@ public class NetWorkUtil {
 
     public static <T> T parseJsonWithGson(String jsonData, Class<?> cls){
         return (T)gson.fromJson(jsonData, cls);
+    }
+
+    public <T> T parseJsonWithGson(String jsonData){
+        Class<T> tClass= null;
+        ParameterizedType type = null;
+        try {
+            type = (ParameterizedType)this.getClass().getGenericSuperclass();
+            tClass = (Class)type.getActualTypeArguments()[0];
+        }catch (ClassCastException e){
+            Log.e(TAG, "parseJsonWithGson: 未指定泛型");
+        }
+
+        return gson.fromJson(jsonData, tClass);
     }
 
     public static <T> T parseJsonWithGson(String jsonData, Type type){
