@@ -102,7 +102,7 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
         private var cv_wholeItem = itemView.findViewById<CardView>(R.id.cv_whole_item)
         private var iv_homeMovieImg = itemView.findViewById<ImageView>(R.id.iv_home_movie_img)
         private var tv_homeMovieDirect = itemView.findViewById<TextView>(R.id.tv_home_movie_direct)
-        private var tv_homeMovieDate = itemView.findViewById<TextView>(R.id.tv_home_movie_genre)
+        private var tv_homeMovieGenre = itemView.findViewById<TextView>(R.id.tv_home_movie_genre)
         private var tv_homeMovieAverge = itemView.findViewById<TextView>(R.id.tv_home_movie_averge)
 
         companion object {
@@ -134,7 +134,7 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
                 genreStr += if(isFirstGenre) genre else "/"+genre
                 isFirstGenre = false
             }
-            tv_homeMovieDate.text = genreStr
+            tv_homeMovieGenre.text = genreStr
 
             //电影的评分,当平均分大于8分是，为金色
             tv_homeMovieAverge.text = movieInfo.rating.average.toString()
@@ -154,6 +154,10 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
                     var compat:ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((context as Activity))
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
                         var imagePair:Pair<View, String> = Pair(iv_homeMovieImg, iv_homeMovieImg.transitionName)
+                        //下面三个动画效果太差，全都不要
+                        var averagePair:Pair<View, String> = Pair(tv_homeMovieAverge, tv_homeMovieAverge.transitionName)
+                        var genrePair:Pair<View, String> = Pair(tv_homeMovieGenre, tv_homeMovieGenre.transitionName)
+                        var DirectPair:Pair<View, String> = Pair(tv_homeMovieDirect, tv_homeMovieDirect.transitionName)
                         compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context, imagePair)
                     }
                     ActivityMovieDetail.actionStart(context!!, bundle, compat)

@@ -34,8 +34,9 @@
     <string name="vitamio_player">Vitamio播放器</string>
     <string name="ijk_player">Ijk播放器</string>
 
-
+    <!--movieDetail-->
     <string name="movie_synopsis">剧情简介</string>
+    <string name="movie_short_commentary">短评</string>
 
     <string-array name="right_title_name">
         <item>最新价</item>
@@ -54,7 +55,6 @@
     <string name="transition_movie_describe">transition_movie_describe</string>
     <string name="transition_movie_average">transition_movie_average</string>
     <string name="transition_movie_direct_name">transition_movie_direct_name</string>
-    <string name="transition_movie_direct_averge">transition_movie_direct_averge</string>
     <string name="transition_movie_genre">transition_movie_genre</string>
 
     <!--ijkPlayer-->

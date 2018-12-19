@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/movie_detail_magrin">
+
+    <TextView
+        android:id="@+id/tv_detail_short_commentary_author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="评论者名字"
+        android:textSize="@dimen/normal_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_detail_short_commentary_average"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_detail_short_commentary_author_name"
+        android:layout_marginLeft="@dimen/movie_detail_magrin"
+        android:text="打分"
+        android:textSize="@dimen/normal_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_detail_short_commentary_creata_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_detail_short_commentary_average"
+        android:layout_marginLeft="@dimen/movie_detail_magrin"
+        android:text="创建时间"
+        android:textSize="@dimen/normal_font_size"/>
+
+    <TextView
+        android:id="@+id/tv_detail_short_commentary_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_detail_short_commentary_author_name"
+        android:layout_marginTop="5dp"
+        android:lineSpacingExtra="@dimen/movie_detail_lineSpacingExtra_magrin"
+        android:text="短评内容"
+        android:textSize="@dimen/normal_font_size"/>
+
+    <View
+        android:id="@+id/v_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_detail_short_commentary_content"
+        android:layout_margin="10dp"
+        android:background="@color/gray" />
+</RelativeLayout>

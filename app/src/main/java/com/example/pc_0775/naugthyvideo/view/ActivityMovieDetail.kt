@@ -15,6 +15,7 @@ import android.transition.ChangeTransform
 import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
@@ -187,6 +188,8 @@ class ActivityMovieDetail : BaseActivity() {
         transitionSet.addTransition(ChangeTransform())
         transitionSet.addTarget(iv_detail_movie)
         transitionSet.addTarget(tv_detail_movie_average)
+        transitionSet.addTarget(tv_detail_movie_direct)
+        transitionSet.addTarget(tv_detail_movie_genre)
         window.sharedElementEnterTransition = transitionSet
         window.sharedElementExitTransition = transitionSet
     }
@@ -206,10 +209,10 @@ class ActivityMovieDetail : BaseActivity() {
      * */
     private fun initViewAfterDetailData(){
         //剧情简介
-        tv_detail_movie_summary.text = "    " + movieDetail?.summary
+        tv_detail_movie_summary.setText("    " + movieDetail?.summary)
 
         //电影评分人数
-        tv_detail_ratings_count.text = movieDetail?.ratings_count.toString() + "人评价"
+        tv_detail_ratings_count.setText(movieDetail?.ratings_count.toString() + "人评价")
     }
     /*
      * 得到Entry数据后再次初始化某些控件
@@ -224,7 +227,46 @@ class ActivityMovieDetail : BaseActivity() {
         tv_detail_movie_pubdate.text = pubdateStr
 
         //片长
-        tv_detail_movie_durations.text = "片长："+movieEntry.durations.get(0)
+        tv_detail_movie_durations.setText("片长："+movieEntry.durations.get(0))
+
+        //短评
+        for (comment in movieEntry.popular_comments){
+            var shortCommentView = ShortCommentaryViewHolder.create(this).bind(comment, this)
+            ll_short_commentary_layout.addView(shortCommentView)
+        }
+    }
+
+    class ShortCommentaryViewHolder(itemView:View){
+
+        private var tv_detailShortCommentaryAuthorName = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_author_name)
+        private var tv_detailShortCommentaryAverage = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_average)
+        private var tv_detailShortCommentaryCreataAt = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_creata_at)
+        private var tv_detailShortCommentaryContent = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_content)
+        private val view = itemView
+
+        companion object {
+
+            fun create(context: Context):ShortCommentaryViewHolder{
+                val view = LayoutInflater.from(context).inflate(R.layout.item_movie_short_commentary, null)
+                return ShortCommentaryViewHolder(view);
+            }
+        }
+
+        fun bind(comment:DoubanMovieEntry.PopularCommentsBean, context: Context):View{
+            tv_detailShortCommentaryAuthorName.text = comment.author.name+"  看过 "
+            tv_detailShortCommentaryCreataAt.text = comment.created_at.split(" ").get(0)//按空分割，只取年月日，即0位置
+            tv_detailShortCommentaryContent.text = "    "+comment.content
+
+            //评分
+            tv_detailShortCommentaryAverage.text = comment.rating.value.toString()+"分"
+            if (comment.rating.value>3){
+                tv_detailShortCommentaryAverage.setTextColor(ContextCompat.getColor(context, R.color.gold))
+            }else{
+                tv_detailShortCommentaryAverage.setTextColor(ContextCompat.getColor(context, R.color.gray))
+            }
+
+            return view
+        }
     }
     companion object {
 
