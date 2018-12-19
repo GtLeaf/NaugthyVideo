@@ -135,16 +135,17 @@ public class NetWorkUtil {
         return uriBuilder.build();
     }
 
-    public static <T> T parseJsonWithGson(String jsonData, Class<?> cls){
-        return (T)gson.fromJson(jsonData, cls);
+    public static <T> T parseJsonWithGson(String jsonData, Class<T> cls){
+        return gson.fromJson(jsonData, cls);
     }
 
+    //不能使用——方法内得到的tClass是类名中指定的泛型，不是方法指定的
     public <T> T parseJsonWithGson(String jsonData){
         Class<T> tClass= null;
         ParameterizedType type = null;
         try {
             type = (ParameterizedType)this.getClass().getGenericSuperclass();
-            tClass = (Class)type.getActualTypeArguments()[0];
+            tClass = (Class<T>)type.getActualTypeArguments()[0];
         }catch (ClassCastException e){
             Log.e(TAG, "parseJsonWithGson: 未指定泛型");
         }
@@ -156,12 +157,12 @@ public class NetWorkUtil {
         return (T)gson.fromJson(jsonData, type);
     }
 
-    public static <T> List<T> parseJsonArray(String jsonData, Class<?> cls){
+    public static <T> List<T> parseJsonArray(String jsonData, Class<T> cls){
         List<T> tList = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(jsonData);
             for(int i = 0; i<jsonArray.length(); i++){
-                  T t = (T)gson.fromJson(jsonArray.getJSONObject(i).toString(), cls);
+                  T t = gson.fromJson(jsonArray.getJSONObject(i).toString(), cls);
                 tList.add(t);
             }
         } catch (JSONException e) {

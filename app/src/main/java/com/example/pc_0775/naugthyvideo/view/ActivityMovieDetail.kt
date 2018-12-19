@@ -21,6 +21,7 @@ import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieDetail
+import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieEntry
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import java.lang.ref.WeakReference
@@ -28,12 +29,13 @@ import java.lang.ref.WeakReference
 class ActivityMovieDetail : BaseActivity() {
 
     //bean
-    var movieInfo:DoubanMovie.SubjectsBean = DoubanMovie.SubjectsBean()
-    var movieDetial: DoubanMovieDetail? = null
+    private var movieInfo:DoubanMovie.SubjectsBean = DoubanMovie.SubjectsBean()
+    private var movieDetail: DoubanMovieDetail = DoubanMovieDetail()
+    private var movieEntry: DoubanMovieEntry = DoubanMovieEntry()
 
     //handler
-
-    inner class MyHandler(activity:ActivityMovieDetail) : Handler(){
+    private var handler = MyHandler(this)
+    class MyHandler(activity:ActivityMovieDetail) : Handler(){
 
         private var weakreference:WeakReference<ActivityMovieDetail>? = null
 
@@ -42,9 +44,22 @@ class ActivityMovieDetail : BaseActivity() {
         }
 
         override fun handleMessage(msg: Message?) {
-
-            when(msg?.what){
-
+            val activity = weakreference?.get()
+            if (null == msg?.obj){
+                return
+            }
+            when(msg.what){
+                Constants.DOUBAN_MOVIE_DETAIL_REQUEST -> {
+                    activity?.movieDetail = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), DoubanMovieDetail::class.java)
+                    activity?.initViewAfterDetailData()
+                }
+                Constants.DOUBAN_MOVIE_ENTRY_REQUEST -> {
+                    activity?.movieEntry = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), DoubanMovieEntry::class.java)
+                    if (null == activity?.movieEntry){
+                        return
+                    }
+                    activity?.initViewAfterEntryData()
+                }
             }
         }
     }
@@ -60,41 +75,77 @@ class ActivityMovieDetail : BaseActivity() {
     }
 
     override fun bindView(): View {
-        return LayoutInflater.from(this).inflate(bindLayout(), null);
+        return LayoutInflater.from(this).inflate(bindLayout(), null)
     }
 
     override fun initView(view: View?) {
-        /**
-         * 1、设置相同的TransitionName
-         * //已经在xml中设置好
-         */
+        //电影海报
         Glide.with(this)
                 .load(movieInfo.images.medium)
                 .skipMemoryCache(false)
                 .dontAnimate()
                 .into(iv_detail_movie)
-        tv_detail_movie_average.text = movieInfo.rating.average.toString()
-        tv_detail_movie_describe.text = movieInfo.alt
-        //电影的评分,当平均分大于8分是，为金色
-        if (movieInfo.rating.average > 8.0){
-            tv_detail_movie_describe.setTextColor(ContextCompat.getColor(this, R.color.gold))
-        }else{
-            tv_detail_movie_describe.setTextColor(ContextCompat.getColor(this, R.color.gray))
+
+        //电影标题名
+        tv_detail_movie_title.text = movieInfo.title
+        //电影原名,如果原名和标题名相同，则不需要
+        tv_detail_movie_original_title.text = movieInfo.original_title
+        if (movieInfo.title.equals(movieInfo.original_title)){
+            tv_detail_movie_original_title.visibility = View.GONE
         }
-        //拼接导演们的名字
+
+        //电影的评分,当平均分大于8分是，为金色
+        tv_detail_movie_average.text = movieInfo.rating.average.toString()
+        if (movieInfo.rating.average > 8.0){
+            tv_detail_movie_average.setTextColor(ContextCompat.getColor(this, R.color.gold))
+        }else{
+            tv_detail_movie_average.setTextColor(ContextCompat.getColor(this, R.color.gray))
+        }
+        tv_detail_movie_summary.text = movieInfo.alt
+
+        //导演，拼接导演们的名字
         var directStr = ""
         var isFirstDirect = true
-        for (direct in movieInfo!!.directors){
-            //第一个导演名字前不用加逗号
-            directStr += if(isFirstDirect) direct.name else ","+direct.name
+        for (direct in movieInfo.directors){
+            //第一个导演名字前不用加分隔符
+            directStr += if(isFirstDirect) "导演："+direct.name else "/"+direct.name
             isFirstDirect = false
         }
-        tv_detail_movie_direct.text = directStr
+
+        //演员阵容：
+        var castsStr = ""
+        var isFirstCast = true
+        for (cast in movieInfo.casts){
+            //第一个演员名字前不用加分隔符
+            castsStr += if(isFirstCast) "演员阵容："+ cast.name else "/"+ cast.name
+            isFirstCast = false
+        }
+        tv_detail_movie_casts.text = castsStr
+
+        //电影类型：
+        var genreStr = ""
+        var isFirstGenre = true
+        for (genre in movieInfo.genres){
+            //第一个类型名字前不用加分隔符
+            genreStr += if(isFirstGenre) "类型："+ genre else "/"+ genre
+            isFirstGenre = false
+        }
+        tv_detail_movie_genre.text = genreStr
 
         //电影简介:
+        tv_detail_movie_direct.text = directStr
+
+        //电影评分人数
+        tv_detail_ratings_count.text = ""
+
+        //上映时间:
+
+        //影片时长:
 
         //设置动画
         setTransition()
+        //请求电影详情信息
+        requestMovieDetaildata()
     }
 
     override fun setListener() {
@@ -115,10 +166,14 @@ class ActivityMovieDetail : BaseActivity() {
     /*
      * 设置动画
      * */
-    fun setTransition(){
+    private fun setTransition(){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
             return
         }
+        /**
+         * 1、设置相同的TransitionName
+         * //已经在xml中设置好
+         */
         /**
          * 2、设置WindowTransition,除指定的ShareElement外，其它所有View都会执行这个Transition动画
          */
@@ -127,25 +182,54 @@ class ActivityMovieDetail : BaseActivity() {
         /*
          * 3、设置ShareElementTransition,指定的ShareElement会执行这个Transiton动画
          * */
-        var transitionSet = TransitionSet()
+        val transitionSet = TransitionSet()
         transitionSet.addTransition(ChangeBounds())
         transitionSet.addTransition(ChangeTransform())
         transitionSet.addTarget(iv_detail_movie)
         transitionSet.addTarget(tv_detail_movie_average)
-        transitionSet.addTarget(tv_detail_movie_name)
         window.sharedElementEnterTransition = transitionSet
         window.sharedElementExitTransition = transitionSet
     }
 
-    //请求电影详情信息
-    fun requestMovieDetail(id:String):DoubanMovieDetail{
-        return NetWorkUtil.getInstant().syncRequest<DoubanMovieDetail>(Constants.DOUBAN_MOVIE_DETAIL_URL+movieInfo.id)
+
+    /*
+    * 网络请求电影数据
+    * */
+    fun requestMovieDetaildata(){
+        NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_DETAIL_URL+movieInfo.id, Constants.DOUBAN_MOVIE_DETAIL_REQUEST, handler)
+        NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_ENTRY_URL+movieInfo.id+"?apikey="+Constants.DOUBAN_MOVIE_APIKEY, Constants.DOUBAN_MOVIE_ENTRY_REQUEST, handler)
     }
 
+
+    /*
+     * 得到Detail数据后再次初始化某些控件
+     * */
+    private fun initViewAfterDetailData(){
+        //剧情简介
+        tv_detail_movie_summary.text = "    " + movieDetail?.summary
+
+        //电影评分人数
+        tv_detail_ratings_count.text = movieDetail?.ratings_count.toString() + "人评价"
+    }
+    /*
+     * 得到Entry数据后再次初始化某些控件
+     * */
+    private fun initViewAfterEntryData(){
+        //上映时间：
+        var pubdateStr = "上映时间："
+        for (date in movieEntry.pubdates){
+            //第一个类型名字前不用加分隔符
+            pubdateStr += "\n"+ date
+        }
+        tv_detail_movie_pubdate.text = pubdateStr
+
+        //片长
+        tv_detail_movie_durations.text = "片长："+movieEntry.durations.get(0)
+    }
     companion object {
 
         fun actionStart(context: Context, bundle: Bundle, compat: ActivityOptionsCompat?){
-            var intent = Intent(context, ActivityMovieDetail::class.java)
+            val intent = Intent(context, ActivityMovieDetail::class.java)
             intent.putExtras(bundle)
             /**
              *4、生成带有共享元素的Bundle，这样系统才会知道这几个元素需要做动画

@@ -1,15 +1,9 @@
 package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter
 
-import android.app.Activity
 import android.arch.paging.PagedListAdapter
 import android.content.Context
-import android.os.Build
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.transition.ChangeBounds
-import android.transition.ChangeTransform
-import android.transition.Fade
-import android.transition.TransitionSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,17 +48,15 @@ class AdapterMovieDetail(context: Context) : PagedListAdapter<DoubanMovie.Subjec
         //view
         private val iv_detailMovieImg = itemView.findViewById<ImageView>(R.id.iv_detail_movie_img)
         private val tv_detailMovieAverage = itemView.findViewById<TextView>(R.id.tv_detail_movie_average)
-        private val tv_detailMovieDescribe = itemView.findViewById<TextView>(R.id.tv_detail_movie_describe)
-        private val tv_detailMovieName = itemView.findViewById<TextView>(R.id.tv_detail_movie_name)
+        private val tv_detailMovieDescribe = itemView.findViewById<TextView>(R.id.tv_detail_movie_summary)
+        private val tv_detailMovieTitle = itemView.findViewById<TextView>(R.id.tv_detail_movie_title)
 
         fun bind(movieInfo: DoubanMovie.SubjectsBean?, context: Context?){
             Glide.with(context).load(movieInfo?.images?.medium).into(iv_detailMovieImg)
             tv_detailMovieAverage.text = movieInfo?.rating?.average.toString()
             tv_detailMovieDescribe.text = movieInfo?.alt
-            tv_detailMovieName.text = movieInfo?.title
+            tv_detailMovieTitle.text = movieInfo?.title
         }
-
-
 
         companion object {
             fun create(parent: ViewGroup):MovieDetailViewHolder{

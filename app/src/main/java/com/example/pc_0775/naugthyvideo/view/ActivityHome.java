@@ -147,7 +147,8 @@ public class ActivityHome extends BaseActivity {
             /**
              *2、设置除ShareElement外其它View的退出方式(左边滑出)
              */
-            getWindow().setExitTransition(new Slide(Gravity.LEFT));
+            getWindow().setExitTransition(new Slide(Gravity.START));
+            getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
         }
     }
 
@@ -313,10 +314,10 @@ public class ActivityHome extends BaseActivity {
 
     /**
      * 请求豆瓣最新电影数据，异步，初始化使用
-     * @return
+     *
      */
     private void requestLatestMoviesData(MyHandler myHandler){
-        HashMap parameter = new HashMap();
+        HashMap<String, String> parameter = new HashMap<>();
         parameter.put("start", start+"");
         parameter.put("count", count+"");
         Uri latestMovieUri = NetWorkUtil.createUri(Constants.DOUBAN_LATEST_MOVIE_URL, parameter);
@@ -326,10 +327,10 @@ public class ActivityHome extends BaseActivity {
 
     /**
      * 请求豆瓣最新电影数据，同步，后续加载使用
-     * @return
+     *
      */
     private DoubanMovie syncRequestLatestMoviesData(){
-        HashMap parameter = new HashMap();
+        HashMap<String, String> parameter = new HashMap<>();
         parameter.put("start", start+"");
         parameter.put("count", count+"");
         Uri latestMovieUri = NetWorkUtil.createUri(Constants.DOUBAN_LATEST_MOVIE_URL, parameter);
@@ -338,7 +339,7 @@ public class ActivityHome extends BaseActivity {
     }
 
     private void startActivityCardSilde(){
-        HashMap classTowparameters = new HashMap();
+        HashMap<String, String> classTowparameters = new HashMap<>();
         classTowparameters.put("yeshu", "1");
         classTowparameters.put("type", "18");
         Uri classTowUri = NetWorkUtil.createUri(Constants.CARTOON_VIDEO_URL, classTowparameters);

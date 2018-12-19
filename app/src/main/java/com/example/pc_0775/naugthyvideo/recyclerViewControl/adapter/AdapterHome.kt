@@ -5,7 +5,6 @@ import android.arch.paging.PagedList
 import android.arch.paging.PagedListAdapter
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
@@ -20,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.example.pc_0775.naugthyvideo.R
@@ -104,7 +102,7 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
         private var cv_wholeItem = itemView.findViewById<CardView>(R.id.cv_whole_item)
         private var iv_homeMovieImg = itemView.findViewById<ImageView>(R.id.iv_home_movie_img)
         private var tv_homeMovieDirect = itemView.findViewById<TextView>(R.id.tv_home_movie_direct)
-        private var tv_homeMovieDate = itemView.findViewById<TextView>(R.id.tv_home_movie_date)
+        private var tv_homeMovieDate = itemView.findViewById<TextView>(R.id.tv_home_movie_genre)
         private var tv_homeMovieAverge = itemView.findViewById<TextView>(R.id.tv_home_movie_averge)
 
         companion object {
@@ -122,8 +120,8 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
             var directStr = ""
             var isFirstDirect = true
             for (direct in movieInfo!!.directors){
-                //第一个导演名字前不用加逗号
-                directStr += if(isFirstDirect) direct.name else ","+direct.name
+                //第一个导演名字前不用加分隔符
+                directStr += if(isFirstDirect) direct.name else "/"+direct.name
                 isFirstDirect = false
             }
             tv_homeMovieDirect.text = directStr
@@ -132,8 +130,8 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
             var genreStr = ""
             var isFirstGenre = true
             for (genre in movieInfo!!.genres){
-                //第一个类型名字前不用加逗号
-                genreStr += if(isFirstGenre) genre else ","+genre
+                //第一个类型名字前不用加分隔符
+                genreStr += if(isFirstGenre) genre else "/"+genre
                 isFirstGenre = false
             }
             tv_homeMovieDate.text = genreStr
