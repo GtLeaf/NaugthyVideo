@@ -222,7 +222,7 @@ class ActivityMovieDetail : BaseActivity() {
      * */
     private fun initViewAfterDetailData(){
         //剧情简介
-        tv_detail_movie_summary.setText("    " + movieDetail?.summary)
+        tv_detail_movie_summary.setLimitText("    " + movieDetail?.summary)
 
         //电影评分人数
         tv_detail_ratings_count.setText(movieDetail?.ratings_count.toString() + "人评价")
