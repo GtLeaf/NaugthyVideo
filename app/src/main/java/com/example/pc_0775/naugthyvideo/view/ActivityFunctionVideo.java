@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.bean.mmBean.VideoInfoMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterFunctionVideo;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
@@ -34,7 +33,6 @@ import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ActivityFunctionVideo extends BaseActivity {
@@ -53,11 +51,10 @@ public class ActivityFunctionVideo extends BaseActivity {
     private static final String INTENT_RESULT_LIST = "resultList";
 
     //data
-    protected List videoInfoList;
+    protected List videoInfoList = new ArrayList<>();
     private int pageNumber = 1;
     private Uri uri;
     private int requestNum = 0;
-    private Boolean isDataFresh = true;
     private int videoIndex = 1;
 
     //handler
@@ -85,7 +82,7 @@ public class ActivityFunctionVideo extends BaseActivity {
                     return;
                 }
                 //如果获得的size为0，则重新获取，最多重试5次
-                activity.requestData();
+                activity.syncRequestData();
                 activity.requestNum++;
                 return;
             }
@@ -95,7 +92,6 @@ public class ActivityFunctionVideo extends BaseActivity {
             Toast.makeText(activity, "网络请求成功"+activity.videoInfoList.size(), Toast.LENGTH_SHORT).show();
             activity.videoInfoList = videoInfoMiMi.getVideos();
 //            activity.adapterFunctionVideo.notifyDataSetChanged();
-            activity.isDataFresh = true;
         }
     }
 
@@ -195,43 +191,38 @@ public class ActivityFunctionVideo extends BaseActivity {
         }
         return list;
     }
-
-    private void requestData(){
+    private void asynRequestData(MyHandler handler){
         int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.VIDEO_PARAMTER_PAGEINDEX));
         String url = NetWorkUtil.replace(uri.toString(), Constants.VIDEO_PARAMTER_PAGEINDEX, currentPageNumber+1+"");
-        NetWorkUtil.sendRequestWithOkHttp(url, Constants.EUROPE_VIDEO_REQUEST, handler );
+        NetWorkUtil.sendRequestWithOkHttp(url, Constants.EUROPE_VIDEO_REQUEST, handler);
+    }
+
+    private VideoInfoMiMi syncRequestData(){
+        int currentPageNumber = Integer.parseInt(uri.getQueryParameter(Constants.VIDEO_PARAMTER_PAGEINDEX));
+        String url = NetWorkUtil.replace(uri.toString(), Constants.VIDEO_PARAMTER_PAGEINDEX, currentPageNumber+1+"");
+        return NetWorkUtil.syncRequest(url,  VideoInfoMiMi.class);
     }
 
     /**
-     * 加载更多数据
-     * @return
+     * Paging中的MyDataSource
      */
-    private List<VideoInfo> loadPagingData(){
-        List<VideoInfo> videoInfos = new ArrayList<>();
-        //上次数据请求成功，才会开启下一次请求
-        if (isDataFresh){
-            requestData();
-            isDataFresh = false;
-            videoInfos = videoMiMiToVideoInfo(videoInfoList);
-        }
-        //是否会发生多次网络请求？
-        return videoInfos;
-    }
-
     private class MyDataSource extends PositionalDataSource<VideoInfo> {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<VideoInfo> callback) {
-            List<VideoInfo> videoInfoList = loadPagingData();
-            callback.onResult(videoInfoList, 0, videoInfoList.size());
+            List<VideoInfo> dataList = videoMiMiToVideoInfo(videoInfoList);
+            callback.onResult(dataList, 0, videoInfoList.size());
         }
 
         @Override
         public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<VideoInfo> callback) {
-            callback.onResult(loadPagingData());
+            callback.onResult(videoMiMiToVideoInfo(syncRequestData().getVideos()));
         }
     }
 
+    /**
+     * Paging中的MyDataSourceFactory
+     */
     private class MyDataSourceFactory extends DataSource.Factory<Integer, VideoInfo>{
 
         @Override

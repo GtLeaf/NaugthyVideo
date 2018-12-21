@@ -109,20 +109,7 @@ public class NetWorkUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return (T)parseJsonWithGson(response,  cls);
-    }
-
-    public <T> T syncRequest(String address){
-        Request request = new Request.Builder()
-                .url(address)
-                .build();
-        String response = null;
-        try {
-            response = client.newCall(request).execute().body().string();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return parseJsonWithGson(response);
+        return gson.<T>fromJson(response,  cls);
     }
 
     public static Uri createUri(String url, HashMap<String, String> parameters){
@@ -137,20 +124,6 @@ public class NetWorkUtil {
 
     public static <T> T parseJsonWithGson(String jsonData, Class<T> cls){
         return gson.fromJson(jsonData, cls);
-    }
-
-    //不能使用——方法内得到的tClass是类名中指定的泛型，不是方法指定的
-    public <T> T parseJsonWithGson(String jsonData){
-        Class<T> tClass= null;
-        ParameterizedType type = null;
-        try {
-            type = (ParameterizedType)this.getClass().getGenericSuperclass();
-            tClass = (Class<T>)type.getActualTypeArguments()[0];
-        }catch (ClassCastException e){
-            Log.e(TAG, "parseJsonWithGson: 未指定泛型");
-        }
-
-        return gson.fromJson(jsonData, tClass);
     }
 
     public static <T> T parseJsonWithGson(String jsonData, Type type){
@@ -171,6 +144,7 @@ public class NetWorkUtil {
         return tList;
     }
 
+    //将Uri中的参数重新赋值
     public static String replace(String url, String key, String value) {
         if (!TextUtils.isEmpty(url) && !TextUtils.isEmpty(key)) {
             url = url.replaceAll("(" + key + "=[^&]*)", key + "=" + value);

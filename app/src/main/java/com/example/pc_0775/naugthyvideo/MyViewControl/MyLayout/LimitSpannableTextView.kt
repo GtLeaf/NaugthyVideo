@@ -8,26 +8,23 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.widget.TextView
 import com.example.pc_0775.naugthyvideo.R
 
 /**
  * 自定义TextView，实现文本“展开”，“收起”功能
+ * 原博客地址：https://blog.csdn.net/qq_28695619/article/details/72857907
  * Created by PC-0775 on 2018/12/20.
  */
 class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppCompatTextView(context, attrs){
 
-    init {
-//        limitTextViewString(this.text.toString(), 140, this, object :OnClickListener{
-//            override fun onClick(v: View?) {
-//                //设置监听函数
-//            }
-//        })
-    }
+    private var mLastActionDownTime:Long = -1
 
     fun setLimitText(text: CharSequence){
-        limitTextViewString(text.toString(), 140, this, object :OnClickListener{
+        limitTextViewString(text.toString(), 20, this, object :OnClickListener{
             override fun onClick(v: View?) {
                 //设置监听函数
             }
@@ -44,10 +41,10 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
      */
     private fun getLastCharIndexForLimitTextView(textView: TextView, content:String, width:Int, maxLine:Int):Int{
         var textPaint:TextPaint = textView.paint
-        var staticLayout:StaticLayout = StaticLayout(content, textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
-        if (staticLayout.lineCount > maxLine)
-            return staticLayout.getLineStart(maxLine)-1
-        else return -1
+        var staticLayout = StaticLayout(content, textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false)
+        return if (staticLayout.lineCount > maxLine)
+            staticLayout.getLineStart(maxLine)
+        else -1
     }
 
     /**
@@ -59,13 +56,13 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
     private fun limitTextViewString(textString:String, maxFirstShowChartCount:Int, textView: TextView, listener: OnClickListener){
         //计算处理话费的时间
         var startTime = System.currentTimeMillis()
-        if (null == textView) return;
+        if (null == textView) return
         var width = textView.width //在recyclerView和ListView中，由于复用的原因，这个TextView可能以前就画好了，能获得宽度
-        if (0 == width) width = 1000;//获取textView的实际宽度，这里可以用各种方式（一般是dp转px写死）填入TextView的宽度
+        if (0 == width) width = this.paint.measureText(textString).toInt()//获取textView的实际宽度，这里可以用各种方式（一般是dp转px写死）填入TextView的宽度
         //返回-1表示没有达到maxLine
-        var lastCharIndex = getLastCharIndexForLimitTextView(textView, textString, width, 5)
+        var lastCharIndex = getLastCharIndexForLimitTextView(textView, textString, width, 4)
         //行数没有超，字符串长度没有超过限制
-        if (lastCharIndex<0 && textString.length <= maxFirstShowChartCount){
+        if (lastCharIndex<0){
             //行数没超过限制
             textView.setText(textString)
             return
@@ -73,18 +70,19 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
         //行数超出了限制
         //this will deprive the recyclerView's focus
         textView.movementMethod = LinkMovementMethod.getInstance()
-        if (lastCharIndex>maxFirstShowChartCount || lastCharIndex<0){
-            lastCharIndex = maxFirstShowChartCount;
-        }
+
         //构造spannableString
         var explicitText = ""
         var explicitTextAll = ""
+        //最后一个字符不能是换行
         if ('\n' == textString.get(lastCharIndex)){
             explicitText = textString.substring(0, lastCharIndex)
-        }else if (lastCharIndex > 12){
-            //如果最大行数限制的那一行到达12以后则直接显示"显示更多"
-            explicitText = textString.substring(0, lastCharIndex-12)
+        }else{
+            explicitText = textString.substring(0, lastCharIndex+1)
         }
+        /*
+        * sourceLength：收起时Text中字符串的总长度
+        * */
         var sourceLength = explicitText.length
         val showMore = "展开"
         explicitText = explicitText+"..."+showMore
@@ -92,7 +90,6 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
 
         val dismissMore = "收起"
         explicitTextAll = textString+dismissMore
-
         var mSpanAll = SpannableString(explicitTextAll)
         mSpanAll.setSpan(object :ClickableSpan(){
 
@@ -120,8 +117,7 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
             override fun onClick(widget: View?) {
                 textView.text = mSpanAll
                 textView.setOnClickListener(null)
-                var handler = android.os.Handler()
-                handler.postDelayed({
+                android.os.Handler().postDelayed({
                     if (listener != null){
                         //防止点击两次
                         textView.setOnClickListener(listener)
@@ -137,8 +133,56 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
             }
 
         }, sourceLength, explicitText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        //设置为“展开”状态下的TextVie
+        //默认设置为“展开”状态下的TextVie
         textView.setText(mSpan)
         Log.i("info", "字符串处理耗时" + (System.currentTimeMillis() - startTime) + " ms");
     }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+
+        //处理ClicekSpan与textIsSelectable属性冲突，暂时不起作用
+        /*if(this.text != null && text is Spannable){
+            handleLinkMovementMethod(this, text as Spannable, event)
+        }*/
+
+
+        return super.onTouchEvent(event)
+    }
+
+    private fun handleLinkMovementMethod(widget: TextView, buffer: Spannable, event: MotionEvent?):Boolean{
+        val action = event?.action
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN){
+            var x = event.x.toInt()
+            var y = event.y.toInt()
+
+            x -= widget.totalPaddingLeft
+            y -= widget.totalPaddingTop
+
+            x += widget.scrollX
+            y += widget.scrollY
+
+            var layout = widget.layout
+            var line = layout.getLineForVertical(y)
+            var off = layout.getOffsetForHorizontal(line, x.toFloat())
+
+            var link = buffer.getSpans(off, off, ClickableSpan::class.java)
+
+            if (!link.isNotEmpty()){
+                if (action == MotionEvent.ACTION_UP){
+                    var actionUpTime = System.currentTimeMillis()
+                    if (actionUpTime - mLastActionDownTime > ViewConfiguration.getLongPressTimeout()){
+                        //长按事件，取消LinkMovementMethod处理，即不处理ClickableSpan点击事件
+                        return false
+                    }
+                }
+                link[0].onClick(widget)
+                Selection.removeSelection(buffer)
+            }else if (action == MotionEvent.ACTION_DOWN){
+                Selection.setSelection(buffer, buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]))
+                mLastActionDownTime = System.currentTimeMillis()
+            }
+        }
+        return false
+    }
+
 }

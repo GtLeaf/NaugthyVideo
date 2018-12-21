@@ -11,6 +11,12 @@ import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.ArrowKeyMovementMethod
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.transition.TransitionSet
 import android.transition.ChangeBounds
 import android.transition.ChangeTransform
@@ -40,6 +46,7 @@ class ActivityMovieDetail : BaseActivity() {
     private var preferences: SharedPreferences? = null
     private var editor: SharedPreferences.Editor? = null
 
+
     //handler
     private var handler = MyHandler(this)
     class MyHandler(activity:ActivityMovieDetail) : Handler(){
@@ -65,8 +72,8 @@ class ActivityMovieDetail : BaseActivity() {
                     if (null == activity?.movieEntry){
                         return
                     }
-                    activity?.cacheMovieEntry(activity?.movieEntry)
-                    activity?.initViewAfterEntryData()
+                    activity.cacheMovieEntry(activity.movieEntry)
+                    activity.initViewAfterEntryData()
                 }
             }
         }
@@ -147,10 +154,6 @@ class ActivityMovieDetail : BaseActivity() {
         //电影评分人数
         tv_detail_ratings_count.text = ""
 
-        //上映时间:
-
-        //影片时长:
-
         //设置动画
         setTransition()
         //请求电影详情信息
@@ -222,7 +225,13 @@ class ActivityMovieDetail : BaseActivity() {
      * */
     private fun initViewAfterDetailData(){
         //剧情简介
-        tv_detail_movie_summary.setLimitText("    " + movieDetail?.summary)
+//        tv_detail_movie_summary.setLimitText("    " + movieDetail?.summary)
+        setTextViewLimit(tv_detail_movie_summary, "    " +movieDetail?.summary, 80, object :View.OnClickListener{
+            override fun onClick(v: View?) {
+                Constants.createAlertDialog(this@ActivityMovieDetail, "点击文本")
+            }
+
+        })
 
         //电影评分人数
         tv_detail_ratings_count.setText(movieDetail?.ratings_count.toString() + "人评价")
@@ -242,7 +251,7 @@ class ActivityMovieDetail : BaseActivity() {
         tv_detail_movie_pubdate.text = pubdateStr
 
         //片长
-        tv_detail_movie_durations.setText("片长："+movieEntry.durations.get(0))
+        tv_detail_movie_durations.setText("片长："+if(movieEntry.durations.size != 0) movieEntry.durations.get(0) else "")
 
         //短评
         for (comment in movieEntry.popular_comments){
@@ -300,8 +309,7 @@ class ActivityMovieDetail : BaseActivity() {
     //
     /**
      * 本地缓存MovieEntry数据
-     * @param phone_number
-     * @param password
+     * @param t
      */
     fun <T> cacheMovieEntry(t: T):Boolean{
         //初始化本地存储
@@ -323,6 +331,84 @@ class ActivityMovieDetail : BaseActivity() {
         }
         movieEntry = NetWorkUtil.parseJsonWithGson(entryStr, DoubanMovieEntry::class.java)
         return true
+    }
+    /*
+    * 为textView添加文本长度限制
+    * @param textView       需要操作的TextView
+    * @param text           textView需要设置的文本
+    * @param limitNumber    最大允许显示的字符数
+    * @param listener       点击事件监听
+    * */
+    fun setTextViewLimit(textView: TextView, text:String, limitNumber:Int, listener:View.OnClickListener?){
+        //如果文本长度没有超过限制，则直接setText
+        if(text.length < limitNumber){
+            textView.text = text
+            return
+        }
+        //允许TextView中文本改变,发生移动
+        textView.movementMethod = LinkMovementMethod.getInstance()
+        //构造spannableString
+        var explicitText = ""
+        var explicitTextAll = ""
+        //最后一个字符是换行，就不读取
+        explicitText = if ('\n' == text.get(limitNumber)){
+            text.substring(0, limitNumber)
+        }else{
+            text.substring(0, limitNumber+1)
+        }
+        /*
+        * sourceLength：收起时Text中字符串的总长度
+        * */
+        var sourceLength = explicitText.length
+        val showMore = "展开"
+        explicitText = explicitText+"..."+showMore
+        var mSpan = SpannableString(explicitText)
+
+        val dismissMore = "收起"
+        explicitTextAll = text+dismissMore
+        var mSpanAll = SpannableString(explicitTextAll)
+
+        //设置“展开”的点击事件
+        mSpan.setSpan(object :ClickableSpan(){
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                ds?.isAntiAlias = true
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View?) {
+                textView.text = mSpanAll
+                textView.setOnClickListener(null)
+                android.os.Handler().postDelayed({
+                    //防止触发TextView的点击事件
+                    textView.setOnClickListener(listener)
+                }, 20)
+            }
+        }, sourceLength, explicitText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+
+        //设置“收起”的点击事件
+        mSpanAll.setSpan(object :ClickableSpan(){
+
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                ds?.isAntiAlias = true
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View?) {
+                textView.text = mSpan
+                textView.setOnClickListener(null)
+                android.os.Handler().postDelayed({
+                    //防止触TextView的发点击事件
+                    textView.setOnClickListener(listener)
+                }, 20)
+            }
+        }, text.length, explicitTextAll.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        //默认为需要展开状态
+        textView.setText(mSpan)
     }
 
     companion object {

@@ -62,9 +62,9 @@ public class Constants {
     public static String MIMI_LIVE_URL = "http://mimiapp.hanya168.com/rar.ashx?action=homelive";
     //video地址
     //http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50&pageindex=1&type=1
-    public static String EUROPE_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";
-    public static String JAPAN_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";
-    public static String CARTOON_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";
+    public static String EUROPE_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";//type=1
+    public static String JAPAN_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";//type=2
+    public static String CARTOON_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";//type=3
     //video地址参数
     public static final String VIDEO_PARAMTER_PAGEINDEX = "pageindex";
     public static final String VIDEO_PARAMTER_TYPE = "type";

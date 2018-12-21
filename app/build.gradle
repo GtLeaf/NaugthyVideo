@@ -22,9 +22,18 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            //选择要添加的对应 cpu 类型的 .so 库。
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips", 'arm64-v8a'
         }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "cccc9eb45f6fca7a7f8f5479", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
+
+
     buildTypes {
         release {
             minifyEnabled true
@@ -84,6 +93,9 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'*/
     //    compile 'com.danikula:videocache:2.6.4'//不支持HLS流媒体，弃用
+    //极光推送
+    implementation 'cn.jiguang.sdk:jpush:3.1.6'
+    implementation 'cn.jiguang.sdk:jcore:1.2.5'
 }
 
 configurations.all {

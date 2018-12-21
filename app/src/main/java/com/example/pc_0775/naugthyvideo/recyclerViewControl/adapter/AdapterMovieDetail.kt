@@ -2,8 +2,13 @@ package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter
 
 import android.arch.paging.PagedListAdapter
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,6 +62,7 @@ class AdapterMovieDetail(context: Context) : PagedListAdapter<DoubanMovie.Subjec
             tv_detailMovieDescribe.text = movieInfo?.alt
             tv_detailMovieTitle.text = movieInfo?.title
         }
+
 
         companion object {
             fun create(parent: ViewGroup):MovieDetailViewHolder{

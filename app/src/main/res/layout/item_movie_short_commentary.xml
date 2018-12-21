@@ -38,7 +38,8 @@
         android:layout_marginTop="5dp"
         android:lineSpacingExtra="@dimen/movie_detail_lineSpacingExtra_magrin"
         android:text="短评内容"
-        android:textSize="@dimen/normal_font_size"/>
+        android:textSize="@dimen/normal_font_size"
+        android:textIsSelectable="true"/>
 
     <View
         android:id="@+id/v_title_line"
