@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.internal.Util;
 
 
@@ -24,6 +25,8 @@ public class MyApplication extends Application {
         oList = new ArrayList<Activity>();
         CrashReport.initCrashReport(getApplicationContext(), "f93662b4ee", false);
 //        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     /**

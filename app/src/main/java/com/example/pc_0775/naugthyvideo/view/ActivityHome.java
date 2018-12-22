@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,8 +29,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -72,6 +75,7 @@ public class ActivityHome extends BaseActivity {
 
     //MessageDetailPopupWindow
     private CommonPopupWindow messageDetailWindow;
+    private LayoutGravity detaiLayoutGravity;
     @ViewInject(R.id.iv_message_detail_sender_icon)
     private ImageView iv_messageDetailSenderIcon;
     @ViewInject(R.id.tv_message_detail_title)
@@ -440,11 +444,13 @@ public class ActivityHome extends BaseActivity {
                         helper.setText(R.id.tv_popup_message_title, item);
                     }
                 };
-                adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         Toast.makeText(ActivityHome.this, "点击了第" + (adapter.getData().get(position)), Toast.LENGTH_SHORT).show();
-                        messageDetailWindow.showAtLocation();
+                        window.getPopupWindow().dismiss();
+                        messageDetailWindow.showBashOfAnchor(drawer_layout, detaiLayoutGravity, 0, 0);
+                        setWindowBlack();
                     }
                 });
                 LinearLayoutManager manager = new LinearLayoutManager(ActivityHome.this);
@@ -470,7 +476,13 @@ public class ActivityHome extends BaseActivity {
     }
 
     private void  initPopupMessageDetail(){
-        messageDetailWindow = new CommonPopupWindow(this, R.layout.activity_popup_message_detail, 250, 330) {
+        // get the height and width of screen
+        DisplayMetrics metrics=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenHeight=metrics.heightPixels;
+        int screenWidth=metrics.widthPixels;
+
+        messageDetailWindow = new CommonPopupWindow(this, R.layout.activity_popup_message_detail, (int)(screenWidth*0.7), (int)(screenHeight*0.5)) {
             @Override
             protected void initView() {
 
@@ -480,6 +492,31 @@ public class ActivityHome extends BaseActivity {
             protected void initEvent() {
 
             }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        WindowManager.LayoutParams lp=getWindow().getAttributes();
+                        lp.alpha=1.0f;
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                        getWindow().setAttributes(lp);
+                    }
+                });
+            }
         };
+        detaiLayoutGravity = new LayoutGravity(LayoutGravity.CENTER_HORI|LayoutGravity.CENTER_VERT);
+        messageDetailWindow.getPopupWindow().setAnimationStyle(R.style.animScale);
+    }
+
+    //弹窗出现后将背景设置为半透明黑色
+    private void setWindowBlack(){
+        WindowManager.LayoutParams lp=getWindow().getAttributes();
+        lp.alpha=0.3f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
     }
 }

@@ -47,7 +47,8 @@
         <activity android:name=".view.ActivityCardSildeWithPaging" />
         <activity android:name=".kotlinTest.ActivityFirstKotlinTest" />
         <activity android:name=".view.ActivityLivePlay" />
-        <activity android:name=".view.ActivityHome" />
+        <activity android:name=".view.ActivityHome"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
