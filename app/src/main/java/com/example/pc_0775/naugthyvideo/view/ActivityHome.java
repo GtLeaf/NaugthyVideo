@@ -21,26 +21,30 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
+import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.CommonPopupWindow;
+import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.CommonPopupWindow.LayoutGravity;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
-import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
-import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterMoiveTop250;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.bean.HomeInfoData;
+import com.example.pc_0775.naugthyvideo.util.AdUtil;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import java.io.Serializable;
@@ -49,8 +53,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cdc.sed.yff.nm.cm.ErrorCode;
-import cdc.sed.yff.nm.sp.SpotListener;
 import cdc.sed.yff.nm.sp.SpotManager;
 
 public class ActivityHome extends BaseActivity {
@@ -62,6 +64,27 @@ public class ActivityHome extends BaseActivity {
     private NavigationView nav_headerView;
     @ViewInject(R.id.rv_home_list)
     private RecyclerView rv_homeList;
+
+    //popupWindow
+    private CommonPopupWindow window;
+    private RecyclerView rv_homePopupMessage;
+    private LayoutGravity layoutGravity;
+
+    //MessageDetailPopupWindow
+    private CommonPopupWindow messageDetailWindow;
+    @ViewInject(R.id.iv_message_detail_sender_icon)
+    private ImageView iv_messageDetailSenderIcon;
+    @ViewInject(R.id.tv_message_detail_title)
+    private ImageView tv_messageDetailTitle;
+    @ViewInject(R.id.rv_message_detail_content)
+    private ImageView rv_messageDetailContent;
+    @ViewInject(R.id.et_message_detail_reply)
+    private ImageView et_messageDetailReply;
+    @ViewInject(R.id.btn_reply_send)
+    private ImageView btn_replySend;
+
+
+
 
     //adapter
     private AdapterHome adapterHome;
@@ -77,8 +100,6 @@ public class ActivityHome extends BaseActivity {
     /**
      * rv_homeList的数据源
      */
-    private List<HomeInfoData> homeInfoDataList = new ArrayList(){};
-    private List<LiveRoomMiMi> liveInfoList;
     private List dataList;
 
 
@@ -131,7 +152,6 @@ public class ActivityHome extends BaseActivity {
                 default:
                     break;
             }
-
         }
     }
 
@@ -180,7 +200,7 @@ public class ActivityHome extends BaseActivity {
         }
 
         // 设置插屏广告
-        setupSpotAd();
+        AdUtil.Companion.setupSpotAd(this);
 
         //配置rv_homeList
         adapterHome = new AdapterHome(this);
@@ -188,6 +208,10 @@ public class ActivityHome extends BaseActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv_homeList.setLayoutManager(layoutManager);
         rv_homeList.setAdapter(adapterHome);
+
+        //配置popupwindow
+        initPopup();
+        initPopupMessageDetail();
 
         nav_headerView.setCheckedItem(R.id.nav_home);
         requestLatestMoviesData(handler);
@@ -232,7 +256,7 @@ public class ActivityHome extends BaseActivity {
         });
 
         // 展示插屏广告
-        showSpotAd();
+        AdUtil.Companion.showSpotAd(this);
 
     }
 
@@ -291,6 +315,7 @@ public class ActivityHome extends BaseActivity {
                 break;
             case R.id.delete:
                 Toast.makeText(this, "You click delete", Toast.LENGTH_SHORT).show();
+                window.showBashOfAnchor(rv_homeList, layoutGravity, 0, 0);
                 break;
             case R.id.settings:
                 Toast.makeText(this, "You click settings", Toast.LENGTH_SHORT).show();
@@ -362,7 +387,6 @@ public class ActivityHome extends BaseActivity {
 
             callback.onResult(syncRequestLatestMoviesData().getSubjects());
         }
-
     }
 
 //    private class MyDataSourecs extends ItemKeyedDataSource
@@ -403,76 +427,59 @@ public class ActivityHome extends BaseActivity {
         });
     }
 
-    /**
-     * 设置插屏广告
-     */
-    private void setupSpotAd() {
-        // 设置插屏图片类型，默认竖图
-        //		// 横图
-        //		SpotManager.getInstance(mContext).setImageType(SpotManager
-        // .IMAGE_TYPE_HORIZONTAL);
-        // 竖图
-        SpotManager.getInstance(ActivityHome.this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+    //配置popupwindow
+    private void initPopup(){
+        window = new CommonPopupWindow(this, R.layout.activity_popup_message, ViewGroup.LayoutParams.WRAP_CONTENT, 400) {
+            @Override
+            protected void initView() {
+                View view = getContentView();
+                rv_homePopupMessage = view.findViewById(R.id.rv_home_popup_message);
+                BaseQuickAdapter adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_popup_message, initData(3)) {
+                    @Override
+                    protected void convert(BaseViewHolder helper, String item) {
+                        helper.setText(R.id.tv_popup_message_title, item);
+                    }
+                };
+                adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                    @Override
+                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                        Toast.makeText(ActivityHome.this, "点击了第" + (adapter.getData().get(position)), Toast.LENGTH_SHORT).show();
+                        messageDetailWindow.showAtLocation();
+                    }
+                });
+                LinearLayoutManager manager = new LinearLayoutManager(ActivityHome.this);
+                manager.setOrientation(LinearLayoutManager.VERTICAL);
+                rv_homePopupMessage.setLayoutManager(manager);
+                rv_homePopupMessage.setAdapter(adapter);
+            }
 
-        // 设置动画类型，默认高级动画
-        //		// 无动画
-        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-        //				.ANIMATION_TYPE_NONE);
-        //		// 简单动画
-        //		SpotManager.getInstance(mContext)
-        //		                    .setAnimationType(SpotManager.ANIMATION_TYPE_SIMPLE);
-        // 高级动画
-        SpotManager.getInstance(ActivityHome.this)
-                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+            @Override
+            protected void initEvent() {
+
+            }
+        };
+        layoutGravity=new LayoutGravity(LayoutGravity.ALIGN_RIGHT|LayoutGravity.ALIGN_ABOVE);
     }
 
+    private List<String> initData(int number){
+        List<String> strList = new ArrayList<>();
+        for (int i=0; i<number; i++){
+            strList.add("title:"+i+","+number);
+        }
+        return strList;
+    }
 
-    /**
-     * 展示插屏广告
-     */
-    private void showSpotAd(){
-        SpotManager.getInstance(ActivityHome.this).showSpot(ActivityHome.this, new SpotListener() {
-
+    private void  initPopupMessageDetail(){
+        messageDetailWindow = new CommonPopupWindow(this, R.layout.activity_popup_message_detail, 250, 330) {
             @Override
-            public void onShowSuccess() {
-                Log.i(TAG, "插屏展示成功");
+            protected void initView() {
+
             }
 
             @Override
-            public void onShowFailed(int errorCode) {
-                Log.e(TAG, "插屏展示失败");
-                switch (errorCode) {
-                    case ErrorCode.NON_NETWORK:
-                        showToast("网络异常");
-                        break;
-                    case ErrorCode.NON_AD:
-                        showToast("暂无插屏广告");
-                        break;
-                    case ErrorCode.RESOURCE_NOT_READY:
-                        showToast("插屏资源还没准备好");
-                        break;
-                    case ErrorCode.SHOW_INTERVAL_LIMITED:
-                        showToast("请勿频繁展示");
-                        break;
-                    case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-                        showToast("请设置插屏为可见状态");
-                        break;
-                    default:
-                        showToast("请稍后再试");
-                        break;
-                }
-            }
+            protected void initEvent() {
 
-            @Override
-            public void onSpotClosed() {
-                Log.d(TAG, "插屏被关闭");
             }
-
-            @Override
-            public void onSpotClicked(boolean isWebPage) {
-                Log.d(TAG, "插屏被点击");
-                Log.i(TAG, String.format("是否是网页广告？%s", isWebPage ? "是" : "不是"));
-            }
-        });
+        };
     }
 }

@@ -96,6 +96,8 @@ dependencies {
     //极光推送
     implementation 'cn.jiguang.sdk:jpush:3.1.6'
     implementation 'cn.jiguang.sdk:jcore:1.2.5'
+    //BRAVH
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 }
 
 configurations.all {

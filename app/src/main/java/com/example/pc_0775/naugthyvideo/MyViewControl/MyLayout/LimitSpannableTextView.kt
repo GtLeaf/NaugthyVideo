@@ -23,14 +23,6 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
 
     private var mLastActionDownTime:Long = -1
 
-    fun setLimitText(text: CharSequence){
-        limitTextViewString(text.toString(), 20, this, object :OnClickListener{
-            override fun onClick(v: View?) {
-                //设置监听函数
-            }
-        })
-    }
-
     /**
      * get the last char index for max limit row,if not exceed the limit,return -1
      * @param textView
@@ -53,23 +45,23 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
      * @param textView
      * @param clickListener textView的点击监听器
      */
-    private fun limitTextViewString(textString:String, maxFirstShowChartCount:Int, textView: TextView, listener: OnClickListener){
+    private fun setLimitString(textString:String, listener: OnClickListener){
         //计算处理话费的时间
         var startTime = System.currentTimeMillis()
-        if (null == textView) return
-        var width = textView.width //在recyclerView和ListView中，由于复用的原因，这个TextView可能以前就画好了，能获得宽度
+        if (null == this) return
+        var width = this.width //在recyclerView和ListView中，由于复用的原因，这个TextView可能以前就画好了，能获得宽度
         if (0 == width) width = this.paint.measureText(textString).toInt()//获取textView的实际宽度，这里可以用各种方式（一般是dp转px写死）填入TextView的宽度
         //返回-1表示没有达到maxLine
-        var lastCharIndex = getLastCharIndexForLimitTextView(textView, textString, width, 4)
+        var lastCharIndex = getLastCharIndexForLimitTextView(this, textString, width, 4)
         //行数没有超，字符串长度没有超过限制
         if (lastCharIndex<0){
             //行数没超过限制
-            textView.setText(textString)
+            this.setText(textString)
             return
         }
         //行数超出了限制
         //this will deprive the recyclerView's focus
-        textView.movementMethod = LinkMovementMethod.getInstance()
+        this.movementMethod = LinkMovementMethod.getInstance()
 
         //构造spannableString
         var explicitText = ""
@@ -95,19 +87,19 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
 
             override fun updateDrawState(ds: TextPaint?) {
                 super.updateDrawState(ds)
-                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                ds?.color = ContextCompat.getColor(this@LimitSpannableTextView.context, R.color.colorPrimary)
                 ds?.isAntiAlias = true
                 ds?.isUnderlineText = false
             }
 
             override fun onClick(widget: View?) {
-                textView.text = mSpan
-                textView.setOnClickListener(null)
+                this@LimitSpannableTextView.text = mSpan
+                this@LimitSpannableTextView.setOnClickListener(null)
                 var handler = android.os.Handler()
                 handler.postDelayed({
                     if (listener != null){
                         //防止点击两次
-                        textView.setOnClickListener(listener)
+                        this@LimitSpannableTextView.setOnClickListener(listener)
                     }
                 }, 20)
             }
@@ -115,26 +107,26 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
 
         mSpan.setSpan(object :ClickableSpan(){
             override fun onClick(widget: View?) {
-                textView.text = mSpanAll
-                textView.setOnClickListener(null)
+                this@LimitSpannableTextView.text = mSpanAll
+                this@LimitSpannableTextView.setOnClickListener(null)
                 android.os.Handler().postDelayed({
                     if (listener != null){
                         //防止点击两次
-                        textView.setOnClickListener(listener)
+                        this@LimitSpannableTextView.setOnClickListener(listener)
                     }
                 }, 20)
             }
 
             override fun updateDrawState(ds: TextPaint?) {
                 super.updateDrawState(ds)
-                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                ds?.color = ContextCompat.getColor(this@LimitSpannableTextView.context, R.color.colorPrimary)
                 ds?.isAntiAlias = true
                 ds?.isUnderlineText = false
             }
 
         }, sourceLength, explicitText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         //默认设置为“展开”状态下的TextVie
-        textView.setText(mSpan)
+        this.setText(mSpan)
         Log.i("info", "字符串处理耗时" + (System.currentTimeMillis() - startTime) + " ms");
     }
 
@@ -183,6 +175,85 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
             }
         }
         return false
+    }
+
+    /*
+    * 为textView添加文本长度限制
+    * @param textView       需要操作的TextView
+    * @param text           textView需要设置的文本
+    * @param limitNumber    最大允许显示的字符数
+    * @param listener       点击事件监听
+    * */
+    fun setLimitText(text:String, limitNumber:Int, listener:View.OnClickListener?, textView: TextView = this){
+        //如果文本长度没有超过限制，则直接setText
+        if(text.length < limitNumber){
+            textView.text = text
+            return
+        }
+        //允许TextView中文本改变,发生移动
+        textView.movementMethod = LinkMovementMethod.getInstance()
+        //构造spannableString
+        var explicitText = ""
+        var explicitTextAll = ""
+        //最后一个字符是换行，就不读取
+        explicitText = if ('\n' == text.get(limitNumber)){
+            text.substring(0, limitNumber)
+        }else{
+            text.substring(0, limitNumber+1)
+        }
+        /*
+        * sourceLength：收起时Text中字符串的总长度
+        * */
+        var sourceLength = explicitText.length
+        val showMore = "展开"
+        explicitText = explicitText+"..."+showMore
+        var mSpan = SpannableString(explicitText)
+
+        val dismissMore = "收起"
+        explicitTextAll = text+dismissMore
+        var mSpanAll = SpannableString(explicitTextAll)
+
+        //设置“展开”的点击事件
+        mSpan.setSpan(object :ClickableSpan(){
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                ds?.isAntiAlias = true
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View?) {
+                textView.text = mSpanAll
+                textView.setOnClickListener(null)
+                android.os.Handler().postDelayed({
+                    //防止触发TextView的点击事件
+                    textView.setOnClickListener(listener)
+                }, 20)
+            }
+        }, sourceLength, explicitText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+
+        //设置“收起”的点击事件
+        mSpanAll.setSpan(object :ClickableSpan(){
+
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                ds?.isAntiAlias = true
+                ds?.isUnderlineText = false
+            }
+
+            override fun onClick(widget: View?) {
+                textView.text = mSpan
+                textView.setOnClickListener(null)
+                android.os.Handler().postDelayed({
+                    //防止触TextView的发点击事件
+                    textView.setOnClickListener(listener)
+                }, 20)
+            }
+        }, text.length, explicitTextAll.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        //默认为需要展开状态
+        textView.setText(mSpan)
     }
 
 }

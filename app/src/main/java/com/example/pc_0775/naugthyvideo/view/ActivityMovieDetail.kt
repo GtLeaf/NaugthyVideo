@@ -26,6 +26,7 @@ import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.Constants.Constants
+import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.LimitSpannableTextView
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
@@ -225,13 +226,7 @@ class ActivityMovieDetail : BaseActivity() {
      * */
     private fun initViewAfterDetailData(){
         //剧情简介
-//        tv_detail_movie_summary.setLimitText("    " + movieDetail?.summary)
-        setTextViewLimit(tv_detail_movie_summary, "    " +movieDetail?.summary, 80, object :View.OnClickListener{
-            override fun onClick(v: View?) {
-                Constants.createAlertDialog(this@ActivityMovieDetail, "点击文本")
-            }
-
-        })
+        tv_detail_movie_summary.setLimitText("    " + movieDetail?.summary, 80, null)
 
         //电影评分人数
         tv_detail_ratings_count.setText(movieDetail?.ratings_count.toString() + "人评价")
@@ -265,7 +260,7 @@ class ActivityMovieDetail : BaseActivity() {
         private var tv_detailShortCommentaryAuthorName = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_author_name)
         private var tv_detailShortCommentaryAverage = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_average)
         private var tv_detailShortCommentaryCreataAt = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_creata_at)
-        private var tv_detailShortCommentaryContent = itemView.findViewById<TextView>(R.id.tv_detail_short_commentary_content)
+        private var tv_detailShortCommentaryContent = itemView.findViewById<LimitSpannableTextView>(R.id.tv_detail_short_commentary_content)
         private val view = itemView
 
         companion object {
@@ -279,7 +274,7 @@ class ActivityMovieDetail : BaseActivity() {
         fun bind(comment:DoubanMovieEntry.PopularCommentsBean, context: Context):View{
             tv_detailShortCommentaryAuthorName.text = comment.author.name+"  看过 "
             tv_detailShortCommentaryCreataAt.text = comment.created_at.split(" ").get(0)//按空分割，只取年月日，即0位置
-            tv_detailShortCommentaryContent.text = "    "+comment.content
+            tv_detailShortCommentaryContent.setLimitText("    "+comment.content, 60, null)
 
             //评分
             tv_detailShortCommentaryAverage.text = comment.rating.value.toString()+"分"
@@ -332,84 +327,7 @@ class ActivityMovieDetail : BaseActivity() {
         movieEntry = NetWorkUtil.parseJsonWithGson(entryStr, DoubanMovieEntry::class.java)
         return true
     }
-    /*
-    * 为textView添加文本长度限制
-    * @param textView       需要操作的TextView
-    * @param text           textView需要设置的文本
-    * @param limitNumber    最大允许显示的字符数
-    * @param listener       点击事件监听
-    * */
-    fun setTextViewLimit(textView: TextView, text:String, limitNumber:Int, listener:View.OnClickListener?){
-        //如果文本长度没有超过限制，则直接setText
-        if(text.length < limitNumber){
-            textView.text = text
-            return
-        }
-        //允许TextView中文本改变,发生移动
-        textView.movementMethod = LinkMovementMethod.getInstance()
-        //构造spannableString
-        var explicitText = ""
-        var explicitTextAll = ""
-        //最后一个字符是换行，就不读取
-        explicitText = if ('\n' == text.get(limitNumber)){
-            text.substring(0, limitNumber)
-        }else{
-            text.substring(0, limitNumber+1)
-        }
-        /*
-        * sourceLength：收起时Text中字符串的总长度
-        * */
-        var sourceLength = explicitText.length
-        val showMore = "展开"
-        explicitText = explicitText+"..."+showMore
-        var mSpan = SpannableString(explicitText)
 
-        val dismissMore = "收起"
-        explicitTextAll = text+dismissMore
-        var mSpanAll = SpannableString(explicitTextAll)
-
-        //设置“展开”的点击事件
-        mSpan.setSpan(object :ClickableSpan(){
-            override fun updateDrawState(ds: TextPaint?) {
-                super.updateDrawState(ds)
-                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
-                ds?.isAntiAlias = true
-                ds?.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View?) {
-                textView.text = mSpanAll
-                textView.setOnClickListener(null)
-                android.os.Handler().postDelayed({
-                    //防止触发TextView的点击事件
-                    textView.setOnClickListener(listener)
-                }, 20)
-            }
-        }, sourceLength, explicitText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-
-        //设置“收起”的点击事件
-        mSpanAll.setSpan(object :ClickableSpan(){
-
-            override fun updateDrawState(ds: TextPaint?) {
-                super.updateDrawState(ds)
-                ds?.color = ContextCompat.getColor(textView.context, R.color.colorPrimary)
-                ds?.isAntiAlias = true
-                ds?.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View?) {
-                textView.text = mSpan
-                textView.setOnClickListener(null)
-                android.os.Handler().postDelayed({
-                    //防止触TextView的发点击事件
-                    textView.setOnClickListener(listener)
-                }, 20)
-            }
-        }, text.length, explicitTextAll.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        //默认为需要展开状态
-        textView.setText(mSpan)
-    }
 
     companion object {
 
