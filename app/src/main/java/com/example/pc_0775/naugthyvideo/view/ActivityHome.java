@@ -8,6 +8,7 @@ import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.arch.paging.PositionalDataSource;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -45,6 +46,7 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.receiver.SimpleJPushReceiver;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdUtil;
@@ -87,7 +89,8 @@ public class ActivityHome extends BaseActivity {
     @ViewInject(R.id.btn_reply_send)
     private ImageView btn_replySend;
 
-
+    //广播接收器
+    private SimpleJPushReceiver jPushReceiver = new SimpleJPushReceiver();
 
 
     //adapter
@@ -217,8 +220,18 @@ public class ActivityHome extends BaseActivity {
         initPopup();
         initPopupMessageDetail();
 
+
         nav_headerView.setCheckedItem(R.id.nav_home);
         requestLatestMoviesData(handler);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("cn.jpush.android.intent.REGISTRATION");
+        filter.addAction("cn.jpush.android.intent.MESSAGE_RECEIVED");
+        filter.addAction("cn.jpush.android.intent.NOTIFICATION_RECEIVED");
+        filter.addAction("cn.jpush.android.intent.NOTIFICATION_OPENED");
+        filter.addAction("cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION");
+        filter.addAction("cn.jpush.android.intent.CONNECTION");
+        filter.addCategory("com.example.pc_0775.naugthyvideo");
+        registerReceiver(jPushReceiver, filter);
     }
 
     @Override
@@ -231,11 +244,11 @@ public class ActivityHome extends BaseActivity {
                     case R.id.nav_home:
                         break;
                     case R.id.nav_function:
-                        ActivityFunction.actionStart(ActivityHome.this);
+//                        ActivityFunction.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_part_slide:
 //                        startActivity(ActivityPartSlide.class);//部分滑动的Activity,已经用不上这个了
-                        ActivityMovieTop250.Companion.actionStart(ActivityHome.this);
+//                        ActivityMovieTop250.Companion.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_card_slide:
                         showToast("功能尚未开放");
@@ -247,10 +260,10 @@ public class ActivityHome extends BaseActivity {
                         }*/
                         break;
                     case R.id.nav_live_card_slide:
-                        startActivity(ActivityLiveCardSilde.class);
+//                        startActivity(ActivityLiveCardSilde.class);
                         break;
                     case R.id.nav_settings:
-                        startActivity(ActivitySetting.class);
+//                        startActivity(ActivitySetting.class);
                         break;
                     default:
                         break;
@@ -303,6 +316,7 @@ public class ActivityHome extends BaseActivity {
         super.onDestroy();
         // 插屏广告
         SpotManager.getInstance(ActivityHome.this).onDestroy();
+        unregisterReceiver(jPushReceiver);
     }
 
     @Override
@@ -319,7 +333,7 @@ public class ActivityHome extends BaseActivity {
                 break;
             case R.id.delete:
                 Toast.makeText(this, "You click delete", Toast.LENGTH_SHORT).show();
-                window.showBashOfAnchor(rv_homeList, layoutGravity, 0, 0);
+//                window.showBashOfAnchor(rv_homeList, layoutGravity, 0, 0);
                 break;
             case R.id.settings:
                 Toast.makeText(this, "You click settings", Toast.LENGTH_SHORT).show();

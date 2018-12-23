@@ -242,6 +242,9 @@ public class FragmentLogin extends Fragment {
                     return;
                 }
                 sendPostRequest(phone_number, password);
+                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                startActivity(intent);
+                activity.finish();
             }
         });
     }

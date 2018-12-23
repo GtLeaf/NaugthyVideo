@@ -8,10 +8,10 @@
     <string name="SETTINGS">Settings</string>
     <!--nav menu-->
     <string name="nav_function">功能</string>
-    <string name="nav_home">首页</string>
-    <string name="nav_part_slide">部分滑动</string>
-    <string name="nav_card_slide">卡片滑动</string>
-    <string name="nav_live_broadcast_play">直播</string>
+    <string name="nav_home">功能1</string><!--首页-->
+    <string name="nav_part_slide">功能2</string><!--部分滑动-->
+    <string name="nav_card_slide">功能3</string><!--卡片滑动-->
+    <string name="nav_live_broadcast_play">功能4</string><!--直播-->
     <string name="nav_settings">设置</string>
     <!--login&register-->
     <string name="login">登     录</string>
