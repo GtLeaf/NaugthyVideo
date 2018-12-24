@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout;
+package com.example.pc_0775.naugthyvideo.MyView;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -11,12 +11,6 @@ import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.method.ArrowKeyMovementMethod
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.transition.TransitionSet
 import android.transition.ChangeBounds
 import android.transition.ChangeTransform
@@ -26,7 +20,7 @@ import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.Constants.Constants
-import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.LimitSpannableTextView
+import com.example.pc_0775.naugthyvideo.MyView.LimitSpannableTextView
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
@@ -284,6 +278,14 @@ class ActivityMovieDetail : BaseActivity() {
                 tv_detailShortCommentaryAverage.setTextColor(ContextCompat.getColor(context, R.color.gray))
             }
 
+            tv_detailShortCommentaryContent.setOnClickListener(object :View.OnClickListener{
+                override fun onClick(v: View?) {
+                    if(){
+
+                    }
+                }
+            })
+
             return view
         }
     }
@@ -308,7 +310,6 @@ class ActivityMovieDetail : BaseActivity() {
      */
     fun <T> cacheMovieEntry(t: T):Boolean{
         //初始化本地存储
-//        initPreferences()
         editor!!.putString(movieInfo.id, NetWorkUtil.getGson().toJson(t))
         return editor!!.commit()
     }

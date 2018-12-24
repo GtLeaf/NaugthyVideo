@@ -1,26 +1,18 @@
 package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pc_0775.naugthyvideo.Constants.Constants;
-import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.SwipeLayout;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.liveBean.LivePlatform;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
-import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
 
 import java.util.List;

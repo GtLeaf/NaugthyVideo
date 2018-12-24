@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -40,8 +39,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
-import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.CommonPopupWindow;
-import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.CommonPopupWindow.LayoutGravity;
+import com.example.pc_0775.naugthyvideo.MyView.CommonPopupWindow;
+import com.example.pc_0775.naugthyvideo.MyView.CommonPopupWindow.LayoutGravity;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
@@ -244,11 +243,11 @@ public class ActivityHome extends BaseActivity {
                     case R.id.nav_home:
                         break;
                     case R.id.nav_function:
-//                        ActivityFunction.actionStart(ActivityHome.this);
+                        ActivityFunction.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_part_slide:
 //                        startActivity(ActivityPartSlide.class);//部分滑动的Activity,已经用不上这个了
-//                        ActivityMovieTop250.Companion.actionStart(ActivityHome.this);
+                        ActivityMovieTop250.Companion.actionStart(ActivityHome.this);
                         break;
                     case R.id.nav_card_slide:
                         showToast("功能尚未开放");
@@ -260,10 +259,10 @@ public class ActivityHome extends BaseActivity {
                         }*/
                         break;
                     case R.id.nav_live_card_slide:
-//                        startActivity(ActivityLiveCardSilde.class);
+                        startActivity(ActivityLiveCardSilde.class);
                         break;
                     case R.id.nav_settings:
-//                        startActivity(ActivitySetting.class);
+                        startActivity(ActivitySetting.class);
                         break;
                     default:
                         break;

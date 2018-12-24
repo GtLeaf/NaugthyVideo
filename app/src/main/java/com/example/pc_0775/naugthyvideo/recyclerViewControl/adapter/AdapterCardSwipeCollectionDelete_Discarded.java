@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.pc_0775.naugthyvideo.MyViewControl.MyLayout.SwipeLayout;
+import com.example.pc_0775.naugthyvideo.MyView.SwipeLayout;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 
