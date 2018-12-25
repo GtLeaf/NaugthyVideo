@@ -243,9 +243,13 @@ public class ActivityHome extends BaseActivity {
                     case R.id.nav_home:
                         break;
                     case R.id.nav_function:
-                        ActivityFunction.actionStart(ActivityHome.this);
+                        if (Constants.user.isIsVIP()){
+                            ActivityFunction.actionStart(ActivityHome.this);
+                        }else {
+                            showToast("功能暂未开放");
+                        }
                         break;
-                    case R.id.nav_part_slide:
+                    case R.id.nav_top250:
 //                        startActivity(ActivityPartSlide.class);//部分滑动的Activity,已经用不上这个了
                         ActivityMovieTop250.Companion.actionStart(ActivityHome.this);
                         break;
@@ -259,7 +263,11 @@ public class ActivityHome extends BaseActivity {
                         }*/
                         break;
                     case R.id.nav_live_card_slide:
-                        startActivity(ActivityLiveCardSilde.class);
+                        if (Constants.user.isIsVIP()){
+                            startActivity(ActivityLiveCardSilde.class);
+                        }else {
+                            showToast("功能暂未开放");
+                        }
                         break;
                     case R.id.nav_settings:
                         startActivity(ActivitySetting.class);
@@ -352,6 +360,20 @@ public class ActivityHome extends BaseActivity {
     public void onUserInteraction() {
         super.onUserInteraction();
 //        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (!Constants.user.isIsVIP()){
+            MenuItem nav_liveCardSlide = menu.findItem(R.id.nav_live_card_slide);
+            MenuItem nav_top250 = menu.findItem(R.id.nav_top250);
+            nav_liveCardSlide.setVisible(false);
+            nav_top250.setVisible(false);
+        }
+
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     /**

@@ -3,8 +3,9 @@ package com.example.pc_0775.naugthyvideo.Constants;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
+
+import com.example.pc_0775.naugthyvideo.bean.UserBean;
 
 import kotlin.text.Regex;
 import okhttp3.MediaType;
@@ -15,49 +16,10 @@ import okhttp3.MediaType;
 
 public class Constants {
 
-    //url
-    /**
-     *  http://api.xkapi.xyz/index/g/guochan/?yeshu=1
-     */
-    public static final String CHINA_VIDEO_URL = "http://api.xkapi.xyz/index/g/guochan/";
-    /**
-     * http://api.xkapi.xyz/index/g2/fenlei4/?leixing=se55&yeshu=1
-     */
-    public static final String CLASS_ONE_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
-    /**
-     * http://api.xkapi.xyz/index/g2/fenlei5/?leixing=movielist1&yeshu=1
-     */
-    public static final String CLASS_TWO_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
-    /**
-     * http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1
-     */
-    public static final String CLASS_THREE_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
-    /**
-     * http://new.xkapi.xyz/index/g/oumei/?yeshu=1
-     */
-//    public static final String EUROPE_VIDEO_URL = "http://new.xkapi.xyz/index/g/oumei/";
 
-    /**
-     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=23 cartoon
-     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=21 no
-     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=22 yes
-     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=18 中文
-     */
-//    public static final String CARTOON_VIDEO_URL = "http://new.xkapi.xyz/index/g/av/";
-    /**
-     * http://new.xkapi.xyz/index/g/zhibo/
-     */
-    public static final String LIVE_PLATFORM_URL = "http://new.xkapi.xyz/index/g/zhibo/";
-    /**
-     * http://new.xkapi.xyz/index/g/zhubolist/?url=jsonchunban.txt
-     */
-    public static final String LIVE_ROOM_URL = "http://new.xkapi.xyz/index/g/zhubolist/";
-    /**
-     * 测试用的静态地址
-     */
-    public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
-    //以上接口已经废弃-------------------------------------------------------------------------------------------------
 
+    //用户
+    public static UserBean user;
     //直播
     public static String MIMI_LIVE_URL = "http://mimiapp.hanya168.com/rar.ashx?action=homelive";
     //video地址
@@ -187,4 +149,58 @@ public class Constants {
             return telRegex.matches(mobileNums);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------------
+    //url
+    /**
+     *  http://api.xkapi.xyz/index/g/guochan/?yeshu=1
+     */
+    public static final String CHINA_VIDEO_URL = "http://api.xkapi.xyz/index/g/guochan/";
+    /**
+     * http://api.xkapi.xyz/index/g2/fenlei4/?leixing=se55&yeshu=1
+     */
+    public static final String CLASS_ONE_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
+    /**
+     * http://api.xkapi.xyz/index/g2/fenlei5/?leixing=movielist1&yeshu=1
+     */
+    public static final String CLASS_TWO_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
+    /**
+     * http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1
+     */
+    public static final String CLASS_THREE_VIDEO_URL = "http://api.xkapi.xyz/index/g2/fenlei4/";
+    /**
+     * http://new.xkapi.xyz/index/g/oumei/?yeshu=1
+     */
+//    public static final String EUROPE_VIDEO_URL = "http://new.xkapi.xyz/index/g/oumei/";
+
+    /**
+     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=23 cartoon
+     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=21 no
+     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=22 yes
+     * http://new.xkapi.xyz/index/g/av/?yeshu=1&type=18 中文
+     */
+//    public static final String CARTOON_VIDEO_URL = "http://new.xkapi.xyz/index/g/av/";
+    /**
+     * http://new.xkapi.xyz/index/g/zhibo/
+     */
+    public static final String LIVE_PLATFORM_URL = "http://new.xkapi.xyz/index/g/zhibo/";
+    /**
+     * http://new.xkapi.xyz/index/g/zhubolist/?url=jsonchunban.txt
+     */
+    public static final String LIVE_ROOM_URL = "http://new.xkapi.xyz/index/g/zhubolist/";
+    /**
+     * 测试用的静态地址
+     */
+    public static String TEST_VIDEO_URL = "http://api.xkapi.xyz/index/g/fenlei3/?leixing=toupaizipai&yeshu=1";
+    //以上接口已经废弃-------------------------------------------------------------------------------------------------
 }

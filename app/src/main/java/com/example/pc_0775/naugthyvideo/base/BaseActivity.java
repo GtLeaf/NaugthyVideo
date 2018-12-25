@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
+import com.example.pc_0775.naugthyvideo.app.ActivityCollector;
 
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
@@ -49,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         } else {
             mContextView = mView;
         }
-        ActivityCollector.addActivity(this);
+        ActivityCollector.Companion.addActivity(this);
         if (mAllowFullScreen) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
@@ -245,7 +246,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
-        ActivityCollector.removeActivity(this);
+        ActivityCollector.Companion.removeActivity(this);
     }
 
     /**

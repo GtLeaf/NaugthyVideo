@@ -8,31 +8,47 @@ import java.util.List;
  */
 
 public class BaseResult<T> implements Serializable{
-    private String msg;
-    private boolean success;
-    private T data;
+    /**
+     * err_code : 0
+     * result : [{"_id":"5c0242149a5369af2ce8dcae","phone_number":"15662360528","nick_name":"Candy","password":"cen3799","sex":"1","deadline":"2019-12-05 24:00:00","isVIP":true}]
+     * message : success
+     * affectedRows : 1
+     */
 
-    public String getMsg() {
-        return msg;
+    private int err_code;
+    private String message;
+    private int affectedRows;
+    private List<T> result;
+
+    public int getErr_code() {
+        return err_code;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setErr_code(int err_code) {
+        this.err_code = err_code;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public String getMessage() {
+        return message;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public T getData() {
-        return data;
+    public int getAffectedRows() {
+        return affectedRows;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setAffectedRows(int affectedRows) {
+        this.affectedRows = affectedRows;
+    }
+
+    public List<T> getResult() {
+        return result;
+    }
+
+    public void setResult(List<T> result) {
+        this.result = result;
     }
 }

@@ -280,7 +280,7 @@ class ActivityMovieDetail : BaseActivity() {
 
             tv_detailShortCommentaryContent.setOnClickListener(object :View.OnClickListener{
                 override fun onClick(v: View?) {
-                    if(){
+                    if(true){
 
                     }
                 }

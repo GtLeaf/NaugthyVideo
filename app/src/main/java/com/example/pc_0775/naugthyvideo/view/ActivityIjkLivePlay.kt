@@ -82,9 +82,8 @@ class ActivityIjkLivePlay : BaseActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 IjkVV_live_play.seekTo(seekBar!!.progress*IjkVV_live_play.duration/1000)
             }
-        }
-
-        )
+        })
+        btn_ijk_change_ratio.setOnClickListener { IjkVV_live_play.toggleAspectRatio() }
     }
 
     override fun widgetClick(v: View?) {
@@ -114,6 +113,7 @@ class ActivityIjkLivePlay : BaseActivity() {
         super.onBackPressed()
     }
 
+    //获取屏幕高度
     fun initScreenInfo(){
         var metric = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metric)
@@ -170,7 +170,7 @@ class ActivityIjkLivePlay : BaseActivity() {
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
         //重新获取屏幕宽高
-        initScreenInfo();
+        /*initScreenInfo();
         if (newConfig!!.orientation == Configuration.ORIENTATION_LANDSCAPE){//切换为横屏
             var lp = IjkVV_live_play.layoutAnimation as LinearLayout.LayoutParams
             lp.height = screenHeight
@@ -181,8 +181,8 @@ class ActivityIjkLivePlay : BaseActivity() {
             lp.height = screenWidth * 9/16
             lp.width = screenWidth
             IjkVV_live_play.layoutParams = lp
-        }
-        setScreenRate(currentSize)
+        }*/
+        //setScreenRate(currentSize)
     }
 
     //播放进度 视频开始播放时使用handle.sendMessageDelayed更新时间显示

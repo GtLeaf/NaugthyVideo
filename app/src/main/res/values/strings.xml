@@ -9,7 +9,7 @@
     <!--nav menu-->
     <string name="nav_function">功能</string>
     <string name="nav_home">首页</string>
-    <string name="nav_part_slide">部分滑动</string>
+    <string name="nav_part_slide">电影Top250</string>
     <string name="nav_card_slide">卡片滑动</string>
     <string name="nav_live_broadcast_play">直播</string>
     <string name="nav_settings">设置</string>
@@ -26,13 +26,18 @@
     <string name="sex">性别：</string>
     <string name="male">男</string>
     <string name="female">女</string>
+    <string name="sex_tip">Tip：性别注册后不可修改</string>
 
     <string name="dl_open">打开</string>
     <string name="dl_close">关闭</string>
     <string name="live_swipe_delete">删除</string>
-
+    <!--设置-->
     <string name="vitamio_player">Vitamio播放器</string>
     <string name="ijk_player">Ijk播放器</string>
+    <string name="logout">登     出</string>
+
+    <!--播放器-->
+    <string name="change_ratio">切换比例</string>
 
     <!--movieDetail-->
     <string name="movie_synopsis">剧情简介</string>

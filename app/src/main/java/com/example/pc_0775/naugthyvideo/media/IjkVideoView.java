@@ -636,7 +636,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
      * Register a callback to be invoked when an error occurs
      * during playback or setup.  If no listener is specified,
      * or if the listener returned false, VideoView will inform
-     * the user of any errors.
+     * the userBean of any errors.
      *
      * @param l The callback that will be run
      */
@@ -920,8 +920,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
             IRenderView.AR_4_3_FIT_PARENT};
-    private int mCurrentAspectRatioIndex = 3;//初始为0
-    private int mCurrentAspectRatio = s_allAspectRatio[3];//初始为0
+    private int mCurrentAspectRatioIndex = 0;//初始为0
+    private int mCurrentAspectRatio = s_allAspectRatio[0];//初始为0
 
     public int toggleAspectRatio() {
         mCurrentAspectRatioIndex++;

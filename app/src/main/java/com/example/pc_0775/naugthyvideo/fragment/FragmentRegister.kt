@@ -62,7 +62,7 @@ class FragmentRegister : Fragment() {
         }
     }
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (getArguments() != null) {
             mParam1 = getArguments()!!.getString(ARG_PARAM1)
@@ -70,13 +70,13 @@ class FragmentRegister : Fragment() {
         }
     }
 
-    public override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                      savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
-    public override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context?) {
         super.onAttach(context)
 
     }

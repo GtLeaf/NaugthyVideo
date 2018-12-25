@@ -12,7 +12,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +20,20 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.bean.BaseResult;
+import com.example.pc_0775.naugthyvideo.bean.UserBean;
+import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityHome;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -98,13 +98,17 @@ public class FragmentLogin extends Fragment {
             FragmentLogin fragmentLogin = weakReference.get();
             switch (msg.what) {
                 case Constants.USER_LOGIN:
-                    String loginMessage = null;
-                    try {
-                        loginMessage = new JSONObject(msg.obj.toString()).getString("message");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    Type type = new TypeToken<BaseResult<UserBean>>(){}.getType();
+                    BaseResult<UserBean> baseResult = NetWorkUtil.getGson().fromJson(msg.obj.toString(), type);
+                    if(baseResult.getMessage().equals("success")){
+                        Constants.user = baseResult.getResult().get(0);
+                        Intent intent = new Intent(fragmentLogin.activity, ActivityHome.class);
+                        fragmentLogin.startActivity(intent);
+                        fragmentLogin.activity.finish();
+                    }else {
+                        Constants.createAlertDialog(fragmentLogin.activity, baseResult.getMessage());
                     }
-                    Constants.createAlertDialog(fragmentLogin.activity, loginMessage);
+
                     break;
                 default:
                     break;
@@ -242,9 +246,6 @@ public class FragmentLogin extends Fragment {
                     return;
                 }
                 sendPostRequest(phone_number, password);
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
-                startActivity(intent);
-                activity.finish();
             }
         });
     }
@@ -273,23 +274,9 @@ public class FragmentLogin extends Fragment {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String loginMessage = "";
                         String json = response.body().string();
-                        try {
-                            loginMessage = new JSONObject(json).getString("message");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        if (loginMessage.equals("success")) {
-                            Intent intent = new Intent(getActivity(), ActivityHome.class);
-                            startActivity(intent);
-                            activity.finish();
-                        } else {
-//                            Toast.makeText(getActivity(), "登录失败", Toast.LENGTH_SHORT).show();
-                            message.obj = json;
-                            handler.sendMessage(message);
-                        }
-
+                        message.obj = json;
+                        handler.sendMessage(message);
                     }
                 });
             }

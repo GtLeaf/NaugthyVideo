@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -53,12 +54,14 @@ public class AdapterMoiveTop250 extends PagedListAdapter<DoubanMovie.SubjectsBea
         private ImageView iv_itemHomeMovie;
         private TextView tv_itemHomeTitle;
         private TextView tv_itemHomeAverage;
+        private TextView tv_itemTop250Direct;
 
         public InfoViewHolder(final View itemView) {
             super(itemView);
-            tv_itemHomeTitle = itemView.findViewById(R.id.tv_item_home_title);
+            tv_itemHomeTitle = itemView.findViewById(R.id.tv_item_top250_title);
             tv_itemHomeAverage = itemView.findViewById(R.id.tv_item_home_average);
             iv_itemHomeMovie = itemView.findViewById(R.id.iv_item_home_movie);
+            tv_itemTop250Direct = itemView.findViewById(R.id.tv_item_top250_direct);
             ll_itemMoive = itemView.findViewById(R.id.ll_item_moive);
 
         }
@@ -100,7 +103,27 @@ public class AdapterMoiveTop250 extends PagedListAdapter<DoubanMovie.SubjectsBea
             final InfoViewHolder infoViewHolder = ((InfoViewHolder) holder);
             Glide.with(context).load(movie.getImages().getMedium()).into(((InfoViewHolder) holder).iv_itemHomeMovie);
             infoViewHolder.tv_itemHomeTitle.setText(movie.getTitle());
+
+            //评分，大于8分设置为金色
             infoViewHolder.tv_itemHomeAverage.setText(movie.getRating().getAverage()+"");
+            if (movie.getRating().getAverage() > 8.0){
+                infoViewHolder.tv_itemHomeAverage.setTextColor(ContextCompat.getColor(context, R.color.gold));
+            }else{
+                infoViewHolder.tv_itemHomeAverage.setTextColor(ContextCompat.getColor(context, R.color.gray));
+            }
+
+
+            //导演，拼接导演们的名字
+            String directStr = "";
+            Boolean isFirstDirect = true;
+            for (DoubanMovie.SubjectsBean.DirectorsBean direct : movie.getDirectors()){
+                //第一个导演名字前不用加分隔符
+                directStr += isFirstDirect ? "导演："+direct.getName() : "/"+direct.getName();
+                isFirstDirect = false;
+            }
+            infoViewHolder.tv_itemTop250Direct.setText(directStr);
+
+            //设置点击事件
             infoViewHolder.ll_itemMoive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
