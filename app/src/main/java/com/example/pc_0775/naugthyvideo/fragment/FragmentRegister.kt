@@ -4,24 +4,28 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
+import android.content.Intent
+import android.os.Handler
 import android.text.Editable
 import android.text.InputType
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.EditText
-import android.widget.Toast
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 
 import com.example.pc_0775.naugthyvideo.R
 import kotlinx.android.synthetic.main.fragment_register.*
+import android.os.Looper
+import android.os.Message
+import android.widget.*
+import com.example.pc_0775.naugthyvideo.view.ActivityHome
+import okhttp3.*
+import java.io.IOException
+
 
 /**
  * A simple [Fragment] subclass.
@@ -36,29 +40,46 @@ class FragmentRegister : Fragment() {
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
     private var mParam2: String? = null
+    private var IS_VERIFICATION_CODE_RIGHT = false
+    private var selectSex = "男"
 
     //login
     internal var eh: EventHandler = object : EventHandler() {
 
-        override fun afterEvent(event: Int, result: Int, data: Any?) {
-            var i:Int = 0
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                //回调完成
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                    //提交验证码成功
-                    i = 1
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    //获取验证码成功
-                    i = 2
-                } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
-                    //返回支持发送验证码的国家列表
-                    i = 3
+        override fun afterEvent(event: Int, result: Int, data: Any) {
+            // afterEvent会在子线程被调用，因此如果后续有UI相关操作，需要将数据发送到UI线程
+            val msg = Message()
+            msg.arg1 = event
+            msg.arg2 = result
+            msg.obj = data
+            Handler(Looper.getMainLooper(), Handler.Callback { msg ->
+                val event = msg.arg1
+                val result = msg.arg2
+                val data = msg.obj
+                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    if (result == SMSSDK.RESULT_COMPLETE) {
+                        // TODO 处理成功得到验证码的结果
+                        // 请注意，此时只是完成了发送验证码的请求，验证码短信还需要几秒钟之后才送达
+                    } else {
+                        // TODO 处理错误的结果
+                        (data as Throwable).printStackTrace()
+                    }
+                } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                    if (result == SMSSDK.RESULT_COMPLETE) {
+                        // TODO 处理验证码验证通过的结果
+                        IS_VERIFICATION_CODE_RIGHT = true
+                        iv_register_identifying_code_tip.setImageResource(R.drawable.circle_green)
+                    } else {
+                        // TODO 处理错误的结果
+                        IS_VERIFICATION_CODE_RIGHT = true
+                        iv_register_identifying_code_tip.setImageResource(R.drawable.circle_red)
+                        (data as Throwable).printStackTrace()
+
+                    }
                 }
-            } else {
-                i = 4
-                (data as Throwable).printStackTrace()
-            }
-            System.out.println(i)
+                // TODO 其他接口的返回结果也类似，根据event判断当前数据属于哪个接口
+                false
+            }).sendMessage(msg)
         }
     }
 
@@ -120,17 +141,37 @@ class FragmentRegister : Fragment() {
 
     private fun init(){
         SMSSDK.registerEventHandler(eh) //注册短信回调
+        rb_sex_man.isChecked = true
     }
 
     private fun setListener(){
-        btn_register_get_identifying_code.setOnClickListener(View.OnClickListener {
+        //获取验证码
+        btn_register_get_identifying_code.setOnClickListener {
+            // 在尝试读取通信录时以弹窗提示用户（可选功能）
+            SMSSDK.setAskPermisionOnReadContact(true);
+
             if (Constants.isMobileNO(et_register_phone_number.text.toString())){
-                SMSSDK.getVerificationCode("86", et_register_phone_number.text.toString());
+                SMSSDK.getVerificationCode(Constants.country, et_register_phone_number.text.toString());
             }else{
                 Toast.makeText(activity, "手机号错误", Toast.LENGTH_SHORT)
             }
+        }
+
+        //验证码校验
+        et_register_identifying_code.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().length == 4){
+                    SMSSDK.submitVerificationCode(Constants.country, et_register_phone_number.text.toString(), s.toString())
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
         })
 
+        //对手机号进行验证,小红点提示
         et_register_phone_number.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -184,6 +225,7 @@ class FragmentRegister : Fragment() {
             }
         })
 
+        //密码可见按钮
         switch_register_if_show.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 //密码不可见
@@ -198,24 +240,48 @@ class FragmentRegister : Fragment() {
             et_register_password_repeat.setSelection(et_register_password_repeat.getText().length)
         })
 
+        //性别
+        rg_register_sex.setOnCheckedChangeListener { group, checkedId ->
+            if (checkedId == rb_sex_man.id){
+                selectSex = rb_sex_man.text.toString()
+            }else if (checkedId == rb_sex_woman.id){
+                selectSex = rb_sex_woman.text.toString()
+            }
+        }
+
+        //注册
+        btn_fragment_register.setOnClickListener(View.OnClickListener {
+            if (!IS_VERIFICATION_CODE_RIGHT){
+                Constants.createAlertDialog(activity, "验证码错误！")
+                return@OnClickListener
+            }
+        })
     }
 
-    /*fun isMobileNO(mobileNums:String):Boolean {
-        *//**
-         * 判断字符串是否符合手机号码格式
-         * 移动号段: 134,135,136,137,138,139,147,150,151,152,157,158,159,170,178,182,183,184,187,188
-         * 联通号段: 130,131,132,145,155,156,170,171,175,176,185,186
-         * 电信号段: 133,149,153,170,173,177,180,181,189
-         * @param str
-         * @return 待检测的字符串
-         *//*
-        var telRegex = Regex("^((13[0-9])|(14[5,7,9])|(15[^4])|(18[0-9])|(17[0,1,3,5,6,7,8]))\\d{8}$")// "[1]"代表下一位为数字可以是几，"[0-9]"代表可以为0-9中的一个，"[5,7,9]"表示可以是5,7,9中的任意一位,[^4]表示除4以外的任何一个,\\d{9}"代表后面是可以是0～9的数字，有9位。
-        if (TextUtils.isEmpty(mobileNums))
-            return false;
-        else
-            return telRegex.matches(mobileNums);
-    }*/
+    fun sendRegisterRequest(){
+        var requestBody:RequestBody = FormBody.Builder()
+                .add("phone_number", et_register_phone_number.text.toString())
+                .add("nick_name", et_register_nickname.text.toString())
+                .add("password", et_register_password.text.toString())
+                .add("sex", selectSex)
+                .build()
+        var request = Request.Builder()
+                .url(Constants.REGITER_URL)
+                .post(requestBody)
+                .build()
+        var client = OkHttpClient()
+        client.newCall(request).enqueue(object :Callback{
+            override fun onFailure(call: Call?, e: IOException?) {
+                e!!.printStackTrace()
+            }
 
-
-}// Required empty public constructor
+            override fun onResponse(call: Call?, response: Response?) {
+                val json = response!!.body().string()
+                val intent = Intent(activity, ActivityHome::class.java)
+                startActivity(intent)
+                activity.finish()
+            }
+        })
+    }
+}
 

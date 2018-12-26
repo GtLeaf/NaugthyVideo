@@ -20,6 +20,8 @@ public class Constants {
 
     //用户
     public static UserBean user;
+    //国家
+    public static String country = "86";
     //直播
     public static String MIMI_LIVE_URL = "http://mimiapp.hanya168.com/rar.ashx?action=homelive";
     //video地址
@@ -60,6 +62,10 @@ public class Constants {
      * 登录接口
      */
     public static final String LOGIN_URL = "http://101.201.236.217:8888/login";
+    /**
+     * 注册接口
+     */
+    public static final String REGITER_URL = "http://101.201.236.217:8888/register";
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/x-www-form-urlencoded");//; charset=utf-8
 
     //paramter

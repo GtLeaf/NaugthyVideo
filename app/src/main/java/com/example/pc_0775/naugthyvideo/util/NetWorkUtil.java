@@ -126,9 +126,6 @@ public class NetWorkUtil {
         return gson.fromJson(jsonData, cls);
     }
 
-    public static <T> T parseJsonWithGson(String jsonData, Type type){
-        return (T)gson.fromJson(jsonData, type);
-    }
 
     public static <T> List<T> parseJsonArray(String jsonData, Class<T> cls){
         List<T> tList = new ArrayList<>();

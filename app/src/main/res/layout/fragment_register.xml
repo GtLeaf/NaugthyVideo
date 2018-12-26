@@ -191,15 +191,18 @@
                 android:textSize="@dimen/login_text_size" />
 
             <RadioGroup
+                android:id="@+id/rg_register_sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <RadioButton
+                    android:id="@+id/rb_sex_man"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/male"
-                    android:textSize="18dp"/>
+                    android:textSize="18dp" />
                 <RadioButton
+                    android:id="@+id/rb_sex_woman"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
