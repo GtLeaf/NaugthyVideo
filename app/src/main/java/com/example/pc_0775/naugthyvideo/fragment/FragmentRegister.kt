@@ -156,8 +156,12 @@ class FragmentRegister : Fragment() {
                     iv_register_password_tip.setImageResource(R.drawable.circle_green)
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
                 }else{
-                    iv_register_password_tip.setImageResource(R.drawable.circle_red);
-                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red);
+                    iv_register_password_tip.setImageResource(R.drawable.circle_red)
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red)
+                }
+                if (password.equals("")){
+                    iv_register_password_tip.setImageResource(R.drawable.circle_red)
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red)
                 }
             }
         })

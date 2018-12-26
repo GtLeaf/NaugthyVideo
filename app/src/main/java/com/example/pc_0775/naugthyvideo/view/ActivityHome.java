@@ -180,6 +180,7 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
+
     }
 
     @Override
@@ -218,6 +219,7 @@ public class ActivityHome extends BaseActivity {
         //配置popupwindow
         initPopup();
         initPopupMessageDetail();
+        setNavigationViewMenu();
 
 
         nav_headerView.setCheckedItem(R.id.nav_home);
@@ -362,19 +364,6 @@ public class ActivityHome extends BaseActivity {
 //        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        if (!Constants.user.isIsVIP()){
-            MenuItem nav_liveCardSlide = menu.findItem(R.id.nav_live_card_slide);
-            MenuItem nav_top250 = menu.findItem(R.id.nav_top250);
-            nav_liveCardSlide.setVisible(false);
-            nav_top250.setVisible(false);
-        }
-
-
-        return super.onPrepareOptionsMenu(menu);
-    }
 
     /**
      * 请求豆瓣最新电影数据，异步，初始化使用
@@ -553,5 +542,19 @@ public class ActivityHome extends BaseActivity {
         lp.alpha=0.3f;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 动态设置NavigationView的menu
+     */
+    private void setNavigationViewMenu(){
+        if (!Constants.user.isIsVIP()){
+            MenuItem nav_liveCardSlide = nav_headerView.getMenu().findItem(R.id.nav_live_card_slide);
+            MenuItem nav_function = nav_headerView.getMenu().findItem(R.id.nav_function);
+            nav_liveCardSlide.setVisible(false);
+            nav_liveCardSlide.setEnabled(false);
+            nav_function.setVisible(false);
+            nav_function.setEnabled(false);
+        }
     }
 }
