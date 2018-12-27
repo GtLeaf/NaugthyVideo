@@ -191,8 +191,8 @@ class FragmentRegister : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                var password = et_register_password.text.toString()
-                var password_repeat = et_register_password_repeat.text.toString()
+                val password = et_register_password.text.toString()
+                val password_repeat = et_register_password_repeat.text.toString()
                 if (password.equals(password_repeat)){
                     iv_register_password_tip.setImageResource(R.drawable.circle_green)
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
@@ -213,8 +213,8 @@ class FragmentRegister : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                var password = et_register_password.text.toString()
-                var password_repeat = et_register_password_repeat.text.toString()
+                val password = et_register_password.text.toString()
+                val password_repeat = et_register_password_repeat.text.toString()
                 if (password.equals(password_repeat)){
                     iv_register_password_tip.setImageResource(R.drawable.circle_green)
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
@@ -255,21 +255,22 @@ class FragmentRegister : Fragment() {
                 Constants.createAlertDialog(activity, "验证码错误！")
                 return@OnClickListener
             }
+            sendRegisterRequest()
         })
     }
 
     fun sendRegisterRequest(){
-        var requestBody:RequestBody = FormBody.Builder()
+        val requestBody:RequestBody = FormBody.Builder()
                 .add("phone_number", et_register_phone_number.text.toString())
                 .add("nick_name", et_register_nickname.text.toString())
                 .add("password", et_register_password.text.toString())
                 .add("sex", selectSex)
                 .build()
-        var request = Request.Builder()
+        val request = Request.Builder()
                 .url(Constants.REGITER_URL)
                 .post(requestBody)
                 .build()
-        var client = OkHttpClient()
+        val client = OkHttpClient()
         client.newCall(request).enqueue(object :Callback{
             override fun onFailure(call: Call?, e: IOException?) {
                 e!!.printStackTrace()

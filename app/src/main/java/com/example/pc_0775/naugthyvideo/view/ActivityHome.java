@@ -298,8 +298,11 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        // 点击后退关闭插屏广告
-        if (SpotManager.getInstance(ActivityHome.this).isSpotShowing()) {
+        //关闭抽屉
+        if (drawer_layout.isDrawerOpen(nav_headerView)){
+            drawer_layout.closeDrawers();
+        }else if (SpotManager.getInstance(ActivityHome.this).isSpotShowing()) {
+            // 点击后退关闭插屏广告
             SpotManager.getInstance(ActivityHome.this).hideSpot();
         } else {
             super.onBackPressed();
