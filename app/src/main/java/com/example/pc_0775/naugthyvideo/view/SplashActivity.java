@@ -109,13 +109,13 @@ public class SplashActivity extends YoumiBaseActivity {
 				logError("请求插屏广告失败，errorCode: %s", errorCode);
 				switch (errorCode) {
 				case ErrorCode.NON_NETWORK:
-					showShortToast("网络异常");
+//					showShortToast("网络异常");
 					break;
 				case ErrorCode.NON_AD:
-					showShortToast("暂无插屏广告");
+//					showShortToast("暂无插屏广告");
 					break;
 				default:
-					showShortToast("请稍后再试");
+//					showShortToast("请稍后再试");
 					break;
 				}
 			}
@@ -137,7 +137,7 @@ public class SplashActivity extends YoumiBaseActivity {
 		//		// 设置是否展示失败自动跳转，默认自动跳转
 		//		splashViewSettings.setAutoJumpToTargetWhenShowFailed(false);
 		// 设置跳转的窗口类
-		splashViewSettings.setTargetClass(ActivityLogin.class);
+		splashViewSettings.setTargetClass(ActivityHome.class);
 		// 设置开屏的容器
 		splashViewSettings.setSplashViewContainer(splashLayout);
 		

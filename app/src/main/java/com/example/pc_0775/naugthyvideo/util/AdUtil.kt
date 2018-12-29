@@ -6,6 +6,7 @@ import android.widget.Toast
 import cdc.sed.yff.nm.cm.ErrorCode
 import cdc.sed.yff.nm.sp.SpotListener
 import cdc.sed.yff.nm.sp.SpotManager
+import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 
 /**
@@ -53,13 +54,15 @@ class AdUtil {
 
                 override fun onShowFailed(errorCode: Int) {
                     Log.e(TAG, "插屏展示失败")
-                    when (errorCode) {
-                        ErrorCode.NON_NETWORK -> showToast(context,"网络异常")
-                        ErrorCode.NON_AD -> showToast(context,"暂无插屏广告")
-                        ErrorCode.RESOURCE_NOT_READY -> showToast(context,"插屏资源还没准备好")
-                        ErrorCode.SHOW_INTERVAL_LIMITED -> showToast(context,"请勿频繁展示")
-                        ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE -> showToast(context,"请设置插屏为可见状态")
-                        else -> showToast(context,"请稍后再试")
+                    if (Constants.isApkInDebug(context)){
+                        when (errorCode) {
+                            ErrorCode.NON_NETWORK -> showToast(context,"网络异常")
+                            ErrorCode.NON_AD -> showToast(context,"暂无插屏广告")
+                            ErrorCode.RESOURCE_NOT_READY -> showToast(context,"插屏资源还没准备好")
+                            ErrorCode.SHOW_INTERVAL_LIMITED -> showToast(context,"请勿频繁展示")
+                            ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE -> showToast(context,"请设置插屏为可见状态")
+                            else -> showToast(context,"请稍后再试")
+                        }
                     }
                 }
 

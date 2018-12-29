@@ -147,4 +147,10 @@ public class ActivityLogin extends BaseActivity implements FragmentLogin.OnFragm
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

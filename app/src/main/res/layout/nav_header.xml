@@ -10,14 +10,14 @@
         android:id="@+id/nav_user_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/nav_icon2"
+        android:src="@drawable/icon"
         android:layout_centerInParent="true"/>
     <TextView
         android:id="@+id/nav_header_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="testpople@gmail.com"
+        android:text=""
         android:textSize="14sp"
         android:textColor="#ffff"/>
     <TextView
@@ -25,7 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/nav_header_mail"
-        android:text="null"
+        android:layout_centerHorizontal="true"
+        android:text=""
         android:textSize="14sp"
         android:textColor="#ffff"/>
 

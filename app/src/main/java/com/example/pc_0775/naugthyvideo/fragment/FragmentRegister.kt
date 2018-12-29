@@ -1,7 +1,6 @@
 package com.example.pc_0775.naugthyvideo.fragment
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
 import android.content.Intent
@@ -9,7 +8,6 @@ import android.os.Handler
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +22,7 @@ import android.os.Message
 import android.widget.*
 import com.example.pc_0775.naugthyvideo.view.ActivityHome
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 
 
@@ -40,7 +39,8 @@ class FragmentRegister : Fragment() {
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
     private var mParam2: String? = null
-    private var IS_VERIFICATION_CODE_RIGHT = false
+    private var isVerificationCodeOk = false
+    private var isPasswordConsistentOk = false
     private var selectSex = "男"
 
     //login
@@ -60,6 +60,15 @@ class FragmentRegister : Fragment() {
                     if (result == SMSSDK.RESULT_COMPLETE) {
                         // TODO 处理成功得到验证码的结果
                         // 请注意，此时只是完成了发送验证码的请求，验证码短信还需要几秒钟之后才送达
+                        var smart = data as Boolean
+                        if(smart) {
+                               //通过Mob云验证
+                                isVerificationCodeOk = true
+                                iv_register_identifying_code_tip.setImageResource(R.drawable.circle_green)
+                                et_register_identifying_code.setText("云验证通过")
+                            } else {
+                               //依然走短信验证
+                            }
                     } else {
                         // TODO 处理错误的结果
                         (data as Throwable).printStackTrace()
@@ -67,11 +76,11 @@ class FragmentRegister : Fragment() {
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     if (result == SMSSDK.RESULT_COMPLETE) {
                         // TODO 处理验证码验证通过的结果
-                        IS_VERIFICATION_CODE_RIGHT = true
+                        isVerificationCodeOk = true
                         iv_register_identifying_code_tip.setImageResource(R.drawable.circle_green)
                     } else {
                         // TODO 处理错误的结果
-                        IS_VERIFICATION_CODE_RIGHT = true
+                        isVerificationCodeOk = true
                         iv_register_identifying_code_tip.setImageResource(R.drawable.circle_red)
                         (data as Throwable).printStackTrace()
 
@@ -85,9 +94,9 @@ class FragmentRegister : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (getArguments() != null) {
-            mParam1 = getArguments()!!.getString(ARG_PARAM1)
-            mParam2 = getArguments()!!.getString(ARG_PARAM2)
+        if (arguments != null) {
+            mParam1 = arguments!!.getString(ARG_PARAM1)
+            mParam2 = arguments!!.getString(ARG_PARAM2)
         }
     }
 
@@ -204,6 +213,7 @@ class FragmentRegister : Fragment() {
                     iv_register_password_tip.setImageResource(R.drawable.circle_red)
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red)
                 }
+
             }
         })
 
@@ -218,6 +228,7 @@ class FragmentRegister : Fragment() {
                 if (password.equals(password_repeat)){
                     iv_register_password_tip.setImageResource(R.drawable.circle_green)
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
+                    isPasswordConsistentOk = true
                 }else{
                     iv_register_password_tip.setImageResource(R.drawable.circle_red);
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red);
@@ -236,8 +247,8 @@ class FragmentRegister : Fragment() {
                 et_register_password.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
                 et_register_password_repeat.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
             }
-            et_register_password.setSelection(et_register_password.getText().length)
-            et_register_password_repeat.setSelection(et_register_password_repeat.getText().length)
+            et_register_password.setSelection(et_register_password.text.length)
+            et_register_password_repeat.setSelection(et_register_password_repeat.text.length)
         })
 
         //性别
@@ -251,15 +262,31 @@ class FragmentRegister : Fragment() {
 
         //注册
         btn_fragment_register.setOnClickListener(View.OnClickListener {
-            if (!IS_VERIFICATION_CODE_RIGHT){
+            //昵称检查
+            if (et_register_nickname.text.isEmpty()){
+                Constants.createAlertDialog(activity, "昵称不能为空！")
+                return@OnClickListener
+            }
+            //验证码检查
+            if (!isVerificationCodeOk){
                 Constants.createAlertDialog(activity, "验证码错误！")
+                return@OnClickListener
+            }
+            //密码一致检查
+            if (!isPasswordConsistentOk){
+                Constants.createAlertDialog(activity, "两次密码不一样！")
+                return@OnClickListener
+            }
+            //密码为空检查
+            if (et_register_password_repeat.text.isEmpty()){
+                Constants.createAlertDialog(activity, "密码不能为空！")
                 return@OnClickListener
             }
             sendRegisterRequest()
         })
     }
 
-    fun sendRegisterRequest(){
+    private fun sendRegisterRequest(){
         val requestBody:RequestBody = FormBody.Builder()
                 .add("phone_number", et_register_phone_number.text.toString())
                 .add("nick_name", et_register_nickname.text.toString())
@@ -277,12 +304,45 @@ class FragmentRegister : Fragment() {
             }
 
             override fun onResponse(call: Call?, response: Response?) {
-                val json = response!!.body().string()
-                val intent = Intent(activity, ActivityHome::class.java)
-                startActivity(intent)
-                activity.finish()
+                val json = response!!.body()?.string()
+                var msg = JSONObject(json).getString("message")
+                activity.runOnUiThread { Constants.createAlertDialog(activity, msg) }
+                if (msg == "注册成功"){
+                    sendPostRequest(et_register_phone_number.text.toString(), et_register_password.text.toString())
+                }
             }
         })
+    }
+
+    fun sendPostRequest(phoneNumber: String, password: String) {
+        val requestBody = FormBody.Builder()
+                .add("phone_number", phoneNumber)
+                .add("password", password)
+                .build()
+        val request = Request.Builder()
+                .url(Constants.LOGIN_URL)
+                .post(requestBody)
+                .build()
+
+        val client = OkHttpClient()
+        Thread(Runnable {
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                @Throws(IOException::class)
+                override fun onResponse(call: Call, response: Response) {
+                    val json = response.body()?.string()
+                    val msg = JSONObject(json).getString("message")
+                    if (msg == "success"){
+                        val intent = Intent(activity, ActivityHome::class.java)
+                        startActivity(intent)
+                        activity.finish()
+                    }
+                }
+            })
+        }).start()
     }
 }
 

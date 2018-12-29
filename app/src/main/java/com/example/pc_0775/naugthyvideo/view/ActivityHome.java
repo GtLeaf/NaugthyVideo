@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,12 +46,14 @@ import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.myInterface.BookService;
 import com.example.pc_0775.naugthyvideo.receiver.SimpleJPushReceiver;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdUtil;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -58,6 +61,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import cdc.sed.yff.nm.sp.SpotManager;
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ActivityHome extends BaseActivity {
 
@@ -68,6 +77,7 @@ public class ActivityHome extends BaseActivity {
     private NavigationView nav_headerView;
     @ViewInject(R.id.rv_home_list)
     private RecyclerView rv_homeList;
+    private CircleImageView nav_userImage;
 
     //popupWindow
     private CommonPopupWindow window;
@@ -205,9 +215,10 @@ public class ActivityHome extends BaseActivity {
         if (null != actionBar){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        //retrofitTest();
 
         // 设置插屏广告
-        AdUtil.Companion.setupSpotAd(this);
+//        AdUtil.Companion.setupSpotAd(this);
 
         //配置rv_homeList
         adapterHome = new AdapterHome(this);
@@ -215,6 +226,8 @@ public class ActivityHome extends BaseActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rv_homeList.setLayoutManager(layoutManager);
         rv_homeList.setAdapter(adapterHome);
+
+        nav_userImage = nav_headerView.getHeaderView(0).findViewById(R.id.nav_user_image);
 
         //配置popupwindow
         initPopup();
@@ -237,6 +250,7 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public void setListener() {
+        //左侧导航栏的事件监听
         nav_headerView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -281,9 +295,13 @@ public class ActivityHome extends BaseActivity {
             }
         });
 
-        // 展示插屏广告
-        AdUtil.Companion.showSpotAd(this);
 
+        nav_userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ActivityLogin.class);
+            }
+        });
     }
 
     @Override
@@ -551,7 +569,7 @@ public class ActivityHome extends BaseActivity {
      * 动态设置NavigationView的menu
      */
     private void setNavigationViewMenu(){
-        if (!Constants.user.isIsVIP()){
+        if (Constants.user == null || !Constants.user.isIsVIP()){
             MenuItem nav_liveCardSlide = nav_headerView.getMenu().findItem(R.id.nav_live_card_slide);
             MenuItem nav_function = nav_headerView.getMenu().findItem(R.id.nav_function);
             nav_liveCardSlide.setVisible(false);
@@ -560,4 +578,32 @@ public class ActivityHome extends BaseActivity {
             nav_function.setEnabled(false);
         }
     }
+
+    /*
+    * Retrofit测试
+    * */
+    public void retrofitTest(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.douban.com/v2/")
+                .build();
+        BookService bookService = retrofit.create(BookService.class);
+        Call<ResponseBody> call = bookService.getBook(1220562);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String s = response.body().string();
+                    Log.e(TAG, s);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
 }

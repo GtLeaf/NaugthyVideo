@@ -3,6 +3,7 @@ package com.example.pc_0775.naugthyvideo.Constants;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 
 import com.example.pc_0775.naugthyvideo.bean.UserBean;
@@ -22,8 +23,8 @@ public class Constants {
     public static UserBean user;
     //国家
     public static String country = "86";
-    //直播
-    public static String MIMI_LIVE_URL = "http://mimiapp.hanya168.com/rar.ashx?action=homelive";
+    //直播http://mimiapp.hanya168.com/rar.ashx?action=homelive
+    public static String MIMI_LIVE_URL = "http://mimi.hfjtpm.com/rar.ashx?action=a&zip=1546003440939&ss=ED44255E5683F1F2F4E2AD28F1114F4C";
     //video地址
     //http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50&pageindex=1&type=1
     public static String EUROPE_VIDEO_URL = "http://mimiapp.hanya168.com/rar.ashx?action=getv&pagesize=50";//type=1
@@ -153,6 +154,16 @@ public class Constants {
             return false;
         else
             return telRegex.matches(mobileNums);
+    }
+
+    //判断当前应用是否是debug状态
+    public static boolean isApkInDebug(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 
