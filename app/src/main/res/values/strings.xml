@@ -12,7 +12,9 @@
     <string name="nav_part_slide">电影Top250</string>
     <string name="nav_card_slide">卡片滑动</string>
     <string name="nav_live_broadcast_play">直播</string>
+    <string name="nav_player">播放器</string>
     <string name="nav_settings">设置</string>
+    <string name="yes">确定</string>
     <!--login&register-->
     <string name="login">登     录</string>
     <string name="register">注      册</string>

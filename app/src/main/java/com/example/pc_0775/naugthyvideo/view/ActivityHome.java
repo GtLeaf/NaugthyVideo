@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -98,6 +99,14 @@ public class ActivityHome extends BaseActivity {
     @ViewInject(R.id.btn_reply_send)
     private ImageView btn_replySend;
 
+    //defined player
+    private CommonPopupWindow playerUrlWindow;
+    private LayoutGravity playerUrlGravity;
+    @ViewInject(R.id.et_player_url)
+    private EditText et_playerUrl;
+    @ViewInject(R.id.btn_player_url_yes)
+    private EditText btn_playerUrlYes;
+
     //广播接收器
     private SimpleJPushReceiver jPushReceiver = new SimpleJPushReceiver();
 
@@ -153,10 +162,6 @@ public class ActivityHome extends BaseActivity {
                     }
                     break;
 
-                case Constants.LIVE_ROOM_REQUEST:
-                    List<LiveRoomInfo> liveRoomInfos = NetWorkUtil.parseJsonArray(msg.obj.toString(), LiveRoomInfo.class);
-
-                    break;
                 case Constants.DOUBAN_LATEST_MOVIE_REQUEST:
                     activity.doubanMovie = NetWorkUtil.parseJsonWithGson(msg.obj.toString(), DoubanMovie.class);
                     if (!activity.isInitPaging){
@@ -232,6 +237,7 @@ public class ActivityHome extends BaseActivity {
         //配置popupwindow
         initPopup();
         initPopupMessageDetail();
+        initPopupDefinedPlayer();
         setNavigationViewMenu();
 
 
@@ -284,6 +290,10 @@ public class ActivityHome extends BaseActivity {
                         }else {
                             showToast("功能暂未开放");
                         }
+                        break;
+                    case R.id.nav_player:
+                        playerUrlWindow.showBashOfAnchor(drawer_layout, playerUrlGravity, 0, 0);
+                        setWindowBlack();
                         break;
                     case R.id.nav_settings:
                         startActivity(ActivitySetting.class);
@@ -363,7 +373,7 @@ public class ActivityHome extends BaseActivity {
                 break;
             case R.id.delete:
                 Toast.makeText(this, "You click delete", Toast.LENGTH_SHORT).show();
-//                window.showBashOfAnchor(rv_homeList, layoutGravity, 0, 0);
+                window.showBashOfAnchor(rv_homeList, layoutGravity, 0, 0);
                 break;
             case R.id.settings:
                 Toast.makeText(this, "You click settings", Toast.LENGTH_SHORT).show();
@@ -555,6 +565,46 @@ public class ActivityHome extends BaseActivity {
         };
         detaiLayoutGravity = new LayoutGravity(LayoutGravity.CENTER_HORI|LayoutGravity.CENTER_VERT);
         messageDetailWindow.getPopupWindow().setAnimationStyle(R.style.animScale);
+    }
+
+    /**
+     * 初始化播放器地址弹窗
+     */
+    private void initPopupDefinedPlayer(){
+        // get the height and width of screen
+        DisplayMetrics metrics=new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screenHeight=metrics.heightPixels;
+        int screenWidth=metrics.widthPixels;
+
+        playerUrlWindow = new CommonPopupWindow(this, R.layout.activity_pop_player_url, (int)(screenWidth*0.7), ViewGroup.LayoutParams.WRAP_CONTENT) {
+            @Override
+            protected void initView() {
+
+            }
+
+            @Override
+            protected void initEvent() {
+
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                PopupWindow instance = getPopupWindow();
+                instance.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        WindowManager.LayoutParams lp=getWindow().getAttributes();
+                        lp.alpha=1.0f;
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                        getWindow().setAttributes(lp);
+                    }
+                });
+            }
+        };
+        playerUrlGravity = new LayoutGravity(LayoutGravity.CENTER_HORI|LayoutGravity.CENTER_VERT);
+        playerUrlWindow.getPopupWindow().setAnimationStyle(R.style.animScale);
     }
 
     //弹窗出现后将背景设置为半透明黑色

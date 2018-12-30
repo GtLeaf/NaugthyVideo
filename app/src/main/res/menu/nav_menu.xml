@@ -23,6 +23,10 @@
             android:id="@+id/nav_live_card_slide"
             android:title="@string/nav_live_broadcast_play"
             />
+        <item
+            android:id="@+id/nav_player"
+            android:title="@string/nav_player"
+            />
 
     </group>
     <group
