@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -102,10 +103,8 @@ public class ActivityHome extends BaseActivity {
     //defined player
     private CommonPopupWindow playerUrlWindow;
     private LayoutGravity playerUrlGravity;
-    @ViewInject(R.id.et_player_url)
     private EditText et_playerUrl;
-    @ViewInject(R.id.btn_player_url_yes)
-    private EditText btn_playerUrlYes;
+    private Button btn_playerUrlYes;
 
     //广播接收器
     private SimpleJPushReceiver jPushReceiver = new SimpleJPushReceiver();
@@ -238,8 +237,6 @@ public class ActivityHome extends BaseActivity {
         initPopup();
         initPopupMessageDetail();
         initPopupDefinedPlayer();
-        setNavigationViewMenu();
-
 
         nav_headerView.setCheckedItem(R.id.nav_home);
         requestLatestMoviesData(handler);
@@ -322,6 +319,12 @@ public class ActivityHome extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setNavigationViewMenu();
     }
 
     @Override
@@ -574,13 +577,23 @@ public class ActivityHome extends BaseActivity {
         // get the height and width of screen
         DisplayMetrics metrics=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screenHeight=metrics.heightPixels;
         int screenWidth=metrics.widthPixels;
 
         playerUrlWindow = new CommonPopupWindow(this, R.layout.activity_pop_player_url, (int)(screenWidth*0.7), ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
             protected void initView() {
 
+                et_playerUrl = contentView.findViewById(R.id.et_player_url);
+                btn_playerUrlYes = contentView.findViewById(R.id.btn_player_url_yes);
+
+                btn_playerUrlYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!et_playerUrl.getText().toString().equals("")){
+                            ActivityLivePlay.actionStart(ActivityHome.this, et_playerUrl.getText().toString());
+                        }
+                    }
+                });
             }
 
             @Override
@@ -619,13 +632,18 @@ public class ActivityHome extends BaseActivity {
      * 动态设置NavigationView的menu
      */
     private void setNavigationViewMenu(){
+        MenuItem nav_liveCardSlide = nav_headerView.getMenu().findItem(R.id.nav_live_card_slide);
+        MenuItem nav_function = nav_headerView.getMenu().findItem(R.id.nav_function);
         if (Constants.user == null || !Constants.user.isIsVIP()){
-            MenuItem nav_liveCardSlide = nav_headerView.getMenu().findItem(R.id.nav_live_card_slide);
-            MenuItem nav_function = nav_headerView.getMenu().findItem(R.id.nav_function);
             nav_liveCardSlide.setVisible(false);
             nav_liveCardSlide.setEnabled(false);
             nav_function.setVisible(false);
             nav_function.setEnabled(false);
+        }else {
+            nav_liveCardSlide.setVisible(true);
+            nav_liveCardSlide.setEnabled(true);
+            nav_function.setVisible(true);
+            nav_function.setEnabled(true);
         }
     }
 

@@ -102,8 +102,6 @@ public class FragmentLogin extends Fragment {
                     BaseResult<UserBean> baseResult = NetWorkUtil.getGson().fromJson(msg.obj.toString(), type);
                     if(baseResult.getMessage().equals("success")){
                         Constants.user = baseResult.getResult().get(0);
-                        Intent intent = new Intent(fragmentLogin.activity, ActivityHome.class);
-                        fragmentLogin.startActivity(intent);
                         fragmentLogin.activity.finish();
                     }else {
                         Constants.createAlertDialog(fragmentLogin.activity, baseResult.getMessage());
