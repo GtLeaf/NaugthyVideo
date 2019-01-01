@@ -289,8 +289,8 @@ public class ActivityHome extends BaseActivity {
                         }
                         break;
                     case R.id.nav_player:
-                        playerUrlWindow.showBashOfAnchor(drawer_layout, playerUrlGravity, 0, 0);
-                        setWindowBlack();
+                        /*playerUrlWindow.showBashOfAnchor(drawer_layout, playerUrlGravity, 0, 0);
+                        setWindowBlack();*/
                         break;
                     case R.id.nav_settings:
                         startActivity(ActivitySetting.class);
