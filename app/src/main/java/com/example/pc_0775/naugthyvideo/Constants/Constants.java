@@ -39,6 +39,10 @@ public class Constants {
     public static String WEREWOLF_URL = "https://www.86rrxx.com/";
 
     /**
+     * 豆瓣base接口
+     */
+    public static String DOUBAN_MOVIE_BASE_URL = "http://api.douban.com/v2/movie/";
+    /**
      * 豆瓣top250 api接口
      */
     public static String DOUBAN_MOVIE_TOP_250_URL = "http://api.douban.com/v2/movie/top250";

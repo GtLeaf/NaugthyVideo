@@ -49,11 +49,13 @@ import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.myInterface.BookService;
+import com.example.pc_0775.naugthyvideo.myInterface.MovieService;
 import com.example.pc_0775.naugthyvideo.receiver.SimpleJPushReceiver;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdUtil;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
+import com.example.pc_0775.naugthyvideo.util.RetrofitServiceManager;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -64,6 +66,13 @@ import java.util.List;
 
 import cdc.sed.yff.nm.sp.SpotManager;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.Subject;
+import kotlin.jvm.functions.Function1;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -220,6 +229,7 @@ public class ActivityHome extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         //retrofitTest();
+        retrofitTest2();
 
         // 设置插屏广告
 //        AdUtil.Companion.setupSpotAd(this);
@@ -672,6 +682,41 @@ public class ActivityHome extends BaseActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    public void retrofitTest2(){
+        MovieService movieService = RetrofitServiceManager.INSTANCE.create(MovieService.class);
+        movieService.getTop250(0, 15)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<DoubanMovie, List<DoubanMovie.SubjectsBean>>() {
+                    @Override
+                    public List<DoubanMovie.SubjectsBean> apply(DoubanMovie doubanMovie) throws Exception {
+                        return doubanMovie.getSubjects();
+                    }
+                })
+                .subscribe(new io.reactivex.Observer<List<DoubanMovie.SubjectsBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<DoubanMovie.SubjectsBean> subjectsBeans) {
+                        Log.d(TAG, "onNext: ");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 }
