@@ -1,7 +1,7 @@
-package com.example.pc_0775.naugthyvideo.util
+package com.example.pc_0775.naugthyvideo.retrofit
 
-import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.myInterface.MovieService
+import com.example.pc_0775.naugthyvideo.util.HttpCommonInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
