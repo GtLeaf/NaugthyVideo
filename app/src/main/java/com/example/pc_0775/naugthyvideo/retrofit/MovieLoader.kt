@@ -18,7 +18,7 @@ class MovieLoader : ObjectLoader(){
         mMovieService = RetrofitServiceManager.create(MovieService::class.java)
     }
 
-    fun getMovie(start:Int, count:Int):Observable<List<DoubanMovie.SubjectsBean>>{
+    fun getMovieTop250(start:Int, count:Int):Observable<List<DoubanMovie.SubjectsBean>>{
         return observe(mMovieService!!.getTop250(start, count)).map { t -> t.subjects }
     }
 }

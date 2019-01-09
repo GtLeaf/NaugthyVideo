@@ -52,6 +52,7 @@ import com.example.pc_0775.naugthyvideo.myInterface.MovieService;
 import com.example.pc_0775.naugthyvideo.receiver.SimpleJPushReceiver;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.retrofit.MovieLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.retrofit.RetrofitServiceManager;
 
@@ -680,7 +681,29 @@ public class ActivityHome extends BaseActivity {
     }
 
     public void retrofitTest2(){
-        MovieService movieService = RetrofitServiceManager.INSTANCE.create(MovieService.class);
+        MovieLoader movieLoader = new MovieLoader();
+        movieLoader.getMovieTop250(0, 10).subscribe(new io.reactivex.Observer<List<DoubanMovie.SubjectsBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<DoubanMovie.SubjectsBean> subjectsBeans) {
+                Log.d(TAG, "onNext: ");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        /*MovieService movieService = RetrofitServiceManager.INSTANCE.create(MovieService.class);
         movieService.getTop250(0, 15)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -711,7 +734,7 @@ public class ActivityHome extends BaseActivity {
                     public void onComplete() {
 
                     }
-                });
+                });*/
     }
 
 }
