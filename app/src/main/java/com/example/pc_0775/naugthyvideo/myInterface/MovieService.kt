@@ -14,9 +14,8 @@ import retrofit2.http.QueryMap
  */
 interface MovieService {
 
-    //baseUrl = https://api.douban.com/v2/movie/
-    @GET("in_theaters?")
-    fun getMovie(@QueryMap params:Map<String, String>): Call<ResponseBody>
+    @GET("in_theaters")
+    fun getLatestMovie(@Query("start") start:Int, @Query("count") count:Int): Observable<DoubanMovie>
 
     @GET("subject/{movieId}")
     fun getMovieItem(@Path("movieId") movieId:Int ): Call<ResponseBody>

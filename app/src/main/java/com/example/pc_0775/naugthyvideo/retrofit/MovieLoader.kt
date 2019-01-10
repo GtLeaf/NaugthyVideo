@@ -21,6 +21,10 @@ class MovieLoader : ObjectLoader(){
     fun getMovieTop250(start:Int, count:Int):Observable<List<DoubanMovie.SubjectsBean>>{
         return observe(mMovieService!!.getTop250(start, count)).map { t -> t.subjects }
     }
+
+    fun getLatestMovie(start:Int, count:Int):Observable<List<DoubanMovie.SubjectsBean>>{
+        return observe(mMovieService!!.getLatestMovie(start, count)).map { t -> t.subjects }
+    }
 }
 
 /**

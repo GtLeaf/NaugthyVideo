@@ -94,16 +94,6 @@ public class ActivityHome extends BaseActivity {
     //MessageDetailPopupWindow
     private CommonPopupWindow messageDetailWindow;
     private LayoutGravity detaiLayoutGravity;
-    @ViewInject(R.id.iv_message_detail_sender_icon)
-    private ImageView iv_messageDetailSenderIcon;
-    @ViewInject(R.id.tv_message_detail_title)
-    private ImageView tv_messageDetailTitle;
-    @ViewInject(R.id.rv_message_detail_content)
-    private ImageView rv_messageDetailContent;
-    @ViewInject(R.id.et_message_detail_reply)
-    private ImageView et_messageDetailReply;
-    @ViewInject(R.id.btn_reply_send)
-    private ImageView btn_replySend;
 
     //defined player
     private CommonPopupWindow playerUrlWindow;
@@ -134,6 +124,7 @@ public class ActivityHome extends BaseActivity {
 
     //豆瓣电影top250 data
     private DoubanMovie doubanMovie = null;
+    private List<DoubanMovie.SubjectsBean> subjectsBeanList = new ArrayList<>();
     /**
      * 判断doubanMovie是否为新的数据
      */
@@ -225,7 +216,7 @@ public class ActivityHome extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         //retrofitTest();
-        retrofitTest2();
+//        retrofitTest2();
 
         // 设置插屏广告
 //        AdUtil.Companion.setupSpotAd(this);
@@ -410,12 +401,40 @@ public class ActivityHome extends BaseActivity {
      *
      */
     private void requestLatestMoviesData(MyHandler myHandler){
-        HashMap<String, String> parameter = new HashMap<>();
+        /*HashMap<String, String> parameter = new HashMap<>();
         parameter.put("start", start+"");
         parameter.put("count", count+"");
         Uri latestMovieUri = NetWorkUtil.createUri(Constants.DOUBAN_LATEST_MOVIE_URL, parameter);
         start += count;
-        NetWorkUtil.sendRequestWithOkHttp(latestMovieUri.toString(), Constants.DOUBAN_LATEST_MOVIE_REQUEST, myHandler);
+        NetWorkUtil.sendRequestWithOkHttp(latestMovieUri.toString(), Constants.DOUBAN_LATEST_MOVIE_REQUEST, myHandler);*/
+
+        MovieLoader movieLoader = new MovieLoader();
+        movieLoader.getLatestMovie(start, count)
+                .subscribe(new io.reactivex.Observer<List<DoubanMovie.SubjectsBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(List<DoubanMovie.SubjectsBean> subjectsBeans) {
+                        subjectsBeanList = subjectsBeans;
+                        if (!isInitPaging){
+                            initPaging();
+                            isInitPaging = true;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        start += count;
     }
 
     /**
@@ -447,7 +466,7 @@ public class ActivityHome extends BaseActivity {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<DoubanMovie.SubjectsBean> callback) {
-            callback.onResult(doubanMovie.getSubjects(), 0, count);
+            callback.onResult(subjectsBeanList, 0, count);
         }
 
         @Override
@@ -703,38 +722,6 @@ public class ActivityHome extends BaseActivity {
 
             }
         });
-        /*MovieService movieService = RetrofitServiceManager.INSTANCE.create(MovieService.class);
-        movieService.getTop250(0, 15)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<DoubanMovie, List<DoubanMovie.SubjectsBean>>() {
-                    @Override
-                    public List<DoubanMovie.SubjectsBean> apply(DoubanMovie doubanMovie) throws Exception {
-                        return doubanMovie.getSubjects();
-                    }
-                })
-                .subscribe(new io.reactivex.Observer<List<DoubanMovie.SubjectsBean>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<DoubanMovie.SubjectsBean> subjectsBeans) {
-                        Log.d(TAG, "onNext: ");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });*/
     }
 
 }
