@@ -279,6 +279,8 @@ public class FragmentLogin extends Fragment {
                 });
             }
         }).start();
+
+
     }
 
     private void initPreferences(){
