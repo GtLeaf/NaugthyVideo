@@ -35,21 +35,3 @@ class MovieLoader : ObjectLoader(){
         return observe(mLoginService!!.userLogin(url, map))
     }
 }
-
-/**
- * 将一些重复的操作提出来，放到父类以免Loader 里每个接口都有重复代码
- */
-open class ObjectLoader{
-    /**
-     *
-     * @param observable
-     * @param <T>
-     * @return
-     */
-    protected fun <T> observe(observable: Observable<T>):Observable<T>{
-        return observable
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-}

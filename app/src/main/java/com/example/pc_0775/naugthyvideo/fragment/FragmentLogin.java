@@ -27,6 +27,7 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.BaseResult;
 import com.example.pc_0775.naugthyvideo.bean.UserBean;
+import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.view.ActivityHome;
 import com.google.gson.reflect.TypeToken;
@@ -280,7 +281,8 @@ public class FragmentLogin extends Fragment {
             }
         }).start();
 
-
+        UserLoginLoader userLoginLoader = new UserLoginLoader();
+//        userLoginLoader
     }
 
     private void initPreferences(){
