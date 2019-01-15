@@ -35,7 +35,11 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -250,7 +254,7 @@ public class FragmentLogin extends Fragment {
     }
 
     public void sendPostRequest(String phoneNumber, String password) {
-        RequestBody requestBody = new FormBody.Builder()
+        /*RequestBody requestBody = new FormBody.Builder()
                 .add("phone_number", phoneNumber)
                 .add("password", password)
                 .build();
@@ -279,10 +283,39 @@ public class FragmentLogin extends Fragment {
                     }
                 });
             }
-        }).start();
+        }).start();*/
 
         UserLoginLoader userLoginLoader = new UserLoginLoader();
-//        userLoginLoader
+        Map<String, String> map = new HashMap<>();
+        map.put("phone_number", phoneNumber);
+        map.put("password", password);
+        userLoginLoader.postUserLogin(Constants.LOGIN_URL, phoneNumber, password)
+        .subscribe(new Observer<BaseResult<UserBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseResult<UserBean> userBeanBaseResult) {
+                if(userBeanBaseResult.getMessage().equals("success")){
+                    Constants.user = userBeanBaseResult.getResult().get(0);
+                    activity.finish();
+                }else {
+                    Constants.createAlertDialog(activity, userBeanBaseResult.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     private void initPreferences(){
