@@ -20,10 +20,17 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import android.os.Looper
 import android.os.Message
 import android.widget.*
+import com.example.pc_0775.naugthyvideo.bean.BaseResult
+import com.example.pc_0775.naugthyvideo.bean.UserBean
+import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader
 import com.example.pc_0775.naugthyvideo.view.ActivityHome
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
+import java.util.*
 
 
 /**
@@ -312,6 +319,32 @@ class FragmentRegister : Fragment() {
                 }
             }
         })
+
+        //用retrofit实现注册，未测试
+        /*var userLoginLoader = UserLoginLoader()
+        userLoginLoader.postUserRegister(Constants.REGITER_URL, et_register_phone_number.text.toString(),
+                et_register_nickname.text.toString(), et_register_password.text.toString(), selectSex)
+                .subscribe(object : Observer<BaseResult<Objects>> {
+                    override fun onSubscribe(d: Disposable) {
+
+                    }
+
+                    override fun onNext(userBeanBaseResult: BaseResult<Objects>) {
+                        var msg = userBeanBaseResult.message
+                        activity.runOnUiThread { Constants.createAlertDialog(activity, msg) }
+                        if (msg == "注册成功"){
+                            sendPostRequest(et_register_phone_number.text.toString(), et_register_password.text.toString())
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onComplete() {
+
+                    }
+                })*/
     }
 
     fun sendPostRequest(phoneNumber: String, password: String) {
@@ -345,4 +378,7 @@ class FragmentRegister : Fragment() {
         }).start()
     }
 }
+
+
+
 

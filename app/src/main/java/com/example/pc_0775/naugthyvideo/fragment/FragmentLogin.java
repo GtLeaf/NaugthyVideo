@@ -254,36 +254,6 @@ public class FragmentLogin extends Fragment {
     }
 
     public void sendPostRequest(String phoneNumber, String password) {
-        /*RequestBody requestBody = new FormBody.Builder()
-                .add("phone_number", phoneNumber)
-                .add("password", password)
-                .build();
-        final Request request = new Request.Builder()
-                .url(Constants.LOGIN_URL)
-                .post(requestBody)
-                .build();
-
-        final OkHttpClient client = new OkHttpClient();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final Message message = Message.obtain();
-                message.what = Constants.USER_LOGIN;
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String json = response.body().string();
-                        message.obj = json;
-                        handler.sendMessage(message);
-                    }
-                });
-            }
-        }).start();*/
 
         UserLoginLoader userLoginLoader = new UserLoginLoader();
         Map<String, String> map = new HashMap<>();
