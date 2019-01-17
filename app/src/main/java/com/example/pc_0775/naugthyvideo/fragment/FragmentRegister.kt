@@ -294,7 +294,7 @@ class FragmentRegister : Fragment() {
     }
 
     private fun sendRegisterRequest(){
-        val requestBody:RequestBody = FormBody.Builder()
+        /*val requestBody:RequestBody = FormBody.Builder()
                 .add("phone_number", et_register_phone_number.text.toString())
                 .add("nick_name", et_register_nickname.text.toString())
                 .add("password", et_register_password.text.toString())
@@ -318,10 +318,10 @@ class FragmentRegister : Fragment() {
                     sendPostRequest(et_register_phone_number.text.toString(), et_register_password.text.toString())
                 }
             }
-        })
+        })*/
 
         //用retrofit实现注册，未测试
-        /*var userLoginLoader = UserLoginLoader()
+        var userLoginLoader = UserLoginLoader()
         userLoginLoader.postUserRegister(Constants.REGITER_URL, et_register_phone_number.text.toString(),
                 et_register_nickname.text.toString(), et_register_password.text.toString(), selectSex)
                 .subscribe(object : Observer<BaseResult<Objects>> {
@@ -344,7 +344,7 @@ class FragmentRegister : Fragment() {
                     override fun onComplete() {
 
                     }
-                })*/
+                })
     }
 
     fun sendPostRequest(phoneNumber: String, password: String) {

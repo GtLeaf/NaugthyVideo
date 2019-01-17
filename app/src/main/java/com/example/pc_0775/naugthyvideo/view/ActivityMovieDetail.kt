@@ -26,7 +26,10 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieDetail
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieEntry
+import com.example.pc_0775.naugthyvideo.retrofit.MovieLoader
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import java.lang.ref.WeakReference
 
@@ -214,6 +217,28 @@ class ActivityMovieDetail : BaseActivity() {
         }
     }
 
+    /*
+    *   获取movieDetail的方法，未测试
+    * */
+    fun movieDetail(){
+        var movieLoader = MovieLoader()
+        movieLoader.getMovieDetail(movieInfo.id)
+                .subscribe(object :Observer<DoubanMovieDetail>{
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onComplete() {
+                    }
+
+                    override fun onNext(t: DoubanMovieDetail) {
+                        movieDetail = t
+                        initViewAfterDetailData()
+                    }
+
+                    override fun onError(e: Throwable) {
+                    }
+                })
+    }
 
     /*
      * 得到Detail数据后再次初始化某些控件

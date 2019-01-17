@@ -3,6 +3,7 @@ package com.example.pc_0775.naugthyvideo.retrofit
 import com.example.pc_0775.naugthyvideo.bean.BaseResult
 import com.example.pc_0775.naugthyvideo.bean.UserBean
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
+import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieDetail
 import com.example.pc_0775.naugthyvideo.myInterface.LoginService
 import com.example.pc_0775.naugthyvideo.myInterface.MovieService
 import io.reactivex.Observable
@@ -27,5 +28,9 @@ class MovieLoader : ObjectLoader(){
 
     fun getLatestMovie(start:Int, count:Int):Observable<List<DoubanMovie.SubjectsBean>>{
         return observe(mMovieService!!.getLatestMovie(start, count)).map { t -> t.subjects }
+    }
+
+    fun getMovieDetail(movieId:String):Observable<DoubanMovieDetail>{
+        return observe(mMovieService!!.getMovieItem(movieId))
     }
 }
