@@ -241,6 +241,32 @@ class ActivityMovieDetail : BaseActivity() {
     }
 
     /*
+    *   获取movieEntry的方法，未测试
+    * */
+    fun getMovieEntryData(){
+        var movieLoader = MovieLoader()
+        movieLoader.getMovieEntry(movieInfo.id, Constants.DOUBAN_MOVIE_APIKEY)
+                .subscribe(object :Observer<DoubanMovieEntry>{
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onComplete() {
+
+                    }
+
+                    override fun onError(e: Throwable) {
+                    }
+
+                    override fun onNext(t: DoubanMovieEntry) {
+                        if (null == t){
+                            return
+                        }
+                        cacheMovieEntry(t)
+                        initViewAfterEntryData()
+                    }
+                })
+    }
+    /*
      * 得到Detail数据后再次初始化某些控件
      * */
     private fun initViewAfterDetailData(){

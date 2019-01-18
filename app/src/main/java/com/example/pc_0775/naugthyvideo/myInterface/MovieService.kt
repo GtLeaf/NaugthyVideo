@@ -2,6 +2,7 @@ package com.example.pc_0775.naugthyvideo.myInterface
 
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieDetail
+import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieEntry
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -19,8 +20,10 @@ interface MovieService {
     fun getLatestMovie(@Query("start") start:Int, @Query("count") count:Int): Observable<DoubanMovie>
 
     @GET("subject/{movieId}")
-    fun getMovieItem(@Path("movieId") movieId:String ): Observable<DoubanMovieDetail>
+    fun getMovieDetail(@Path("movieId") movieId:String ): Observable<DoubanMovieDetail>
 
+    @GET("subject/{movieId}")
+    fun getMovieEntry(@Path("movieId") movieId:String, @Query("key")key:String): Observable<DoubanMovieEntry>
 
     @GET("top250")
     fun getTop250(@Query("start") start:Int, @Query("count") count:Int): Observable<DoubanMovie>
