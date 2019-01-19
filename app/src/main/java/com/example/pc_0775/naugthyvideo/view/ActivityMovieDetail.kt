@@ -208,7 +208,8 @@ class ActivityMovieDetail : BaseActivity() {
     * 网络请求电影数据
     * */
     fun requestMovieDetaildata(){
-        NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_DETAIL_URL+movieInfo.id, Constants.DOUBAN_MOVIE_DETAIL_REQUEST, handler)
+        movieDetail()
+//        NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_DETAIL_URL+movieInfo.id, Constants.DOUBAN_MOVIE_DETAIL_REQUEST, handler)
         //没有本地数据，执行网络请求，否则调用本地数据
         if (!getCacheMovieEntry(movieInfo.id)){
             NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_ENTRY_URL+movieInfo.id+"?apikey="+Constants.DOUBAN_MOVIE_APIKEY, Constants.DOUBAN_MOVIE_ENTRY_REQUEST, handler)
