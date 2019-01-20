@@ -155,7 +155,7 @@ class ActivityMovieDetail : BaseActivity() {
         //设置动画
         setTransition()
         //请求电影详情信息
-        requestMovieDetaildata()
+        requestMovieDetailData()
     }
 
     override fun setListener() {
@@ -207,12 +207,13 @@ class ActivityMovieDetail : BaseActivity() {
     /*
     * 网络请求电影数据
     * */
-    fun requestMovieDetaildata(){
+    private fun requestMovieDetailData(){
         movieDetail()
 //        NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_DETAIL_URL+movieInfo.id, Constants.DOUBAN_MOVIE_DETAIL_REQUEST, handler)
         //没有本地数据，执行网络请求，否则调用本地数据
         if (!getCacheMovieEntry(movieInfo.id)){
-            NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_ENTRY_URL+movieInfo.id+"?apikey="+Constants.DOUBAN_MOVIE_APIKEY, Constants.DOUBAN_MOVIE_ENTRY_REQUEST, handler)
+            getMovieEntryData()
+//            NetWorkUtil.sendRequestWithOkHttp(Constants.DOUBAN_MOVIE_ENTRY_URL+movieInfo.id+"?apikey="+Constants.DOUBAN_MOVIE_APIKEY, Constants.DOUBAN_MOVIE_ENTRY_REQUEST, handler)
         }else{
             initViewAfterEntryData()
         }
@@ -221,7 +222,7 @@ class ActivityMovieDetail : BaseActivity() {
     /*
     *   获取movieDetail的方法，未测试
     * */
-    fun movieDetail(){
+    private fun movieDetail(){
         var movieLoader = MovieLoader()
         movieLoader.getMovieDetail(movieInfo.id)
                 .subscribe(object :Observer<DoubanMovieDetail>{
@@ -244,7 +245,7 @@ class ActivityMovieDetail : BaseActivity() {
     /*
     *   获取movieEntry的方法，未测试
     * */
-    fun getMovieEntryData(){
+    private fun getMovieEntryData(){
         var movieLoader = MovieLoader()
         movieLoader.getMovieEntry(movieInfo.id, Constants.DOUBAN_MOVIE_APIKEY)
                 .subscribe(object :Observer<DoubanMovieEntry>{
@@ -285,20 +286,31 @@ class ActivityMovieDetail : BaseActivity() {
     private fun initViewAfterEntryData(){
         //上映时间：
         var pubdateStr = "上映时间："
-        for (date in movieEntry.pubdates){
-            //第一个类型名字前不用加分隔符
-            pubdateStr += "\n"+ date
+        if (null != movieEntry.pubdates){
+            for (date in movieEntry.pubdates){
+                //第一个类型名字前不用加分隔符
+                pubdateStr += "\n"+ date
+            }
         }
         tv_detail_movie_pubdate.text = pubdateStr
 
         //片长
-        tv_detail_movie_durations.setText("片长："+if(movieEntry.durations.size != 0) movieEntry.durations.get(0) else "")
+        if (null != movieEntry.durations){
+            tv_detail_movie_durations.text = "片长："+if(movieEntry.durations.size != 0) movieEntry.durations.get(0) else ""
+        }
+
 
         //短评
-        for (comment in movieEntry.popular_comments){
-            var shortCommentView = ShortCommentaryViewHolder.create(this).bind(comment, this)
-            ll_short_commentary_layout.addView(shortCommentView)
+        if (null != movieEntry.popular_comments){
+            for (comment in movieEntry.popular_comments){
+                var shortCommentView = ShortCommentaryViewHolder.create(this).bind(comment, this)
+                ll_short_commentary_layout.addView(shortCommentView)
+            }
+            movieEntry.popular_comments
+                    .map { ShortCommentaryViewHolder.create(this).bind(it, this) }
+                    .forEach { ll_short_commentary_layout.addView(it) }
         }
+
     }
 
     class ShortCommentaryViewHolder(itemView:View){

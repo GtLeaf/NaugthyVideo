@@ -294,33 +294,8 @@ class FragmentRegister : Fragment() {
     }
 
     private fun sendRegisterRequest(){
-        /*val requestBody:RequestBody = FormBody.Builder()
-                .add("phone_number", et_register_phone_number.text.toString())
-                .add("nick_name", et_register_nickname.text.toString())
-                .add("password", et_register_password.text.toString())
-                .add("sex", selectSex)
-                .build()
-        val request = Request.Builder()
-                .url(Constants.REGITER_URL)
-                .post(requestBody)
-                .build()
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object :Callback{
-            override fun onFailure(call: Call?, e: IOException?) {
-                e!!.printStackTrace()
-            }
 
-            override fun onResponse(call: Call?, response: Response?) {
-                val json = response!!.body()?.string()
-                var msg = JSONObject(json).getString("message")
-                activity.runOnUiThread { Constants.createAlertDialog(activity, msg) }
-                if (msg == "注册成功"){
-                    sendPostRequest(et_register_phone_number.text.toString(), et_register_password.text.toString())
-                }
-            }
-        })*/
-
-        //用retrofit实现注册，未测试
+        //用retrofit实现注册
         var userLoginLoader = UserLoginLoader()
         userLoginLoader.postUserRegister(Constants.REGITER_URL, et_register_phone_number.text.toString(),
                 et_register_nickname.text.toString(), et_register_password.text.toString(), selectSex)
