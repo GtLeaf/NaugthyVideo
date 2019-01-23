@@ -215,7 +215,7 @@ public class ActivityHome extends BaseActivity {
         if (null != actionBar){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        //retrofitTest();
+        retrofitTest();
 //        retrofitTest2();
 
         // 设置插屏广告
@@ -681,7 +681,7 @@ public class ActivityHome extends BaseActivity {
                 .build();
         BookService bookService = retrofit.create(BookService.class);
         Call<ResponseBody> call = bookService.getBook(1220562);
-        call.enqueue(new Callback<ResponseBody>() {
+        /*call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
@@ -696,7 +696,25 @@ public class ActivityHome extends BaseActivity {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
             }
-        });
+        });*/
+        //, "0b2bdeda43b5688921839c8ecb20399b"
+        Call<ResponseBody> call2 = bookService.getMovieEntry2("1291583", "0b2bdeda43b5688921839c8ecb20399b");
+        /*call2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String s = response.body().string();
+                    Log.e(TAG, s);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });*/
     }
 
     public void retrofitTest2(){

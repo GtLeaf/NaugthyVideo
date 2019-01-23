@@ -23,7 +23,10 @@ interface MovieService {
     fun getMovieDetail(@Path("movieId") movieId:String ): Observable<DoubanMovieDetail>
 
     @GET("subject/{movieId}")
-    fun getMovieEntry(@Path("movieId") movieId:String, @Query("key")key:String): Observable<DoubanMovieEntry>
+    fun getMovieEntry(@Path("movieId") movieId:String, @Query("apikey")key:String): Observable<DoubanMovieEntry>
+
+    @GET("subject/{movieId}")
+    fun getMovieEntry2(@Path("movieId") movieId:String, @Query("apikey")apikey:String): Call<ResponseBody>
 
     @GET("top250")
     fun getTop250(@Query("start") start:Int, @Query("count") count:Int): Observable<DoubanMovie>

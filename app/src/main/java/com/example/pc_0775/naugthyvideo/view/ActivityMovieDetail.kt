@@ -30,6 +30,7 @@ import com.example.pc_0775.naugthyvideo.retrofit.MovieLoader
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import io.vov.vitamio.utils.Log
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import java.lang.ref.WeakReference
 
@@ -253,16 +254,18 @@ class ActivityMovieDetail : BaseActivity() {
                     }
 
                     override fun onComplete() {
-
+                        Log.d(TAG, "is complete")
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                     }
 
                     override fun onNext(t: DoubanMovieEntry) {
                         if (null == t){
                             return
                         }
+                        movieEntry = t
                         cacheMovieEntry(t)
                         initViewAfterEntryData()
                     }
@@ -302,10 +305,10 @@ class ActivityMovieDetail : BaseActivity() {
 
         //短评
         if (null != movieEntry.popular_comments){
-            for (comment in movieEntry.popular_comments){
+            /*for (comment in movieEntry.popular_comments){
                 var shortCommentView = ShortCommentaryViewHolder.create(this).bind(comment, this)
                 ll_short_commentary_layout.addView(shortCommentView)
-            }
+            }*/
             movieEntry.popular_comments
                     .map { ShortCommentaryViewHolder.create(this).bind(it, this) }
                     .forEach { ll_short_commentary_layout.addView(it) }
