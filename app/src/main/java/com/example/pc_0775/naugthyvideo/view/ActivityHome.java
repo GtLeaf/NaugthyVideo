@@ -303,7 +303,12 @@ public class ActivityHome extends BaseActivity {
         nav_userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ActivityLogin.class);
+                if (Constants.user == null){
+                    startActivity(ActivityLogin.class);
+                }else {
+                    startActivity(ActivityUserInfo.class);
+                }
+
             }
         });
     }

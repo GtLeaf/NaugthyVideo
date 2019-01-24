@@ -24,5 +24,9 @@
         <item name="android:windowEnterAnimation">@anim/rotate_in</item>
         <item name="android:windowExitAnimation">@anim/rotate_out</item>
     </style>
-
+    <style name="toolbar_theme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!--text color-->
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:actionBarSize">46dp</item>
+    </style>
 </resources>

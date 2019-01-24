@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityUserInfo">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/toolbar_theme">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_userinfo_setting"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="个人信息"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+        </android.support.v7.widget.Toolbar>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_upload_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cir_user_head"
+            android:layout_width="@dimen/x168"
+            android:layout_height="@dimen/y168"
+            android:layout_margin="15dp"
+            android:src="@drawable/icon" />
+
+        <Button
+            android:id="@+id/bt_upload_head"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:background="@color/colorPrimary"
+            android:text="上传头像"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_user_select_host"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_user_default_address"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/x40"
+            android:layout_marginLeft="@dimen/x40"
+            android:gravity="center"
+            android:text="昵称"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/tv_user_default_address"
+            android:layout_toRightOf="@+id/tv_user_default_address"
+            android:gravity="center"
+            android:text="-"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_info_change_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/x82"
+            android:layout_marginRight="@dimen/x82"
+            android:gravity="center"
+            android:text="修改"
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@drawable/ic_forward" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_user_phone"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_user_phone_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/x40"
+            android:layout_marginLeft="@dimen/x40"
+            android:gravity="center"
+            android:text="手机"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/tv_user_phone_hint"
+            android:layout_toRightOf="@+id/tv_user_phone_hint"
+            android:gravity="center"
+            android:text="未设置 "
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_info_change_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/x82"
+            android:layout_marginRight="@dimen/x82"
+            android:gravity="center"
+            android:text="修改"
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@drawable/ic_forward" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_user_mail"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_user_mail_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/x40"
+            android:layout_marginLeft="@dimen/x40"
+            android:gravity="center"
+            android:text="邮箱"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/tv_user_mail_hint"
+            android:layout_toRightOf="@+id/tv_user_mail_hint"
+            android:gravity="center"
+            android:text="未设置"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_info_change_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/x82"
+            android:layout_marginRight="@dimen/x82"
+            android:gravity="center"
+            android:text="修改"
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/x30"
+            android:layout_height="@dimen/x30"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@drawable/ic_forward" />
+
+    </RelativeLayout>
+
+</LinearLayout>

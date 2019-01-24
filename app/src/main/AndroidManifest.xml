@@ -47,7 +47,8 @@
         <activity android:name=".view.ActivityCardSildeWithPaging" />
         <activity android:name=".kotlinTest.ActivityFirstKotlinTest" />
         <activity android:name=".view.ActivityLivePlay" />
-        <activity android:name=".view.ActivityHome"
+        <activity
+            android:name=".view.ActivityHome"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"
@@ -58,7 +59,8 @@
         <activity android:name=".view.ActivitySetting" />
         <activity android:name=".view.ActivityIjkLivePlay" />
         <activity android:name=".view.ActivityMovieDetail" />
-        <activity android:name=".view.ActivityMovieTop250"></activity>
+        <activity android:name=".view.ActivityMovieTop250" />
+        <activity android:name=".view.ActivityUserInfo"></activity>
     </application>
 
 </manifest>
