@@ -67,11 +67,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_user_default_address"
+            android:id="@+id/tv_user_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/x40"
             android:layout_marginLeft="@dimen/x40"
+            android:layout_marginStart="@dimen/x40"
             android:gravity="center"
             android:text="昵称"
             android:textSize="17sp" />
@@ -80,10 +80,10 @@
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/tv_user_nick_name"
+            android:layout_toRightOf="@+id/tv_user_nick_name"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_toEndOf="@+id/tv_user_default_address"
-            android:layout_toRightOf="@+id/tv_user_default_address"
             android:gravity="center"
             android:text="-"
             android:textSize="17sp" />
@@ -220,6 +220,38 @@
             android:layout_marginEnd="@dimen/x30"
             android:layout_marginRight="@dimen/x30"
             android:src="@drawable/ic_forward" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_user_sex"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_user_sex_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/x40"
+            android:layout_marginLeft="@dimen/x40"
+            android:gravity="center"
+            android:text="性别"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_user_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/tv_user_sex_hint"
+            android:layout_toRightOf="@+id/tv_user_sex_hint"
+            android:gravity="center"
+            android:text="未设置"
+            android:textSize="17sp" />
 
     </RelativeLayout>
 
