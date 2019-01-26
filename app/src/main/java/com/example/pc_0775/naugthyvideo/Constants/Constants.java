@@ -21,6 +21,8 @@ public class Constants {
 
     //用户
     public static UserBean user;
+    //是否自动登录
+    public static Boolean IS_AUTO_LOGIN = false;
     //国家
     public static String country = "86";
     //直播http://mimiapp.hanya168.com/rar.ashx?action=homelive

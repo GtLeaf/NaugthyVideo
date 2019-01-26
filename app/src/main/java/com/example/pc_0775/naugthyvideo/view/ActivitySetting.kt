@@ -1,7 +1,9 @@
 package com.example.pc_0775.naugthyvideo.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
@@ -12,7 +14,9 @@ import kotlinx.android.synthetic.main.activity_setting.*
 
 class ActivitySetting : BaseActivity() {
 
-
+    private var isAutoLogin = false
+    private var preferences:SharedPreferences? = null
+    private var editor:SharedPreferences.Editor? = null
 
     override fun initParams(params: Bundle?) {
 
@@ -28,8 +32,8 @@ class ActivitySetting : BaseActivity() {
 
     override fun initView(view: View?) {
         setSupportActionBar(tb_setting);
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
-        getSupportActionBar()?.setTitle("设置")
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "设置"
 
         if (1 == Constants.PLAY_MODE){
             switch_play_mode.isChecked = true
@@ -60,6 +64,13 @@ class ActivitySetting : BaseActivity() {
 
             setPlayer(isChecked)
         })
+
+        switch_auto_login.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
+            buttonView, isChecked ->
+
+            isAutoLogin = isChecked
+
+        })
     }
 
     override fun widgetClick(v: View?) {
@@ -80,7 +91,7 @@ class ActivitySetting : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun setPlayMode(isChecked:Boolean){
+    private fun setPlayMode(isChecked:Boolean){
         if (isChecked){
             Constants.PLAY_MODE = 1
             tv_setting_play_mode.text = "播放：播放器模式"
@@ -94,13 +105,26 @@ class ActivitySetting : BaseActivity() {
         }
     }
 
-    fun setPlayer(isChecked: Boolean){
+    private fun setPlayer(isChecked: Boolean){
         if (isChecked){
             Constants.PLAYER_SELECT = 1
             tv_setting_player_name.text = getString(R.string.ijk_player)
         }else{
             Constants.PLAYER_SELECT = 0
             tv_setting_player_name.text = getString(R.string.vitamio_player)
+        }
+    }
+
+    private fun initPreferences(){
+        if (null == preferences){
+            preferences = PreferenceManager.getDefaultSharedPreferences(this)
+            editor = preferences!!.edit()
+        }
+        if (null == editor){
+            if (null == preferences) {
+                return //获取不到
+            }
+            editor = preferences!!.edit()
         }
     }
 }
