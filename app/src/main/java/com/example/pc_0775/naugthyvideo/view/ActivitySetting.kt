@@ -68,8 +68,7 @@ class ActivitySetting : BaseActivity() {
         switch_auto_login.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
             buttonView, isChecked ->
 
-            isAutoLogin = isChecked
-
+            setAutoLogin(isAutoLogin)
         })
     }
 
@@ -92,6 +91,7 @@ class ActivitySetting : BaseActivity() {
     }
 
     private fun setPlayMode(isChecked:Boolean){
+        initPreferences()
         if (isChecked){
             Constants.PLAY_MODE = 1
             tv_setting_play_mode.text = "播放：播放器模式"
@@ -106,6 +106,7 @@ class ActivitySetting : BaseActivity() {
     }
 
     private fun setPlayer(isChecked: Boolean){
+        initPreferences()
         if (isChecked){
             Constants.PLAYER_SELECT = 1
             tv_setting_player_name.text = getString(R.string.ijk_player)
@@ -113,6 +114,12 @@ class ActivitySetting : BaseActivity() {
             Constants.PLAYER_SELECT = 0
             tv_setting_player_name.text = getString(R.string.vitamio_player)
         }
+    }
+
+    private fun setAutoLogin(isAutoLogin:Boolean){
+        initPreferences()
+        editor!!.putBoolean("isAutoLogin", switch_auto_login.isChecked)
+        editor!!.commit()
     }
 
     private fun initPreferences(){
@@ -126,5 +133,14 @@ class ActivitySetting : BaseActivity() {
             }
             editor = preferences!!.edit()
         }
+    }
+
+    private fun savePreferencesData(){
+
+    }
+
+    private fun takePreferencesData(){
+        initPreferences()
+
     }
 }
