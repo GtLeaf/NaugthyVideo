@@ -55,6 +55,7 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.retrofit.MovieLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.retrofit.RetrofitServiceManager;
+import com.example.pc_0775.naugthyvideo.util.SPUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -745,6 +746,12 @@ public class ActivityHome extends BaseActivity {
 
             }
         });
+    }
+
+    private void autoLogin(){
+        if((Boolean) SPUtils.Companion.get(this, Constants.IS_AUTO_LOGIN, false)){
+
+        }
     }
 
 }

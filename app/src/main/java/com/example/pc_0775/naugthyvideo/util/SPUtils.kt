@@ -13,7 +13,7 @@ class SPUtils {
         /*
         * 保存在手机中的SP文件名
         * */
-        val FILE_NAME = "my_sp"
+        private val FILE_NAME = "my_sp"
 
         /*
         * 保存数据
@@ -22,7 +22,7 @@ class SPUtils {
             val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             val editor = sp.edit()
             when (obj) {
-                is String -> editor.putBoolean(key, obj as Boolean)
+                is Boolean -> editor.putBoolean(key, obj as Boolean)
                 is Float -> editor.putFloat(key, obj)
                 is Int -> editor.putInt(key, obj)
                 is Long -> editor.putLong(key, obj)

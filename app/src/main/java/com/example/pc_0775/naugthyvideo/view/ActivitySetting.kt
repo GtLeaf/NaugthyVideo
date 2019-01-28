@@ -10,13 +10,10 @@ import android.widget.CompoundButton
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
+import com.example.pc_0775.naugthyvideo.util.SPUtils
 import kotlinx.android.synthetic.main.activity_setting.*
 
 class ActivitySetting : BaseActivity() {
-
-    private var isAutoLogin = false
-    private var preferences:SharedPreferences? = null
-    private var editor:SharedPreferences.Editor? = null
 
     override fun initParams(params: Bundle?) {
 
@@ -50,6 +47,8 @@ class ActivitySetting : BaseActivity() {
             switch_player_select.isChecked = false
             setPlayer(false)
         }
+
+        switch_auto_login.isChecked = SPUtils.get(this, "isAutoLogin", false) as Boolean
     }
 
     override fun setListener() {
@@ -68,7 +67,7 @@ class ActivitySetting : BaseActivity() {
         switch_auto_login.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
             buttonView, isChecked ->
 
-            setAutoLogin(isAutoLogin)
+            setAutoLogin(isChecked)
         })
     }
 
@@ -91,7 +90,6 @@ class ActivitySetting : BaseActivity() {
     }
 
     private fun setPlayMode(isChecked:Boolean){
-        initPreferences()
         if (isChecked){
             Constants.PLAY_MODE = 1
             tv_setting_play_mode.text = "播放：播放器模式"
@@ -106,7 +104,6 @@ class ActivitySetting : BaseActivity() {
     }
 
     private fun setPlayer(isChecked: Boolean){
-        initPreferences()
         if (isChecked){
             Constants.PLAYER_SELECT = 1
             tv_setting_player_name.text = getString(R.string.ijk_player)
@@ -117,12 +114,10 @@ class ActivitySetting : BaseActivity() {
     }
 
     private fun setAutoLogin(isAutoLogin:Boolean){
-        initPreferences()
-        editor!!.putBoolean("isAutoLogin", switch_auto_login.isChecked)
-        editor!!.commit()
+        SPUtils.put(this, "isAutoLogin", isAutoLogin)
     }
 
-    private fun initPreferences(){
+    /*private fun initPreferences(){
         if (null == preferences){
             preferences = PreferenceManager.getDefaultSharedPreferences(this)
             editor = preferences!!.edit()
@@ -133,14 +128,13 @@ class ActivitySetting : BaseActivity() {
             }
             editor = preferences!!.edit()
         }
-    }
+    }*/
 
     private fun savePreferencesData(){
 
     }
 
     private fun takePreferencesData(){
-        initPreferences()
 
     }
 }

@@ -21,8 +21,6 @@ public class Constants {
 
     //用户
     public static UserBean user;
-    //是否自动登录
-    public static Boolean IS_AUTO_LOGIN = false;
     //国家
     public static String country = "86";
     //直播http://mimiapp.hanya168.com/rar.ashx?action=homelive
@@ -118,6 +116,9 @@ public class Constants {
         ITEM_TYPE_INFO,
         ITEM_TYPE_LIST
     }
+
+    //sharePreferences的key
+    public static final String IS_AUTO_LOGIN = "isAutoLogin";
 
     //Setting
     //播放模式,0为网页，1为直播播放器

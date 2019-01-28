@@ -29,6 +29,7 @@ import com.example.pc_0775.naugthyvideo.bean.BaseResult;
 import com.example.pc_0775.naugthyvideo.bean.UserBean;
 import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
+import com.example.pc_0775.naugthyvideo.util.SPUtils;
 import com.example.pc_0775.naugthyvideo.view.ActivityHome;
 import com.google.gson.reflect.TypeToken;
 
@@ -288,7 +289,7 @@ public class FragmentLogin extends Fragment {
         });
     }
 
-    private void initPreferences(){
+    /*private void initPreferences(){
         if (null == preferences){
             preferences = PreferenceManager.getDefaultSharedPreferences(activity);
             editor = preferences.edit();
@@ -299,7 +300,7 @@ public class FragmentLogin extends Fragment {
             }
             editor = preferences.edit();
         }
-    }
+    }*/
 
     /**
      * 记住密码
@@ -307,23 +308,25 @@ public class FragmentLogin extends Fragment {
      * @param password
      */
     private void rememberPassword(String phone_number, String password){
-        initPreferences();
         if (cb_rememberPass.isChecked()){
-            editor.putBoolean("isRemember", true);
-            editor.putString("phone_number", phone_number);
-            editor.putString("password", password);
+            SPUtils.Companion.put(activity, "isRemember", true);
+            SPUtils.Companion.put(activity, "phone_number", phone_number);
+            SPUtils.Companion.put(activity, "password", password);
         }
-        editor.commit();
     }
 
     /**
      * 获取本地数据库中的账号密码
      */
     private void takePassword(){
-        initPreferences();
-        if(preferences.getBoolean("isRemember", false)){
+        /*if(preferences.getBoolean("isRemember", false)){
             et_loginName.setText(preferences.getString("phone_number", ""));
             et_loginPassowrd.setText(preferences.getString("password", ""));
+            cb_rememberPass.setChecked(true);
+        }*/
+        if((Boolean) SPUtils.Companion.get(activity, "isRemember", false)){
+            et_loginName.setText((String)SPUtils.Companion.get(activity,"phone_number", ""));
+            et_loginPassowrd.setText((String)SPUtils.Companion.get(activity,"password", ""));
             cb_rememberPass.setChecked(true);
         }
     }
