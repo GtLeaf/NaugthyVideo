@@ -119,6 +119,8 @@ public class Constants {
 
     //sharePreferences的key
     public static final String IS_AUTO_LOGIN = "isAutoLogin";
+    public static final String PHONE_NUMBER = "phone_number";
+    public static final String PASSWORD = "password";
 
     //Setting
     //播放模式,0为网页，1为直播播放器

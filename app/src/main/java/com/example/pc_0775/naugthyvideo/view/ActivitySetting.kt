@@ -24,7 +24,7 @@ class ActivitySetting : BaseActivity() {
     }
 
     override fun bindView(): View? {
-        return null;
+        return null
     }
 
     override fun initView(view: View?) {

@@ -45,6 +45,8 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.MyView.CommonPopupWindow;
 import com.example.pc_0775.naugthyvideo.MyView.CommonPopupWindow.LayoutGravity;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.bean.BaseResult;
+import com.example.pc_0775.naugthyvideo.bean.UserBean;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
 import com.example.pc_0775.naugthyvideo.myInterface.BookService;
@@ -53,6 +55,7 @@ import com.example.pc_0775.naugthyvideo.receiver.SimpleJPushReceiver;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
 import com.example.pc_0775.naugthyvideo.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.retrofit.MovieLoader;
+import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.retrofit.RetrofitServiceManager;
 import com.example.pc_0775.naugthyvideo.util.SPUtils;
@@ -63,6 +66,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cdc.sed.yff.nm.sp.SpotManager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -221,6 +225,10 @@ public class ActivityHome extends BaseActivity {
 
         // 设置插屏广告
 //        AdUtil.Companion.setupSpotAd(this);
+        //判断是否自动登录
+        if((Boolean) SPUtils.Companion.get(this, Constants.IS_AUTO_LOGIN, false)){
+            sendLoginRequest();
+        }
 
         //配置rv_homeList
         adapterHome = new AdapterHome(this);
@@ -247,6 +255,8 @@ public class ActivityHome extends BaseActivity {
         filter.addAction("cn.jpush.android.intent.CONNECTION");
         filter.addCategory("com.example.pc_0775.naugthyvideo");
         registerReceiver(jPushReceiver, filter);
+
+
     }
 
     @Override
@@ -748,10 +758,40 @@ public class ActivityHome extends BaseActivity {
         });
     }
 
-    private void autoLogin(){
-        if((Boolean) SPUtils.Companion.get(this, Constants.IS_AUTO_LOGIN, false)){
+    public void sendLoginRequest() {
 
-        }
+        String phoneNumber = SPUtils.Companion.get(this, Constants.PHONE_NUMBER, "").toString();
+        String password = SPUtils.Companion.get(this, Constants.PASSWORD, "").toString();
+        UserLoginLoader userLoginLoader = new UserLoginLoader();
+        Map<String, String> map = new HashMap<>();
+        map.put("phone_number", phoneNumber);
+        map.put("password", password);
+        userLoginLoader.postUserLogin(Constants.LOGIN_URL, phoneNumber, password)
+                .subscribe(new io.reactivex.Observer<BaseResult<UserBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseResult<UserBean> userBeanBaseResult) {
+                        if(userBeanBaseResult.getMessage().equals("success")){
+                            Constants.user = userBeanBaseResult.getResult().get(0);
+                        }else {
+                            showToast(userBeanBaseResult.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 }
