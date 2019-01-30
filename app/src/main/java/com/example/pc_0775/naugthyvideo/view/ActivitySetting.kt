@@ -49,6 +49,9 @@ class ActivitySetting : BaseActivity() {
         }
 
         switch_auto_login.isChecked = SPUtils.get(this, "isAutoLogin", false) as Boolean
+        if (null == Constants.user){
+            ll_setting_auto_login.visibility = View.GONE
+        }
     }
 
     override fun setListener() {

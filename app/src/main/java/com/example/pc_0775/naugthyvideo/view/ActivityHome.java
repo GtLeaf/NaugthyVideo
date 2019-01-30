@@ -777,6 +777,7 @@ public class ActivityHome extends BaseActivity {
                     public void onNext(BaseResult<UserBean> userBeanBaseResult) {
                         if(userBeanBaseResult.getMessage().equals("success")){
                             Constants.user = userBeanBaseResult.getResult().get(0);
+                            setNavigationViewMenu();
                         }else {
                             showToast(userBeanBaseResult.getMessage());
                         }
