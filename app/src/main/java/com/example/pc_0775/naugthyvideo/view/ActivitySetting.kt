@@ -72,6 +72,18 @@ class ActivitySetting : BaseActivity() {
 
             setAutoLogin(isChecked)
         })
+
+        btn_setting_logout.setOnClickListener(object :View.OnClickListener{
+            override fun onClick(v: View?) {
+                if (null == Constants.user){
+                    showToast("请先登录")
+                }else{
+                    Constants.user = null
+                    showToast("登出成功")
+                    finish()
+                }
+            }
+        })
     }
 
     override fun widgetClick(v: View?) {
