@@ -20,6 +20,9 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import android.os.Looper
 import android.os.Message
 import android.widget.*
+import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.options.RegisterOptionalUserInfo
+import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.bean.BaseResult
 import com.example.pc_0775.naugthyvideo.bean.UserBean
 import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader
@@ -113,19 +116,14 @@ class FragmentRegister : Fragment() {
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        init();
-        setListener();
+        init()
+        setListener()
     }
 
-    public override fun onDetach() {
+    override fun onDetach() {
         super.onDetach()
         SMSSDK.unregisterEventHandler(eh)
     }
@@ -150,7 +148,7 @@ class FragmentRegister : Fragment() {
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)
-            fragment.setArguments(args)
+            fragment.arguments = args
             return fragment
         }
     }
@@ -164,10 +162,10 @@ class FragmentRegister : Fragment() {
         //获取验证码
         btn_register_get_identifying_code.setOnClickListener {
             // 在尝试读取通信录时以弹窗提示用户（可选功能）
-            SMSSDK.setAskPermisionOnReadContact(true);
+            SMSSDK.setAskPermisionOnReadContact(true)
 
             if (Constants.isMobileNO(et_register_phone_number.text.toString())){
-                SMSSDK.getVerificationCode(Constants.country, et_register_phone_number.text.toString());
+                SMSSDK.getVerificationCode(Constants.country, et_register_phone_number.text.toString())
             }else{
                 Toast.makeText(activity, "手机号错误", Toast.LENGTH_SHORT)
             }
@@ -194,9 +192,9 @@ class FragmentRegister : Fragment() {
 
             override fun afterTextChanged(s: Editable) {
                 if (Constants.isMobileNO(s.toString())){
-                    iv_register_phone_number_tip.setImageResource(R.drawable.circle_green);
+                    iv_register_phone_number_tip.setImageResource(R.drawable.circle_green)
                 }else{
-                    iv_register_phone_number_tip.setImageResource(R.drawable.circle_red);
+                    iv_register_phone_number_tip.setImageResource(R.drawable.circle_red)
                 }
             }
         })
@@ -237,8 +235,8 @@ class FragmentRegister : Fragment() {
                     iv_register_password_repeat_tip.setImageResource(R.drawable.circle_green)
                     isPasswordConsistentOk = true
                 }else{
-                    iv_register_password_tip.setImageResource(R.drawable.circle_red);
-                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red);
+                    iv_register_password_tip.setImageResource(R.drawable.circle_red)
+                    iv_register_password_repeat_tip.setImageResource(R.drawable.circle_red)
                 }
             }
         })
@@ -289,7 +287,16 @@ class FragmentRegister : Fragment() {
                 Constants.createAlertDialog(activity, "密码不能为空！")
                 return@OnClickListener
             }
-            sendRegisterRequest()
+
+            var userInfo = RegisterOptionalUserInfo()
+            userInfo.nickname = et_register_nickname.text.toString()
+            JMessageClient.register(et_register_phone_number.text.toString(), et_register_password.text.toString(), userInfo, object : BasicCallback(){
+                override fun gotResult(p0: Int, p1: String?) {
+
+                }
+            })
+
+//            sendRegisterRequest()
         })
     }
 

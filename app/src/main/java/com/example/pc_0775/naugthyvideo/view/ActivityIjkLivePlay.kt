@@ -1,28 +1,20 @@
 package com.example.pc_0775.naugthyvideo.view
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
-import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.SeekBar
 import com.example.pc_0775.naugthyvideo.Constants.Constants
-import com.example.pc_0775.naugthyvideo.MyApplication
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.media.AndroidMediaController
-import com.example.pc_0775.naugthyvideo.media.IRenderView
-import com.example.pc_0775.naugthyvideo.media.IjkVideoView
 import kotlinx.android.synthetic.main.activity_ijk_live_play.*
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
-import kotlin.concurrent.timer
 
 
 class ActivityIjkLivePlay : BaseActivity() {

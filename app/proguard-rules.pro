@@ -263,7 +263,7 @@
 # ---------------------错误日志Bugly ----------------------------
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
-# ---------------------极光推送 ----------------------------
+# ---------------------极光推送,消息 ----------------------------
 -dontoptimize
 -dontpreverify
 
@@ -273,3 +273,18 @@
 
 -dontwarn cn.jiguang.**
 -keep class cn.jiguang.** { *; }
+
+-keepattributes  EnclosingMethod,Signature
+
+-dontwarn cn.jmessage.**
+-keep class cn.jmessage.**{ *; }
+
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+
+# ------------------极光验证----------------------------------
+-dontwarn com.cmic.**
+-keep class com.cmic.** { *; }
+-dontwarn com.unicom.**
+-keep class com.unicom.** { *; }

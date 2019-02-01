@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo;
+package com.example.pc_0775.naugthyvideo.app;
 
 import android.app.Activity;
 import android.app.Application;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.im.android.api.JMessageClient;
 import okhttp3.internal.Util;
 
 
@@ -27,6 +28,8 @@ public class MyApplication extends Application {
 //        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        //极光IM
+        JMessageClient.init(this, true);
     }
 
 
