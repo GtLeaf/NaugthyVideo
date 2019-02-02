@@ -12,6 +12,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
@@ -249,7 +252,13 @@ public class FragmentLogin extends Fragment {
                     Constants.createAlertDialog(activity, "密码不能为空");
                     return;
                 }
-                sendPostRequest(phone_number, password);
+//                sendPostRequest(phone_number, password);
+                JMessageClient.login(phone_number, password, new BasicCallback() {
+                    @Override
+                    public void gotResult(int i, String s) {
+                        Log.d("login", "gotResult: "+s);
+                    }
+                });
             }
         });
     }
