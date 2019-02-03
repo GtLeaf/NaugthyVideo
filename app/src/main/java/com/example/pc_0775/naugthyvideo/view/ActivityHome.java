@@ -314,7 +314,7 @@ public class ActivityHome extends BaseActivity {
         nav_userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Constants.user == null){
+                if (Constants.androidDeviceInfo == null){
                     startActivity(ActivityLogin.class);
                 }else {
                     startActivity(ActivityUserInfo.class);

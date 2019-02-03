@@ -8,6 +8,10 @@ import android.text.TextUtils;
 
 import com.example.pc_0775.naugthyvideo.bean.UserBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.jpush.im.android.api.model.DeviceInfo;
 import kotlin.text.Regex;
 import okhttp3.MediaType;
 
@@ -21,6 +25,8 @@ public class Constants {
 
     //用户
     public static UserBean user;
+    public static List<DeviceInfo> deviceInfoList = new ArrayList<>();
+    public static DeviceInfo androidDeviceInfo;
     //国家
     public static String country = "86";
     //直播http://mimiapp.hanya168.com/rar.ashx?action=homelive
@@ -175,7 +181,27 @@ public class Constants {
         }
     }
 
-
+    /*
+    * 极光错误号翻译
+    * */
+    public static String errorCodeTranfom(int errorCode){
+        if (0 == errorCode){
+            return "成功";
+        }
+        if (801003 == errorCode){
+            return "登录的用户名未注册，登录失败";
+        }
+        if (801004 == errorCode){
+            return "登录的用户密码错误，登录失败";
+        }
+        if (801005 == errorCode){
+            return "登录的用户设备有误，登录失败";
+        }
+        if (801006 == errorCode){
+            return "登录的用户被禁用，登录失败";
+        }
+        return "";
+    }
 
 
 

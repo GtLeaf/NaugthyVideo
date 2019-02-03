@@ -38,9 +38,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.RequestCallback;
+import cn.jpush.im.android.api.enums.PlatformType;
+import cn.jpush.im.android.api.model.DeviceInfo;
 import cn.jpush.im.api.BasicCallback;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -253,12 +257,34 @@ public class FragmentLogin extends Fragment {
                     return;
                 }
 //                sendPostRequest(phone_number, password);
-                JMessageClient.login(phone_number, password, new BasicCallback() {
+                userLogin(activity, phone_number, password);
+                /*JMessageClient.login(phone_number, password, new BasicCallback() {
                     @Override
                     public void gotResult(int i, String s) {
-                        Log.d("login", "gotResult: "+s);
+                        Constants.createAlertDialog(activity, Constants.errorCodeTranfom(i));
+                        if (0 == i){
+                            activity.finish();
+                        }
                     }
-                });
+                });*/
+            }
+        });
+    }
+
+    public static void userLogin(final Activity activity, String phone_number, String password){
+        JMessageClient.login(phone_number, password, new RequestCallback<List<DeviceInfo>>() {
+            @Override
+            public void gotResult(int i, String s, List<DeviceInfo> deviceInfos) {
+                Constants.createAlertDialog(activity, Constants.errorCodeTranfom(i));
+                Constants.deviceInfoList = deviceInfos;
+                for (DeviceInfo info : deviceInfos){
+                    if (info.getPlatformType() == PlatformType.android){
+                        Constants.androidDeviceInfo = info;
+                    }
+                }
+                if (0 == i){
+                    activity.finish();
+                }
             }
         });
     }
@@ -328,15 +354,12 @@ public class FragmentLogin extends Fragment {
      * 获取本地数据库中的账号密码
      */
     private void takePassword(){
-        /*if(preferences.getBoolean("isRemember", false)){
-            et_loginName.setText(preferences.getString("phone_number", ""));
-            et_loginPassowrd.setText(preferences.getString("password", ""));
-            cb_rememberPass.setChecked(true);
-        }*/
         if((Boolean) SPUtils.Companion.get(activity, "isRemember", false)){
             et_loginName.setText((String)SPUtils.Companion.get(activity,"phone_number", ""));
             et_loginPassowrd.setText((String)SPUtils.Companion.get(activity,"password", ""));
             cb_rememberPass.setChecked(true);
         }
     }
+
+
 }

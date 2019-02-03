@@ -3,6 +3,7 @@ package com.example.pc_0775.naugthyvideo.fragment
 import android.content.Context
 import android.os.Bundle
 import android.app.Fragment
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Handler
 import android.text.Editable
@@ -21,6 +22,7 @@ import android.os.Looper
 import android.os.Message
 import android.widget.*
 import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.model.UserInfo
 import cn.jpush.im.android.api.options.RegisterOptionalUserInfo
 import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.bean.BaseResult
@@ -290,9 +292,24 @@ class FragmentRegister : Fragment() {
 
             var userInfo = RegisterOptionalUserInfo()
             userInfo.nickname = et_register_nickname.text.toString()
+            if("男" == selectSex){
+                userInfo.gender = UserInfo.Gender.male
+            }else if ("女" == selectSex){
+                userInfo.gender = UserInfo.Gender.female
+            }
+            //发送注册请求
             JMessageClient.register(et_register_phone_number.text.toString(), et_register_password.text.toString(), userInfo, object : BasicCallback(){
                 override fun gotResult(p0: Int, p1: String?) {
-
+                    Constants.createAlertDialog(activity, "提示", p1, "确定") { dialog, which ->
+                        JMessageClient.login(et_register_phone_number.text.toString(), et_register_password.text.toString(), object : BasicCallback(){
+                            override fun gotResult(p0: Int, p1: String?) {
+                                Constants.createAlertDialog(activity, Constants.errorCodeTranfom(p0))
+                                if (0 == p0) {
+                                    activity.finish()
+                                }
+                            }
+                        })
+                    }
                 }
             })
 

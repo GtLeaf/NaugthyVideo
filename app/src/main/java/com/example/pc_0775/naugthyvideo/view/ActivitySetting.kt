@@ -1,12 +1,12 @@
 package com.example.pc_0775.naugthyvideo.view
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
+import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.model.DeviceInfo
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivity
@@ -58,7 +58,7 @@ class ActivitySetting : BaseActivity() {
         switch_play_mode.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
             buttonView, isChecked ->
 
-            setPlayMode(isChecked);
+            setPlayMode(isChecked)
         })
 
         switch_player_select.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener{
@@ -73,17 +73,23 @@ class ActivitySetting : BaseActivity() {
             setAutoLogin(isChecked)
         })
 
-        btn_setting_logout.setOnClickListener(object :View.OnClickListener{
-            override fun onClick(v: View?) {
-                if (null == Constants.user){
+        btn_setting_logout.setOnClickListener { v ->
+            /*if (null == Constants.user){
                     showToast("请先登录")
                 }else{
                     Constants.user = null
                     showToast("登出成功")
                     finish()
-                }
+                }*/
+            if (Constants.androidDeviceInfo != null && Constants.androidDeviceInfo.isLogin){
+                JMessageClient.logout()
+                showToast("登出成功")
+                finish()
+            }else{
+                showToast("登出失败，请先登录")
             }
-        })
+
+        }
     }
 
     override fun widgetClick(v: View?) {
@@ -132,24 +138,4 @@ class ActivitySetting : BaseActivity() {
         SPUtils.put(this, "isAutoLogin", isAutoLogin)
     }
 
-    /*private fun initPreferences(){
-        if (null == preferences){
-            preferences = PreferenceManager.getDefaultSharedPreferences(this)
-            editor = preferences!!.edit()
-        }
-        if (null == editor){
-            if (null == preferences) {
-                return //获取不到
-            }
-            editor = preferences!!.edit()
-        }
-    }*/
-
-    private fun savePreferencesData(){
-
-    }
-
-    private fun takePreferencesData(){
-
-    }
 }
