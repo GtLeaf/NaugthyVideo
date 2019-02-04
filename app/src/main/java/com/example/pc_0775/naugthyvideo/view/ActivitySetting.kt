@@ -49,7 +49,7 @@ class ActivitySetting : BaseActivity() {
         }
 
         switch_auto_login.isChecked = SPUtils.get(this, "isAutoLogin", false) as Boolean
-        if (null == Constants.user){
+        if (null == Constants.userInfo){
             ll_setting_auto_login.visibility = View.GONE
         }
     }
@@ -81,8 +81,9 @@ class ActivitySetting : BaseActivity() {
                     showToast("登出成功")
                     finish()
                 }*/
-            if (Constants.androidDeviceInfo != null && Constants.androidDeviceInfo.isLogin){
+            if (null != Constants.userInfo){
                 JMessageClient.logout()
+                Constants.userInfo = null
                 showToast("登出成功")
                 finish()
             }else{

@@ -49,6 +49,7 @@ import com.example.pc_0775.naugthyvideo.bean.BaseResult;
 import com.example.pc_0775.naugthyvideo.bean.UserBean;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
+import com.example.pc_0775.naugthyvideo.fragment.FragmentLogin;
 import com.example.pc_0775.naugthyvideo.myInterface.BookService;
 import com.example.pc_0775.naugthyvideo.myInterface.MovieService;
 import com.example.pc_0775.naugthyvideo.receiver.SimpleJPushReceiver;
@@ -69,6 +70,9 @@ import java.util.List;
 import java.util.Map;
 
 import cdc.sed.yff.nm.sp.SpotManager;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.RequestCallback;
+import cn.jpush.im.android.api.model.DeviceInfo;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -290,11 +294,12 @@ public class ActivityHome extends BaseActivity {
                         }*/
                         break;
                     case R.id.nav_live_card_slide:
-                        if (Constants.user.isIsVIP()){
+
+                        /*if (Constants.user.isIsVIP()){
                             startActivity(ActivityLiveCardSilde.class);
                         }else {
                             showToast("功能暂未开放");
-                        }
+                        }*/
                         break;
                     case R.id.nav_player:
                         /*playerUrlWindow.showBashOfAnchor(drawer_layout, playerUrlGravity, 0, 0);
@@ -314,7 +319,7 @@ public class ActivityHome extends BaseActivity {
         nav_userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Constants.androidDeviceInfo == null){
+                if (null == Constants.userInfo){
                     startActivity(ActivityLogin.class);
                 }else {
                     startActivity(ActivityUserInfo.class);
@@ -675,7 +680,8 @@ public class ActivityHome extends BaseActivity {
     private void setNavigationViewMenu(){
         MenuItem nav_liveCardSlide = nav_headerView.getMenu().findItem(R.id.nav_live_card_slide);
         MenuItem nav_function = nav_headerView.getMenu().findItem(R.id.nav_function);
-        if (Constants.user == null || !Constants.user.isIsVIP()){
+        //!Constants.user.isIsVIP()需加入vip字段
+        if (null == Constants.userInfo){
             nav_liveCardSlide.setVisible(false);
             nav_liveCardSlide.setEnabled(false);
             nav_function.setVisible(false);
@@ -762,7 +768,7 @@ public class ActivityHome extends BaseActivity {
 
         String phoneNumber = SPUtils.Companion.get(this, Constants.PHONE_NUMBER, "").toString();
         String password = SPUtils.Companion.get(this, Constants.PASSWORD, "").toString();
-        UserLoginLoader userLoginLoader = new UserLoginLoader();
+        /*UserLoginLoader userLoginLoader = new UserLoginLoader();
         Map<String, String> map = new HashMap<>();
         map.put("phone_number", phoneNumber);
         map.put("password", password);
@@ -792,7 +798,24 @@ public class ActivityHome extends BaseActivity {
                     public void onComplete() {
 
                     }
-                });
+                });*/
+        JMessageClient.login(phoneNumber, password, new RequestCallback<List<DeviceInfo>>() {
+            @Override
+            public void gotResult(int i, String s, List<DeviceInfo> deviceInfos) {
+                /*Constants.createAlertDialog(activity, Constants.errorCodeTranfom(i));
+                Constants.deviceInfoList = deviceInfos;
+                for (DeviceInfo info : deviceInfos){
+                    if (info.getPlatformType() == PlatformType.android){
+                        Constants.androidDeviceInfo = info;
+                    }
+                }*/
+                if (0 == i){
+                    Constants.userInfo = JMessageClient.getMyInfo();
+                    showToast("自动登录成功");
+                }
+            }
+        });
+
     }
 
 }

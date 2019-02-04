@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jpush.im.android.api.model.DeviceInfo;
+import cn.jpush.im.android.api.model.UserInfo;
 import kotlin.text.Regex;
 import okhttp3.MediaType;
 
@@ -25,8 +26,11 @@ public class Constants {
 
     //用户
     public static UserBean user;
+    public static UserInfo userInfo;
     public static List<DeviceInfo> deviceInfoList = new ArrayList<>();
     public static DeviceInfo androidDeviceInfo;
+//    public static Boolean isLogin = false;
+
     //国家
     public static String country = "86";
     //直播http://mimiapp.hanya168.com/rar.ashx?action=homelive

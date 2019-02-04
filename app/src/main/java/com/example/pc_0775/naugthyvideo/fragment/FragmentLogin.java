@@ -258,15 +258,6 @@ public class FragmentLogin extends Fragment {
                 }
 //                sendPostRequest(phone_number, password);
                 userLogin(activity, phone_number, password);
-                /*JMessageClient.login(phone_number, password, new BasicCallback() {
-                    @Override
-                    public void gotResult(int i, String s) {
-                        Constants.createAlertDialog(activity, Constants.errorCodeTranfom(i));
-                        if (0 == i){
-                            activity.finish();
-                        }
-                    }
-                });*/
             }
         });
     }
@@ -275,19 +266,21 @@ public class FragmentLogin extends Fragment {
         JMessageClient.login(phone_number, password, new RequestCallback<List<DeviceInfo>>() {
             @Override
             public void gotResult(int i, String s, List<DeviceInfo> deviceInfos) {
-                Constants.createAlertDialog(activity, Constants.errorCodeTranfom(i));
+                /*Constants.createAlertDialog(activity, Constants.errorCodeTranfom(i));
                 Constants.deviceInfoList = deviceInfos;
                 for (DeviceInfo info : deviceInfos){
                     if (info.getPlatformType() == PlatformType.android){
                         Constants.androidDeviceInfo = info;
                     }
-                }
+                }*/
                 if (0 == i){
+                    Constants.userInfo = JMessageClient.getMyInfo();
                     activity.finish();
                 }
             }
         });
     }
+
 
     public void sendPostRequest(String phoneNumber, String password) {
 

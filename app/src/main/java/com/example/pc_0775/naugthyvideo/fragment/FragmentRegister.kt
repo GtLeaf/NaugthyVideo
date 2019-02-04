@@ -300,16 +300,13 @@ class FragmentRegister : Fragment() {
             //发送注册请求
             JMessageClient.register(et_register_phone_number.text.toString(), et_register_password.text.toString(), userInfo, object : BasicCallback(){
                 override fun gotResult(p0: Int, p1: String?) {
-                    Constants.createAlertDialog(activity, "提示", p1, "确定") { dialog, which ->
-                        JMessageClient.login(et_register_phone_number.text.toString(), et_register_password.text.toString(), object : BasicCallback(){
-                            override fun gotResult(p0: Int, p1: String?) {
-                                Constants.createAlertDialog(activity, Constants.errorCodeTranfom(p0))
-                                if (0 == p0) {
-                                    activity.finish()
-                                }
-                            }
-                        })
+                    Constants.createAlertDialog(activity, p1)
+                    //如果注册失败，直接返回
+                    if (0 == p0){
+                        return
                     }
+
+                    FragmentLogin.userLogin(activity, et_register_phone_number.text.toString(), et_register_password.text.toString())
                 }
             })
 
