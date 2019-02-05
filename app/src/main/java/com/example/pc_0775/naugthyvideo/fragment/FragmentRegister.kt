@@ -297,6 +297,9 @@ class FragmentRegister : Fragment() {
             }else if ("女" == selectSex){
                 userInfo.gender = UserInfo.Gender.female
             }
+            var extraParameters = mutableMapOf<String, String>()
+            extraParameters.put("isVIP", "false")
+            userInfo.extras = extraParameters
             //发送注册请求
             JMessageClient.register(et_register_phone_number.text.toString(), et_register_password.text.toString(), userInfo, object : BasicCallback(){
                 override fun gotResult(p0: Int, p1: String?) {

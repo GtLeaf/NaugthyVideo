@@ -55,7 +55,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation fileTree(include: ['*.aar'], dir: 'libs')
-
     //有米广告
     implementation project(':vitamio')
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -74,59 +73,41 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.tencent.bugly:crashreport:2.6.6'
     implementation 'com.jwkj:M3U8Manger:v2.3.0'
-
     //缓存m3u8格式
-
     //ijkplayer
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'
-
     //集成IJK的播放器(只添加引用，未使用) 参考网站：https://blog.csdn.net/Zmq321834649/article/details/79092102
-
     //    compile 'com.dou361.ijkplayer:jjdxm-ijkplayer:1.0.5'
-
     //paging
     implementation 'android.arch.paging:runtime:1.0.0'
-
     // RxKotlin
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-
     // RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-
     // Lifecycle
     implementation 'android.arch.lifecycle:extensions:1.1.1'
-
     //retrofit2
     implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
-
     // 必要rxjava2依赖
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-
     // 必要rxandrroid依赖，切线程时需要用到
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-
     // 必要retrofit依赖
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-
     // 必要依赖，和Rxjava结合必须用到，下面会提到
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-
     //极光推送
     implementation 'cn.jiguang.sdk:jpush:3.1.6'
     implementation 'cn.jiguang.sdk:jmessage:2.8.1'
-
     // 此处以JMessage 2.8.1 版本为例。
     implementation 'cn.jiguang.sdk:jcore:1.2.5'
-
     //BRAVH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-
 }
 
 configurations.all {
