@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityChangeUserInfo">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abl_change_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/toolbar_theme">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:id="@+id/tv_user_info_bar_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="昵称"
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <EditText
+        android:id="@+id/et_change_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        />
+
+</LinearLayout>

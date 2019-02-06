@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
-    <!--极光 Optional -->
+    <!-- 极光 Optional -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -62,12 +62,12 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity android:name=".view.ActivitySetting" />
         <activity android:name=".view.ActivityIjkLivePlay" />
         <activity android:name=".view.ActivityMovieDetail" />
         <activity android:name=".view.ActivityMovieTop250" />
-        <activity android:name=".view.ActivityUserInfo"/>
+        <activity android:name=".view.ActivityUserInfo" />
+        <activity android:name=".view.ActivityChangeUserInfo" />
     </application>
 
 </manifest>

@@ -10,5 +10,6 @@
     <dimen name="movie_detail_magrin">10dp</dimen>
     <dimen name="movie_detail_magrinTop">5dp</dimen>
     <dimen name="movie_detail_lineSpacingExtra_magrin">2dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
