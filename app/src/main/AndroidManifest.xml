@@ -68,6 +68,7 @@
         <activity android:name=".view.ActivityMovieTop250" />
         <activity android:name=".view.ActivityUserInfo" />
         <activity android:name=".view.ActivityChangeUserInfo" />
+        <activity android:name=".view.ActivityChatHome"></activity>
     </application>
 
 </manifest>
