@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pc_0775.naugthyvideo.fragment.FragmentHome">
+    tools:context="com.example.pc_0775.naugthyvideo.fragmentFriendMessage.FragmentHome">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update blfragmentFriendMessagement layout -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_home_main"
         android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
 import kotlinx.android.synthetic.main.activity_change_user_info.*
 
 class ActivityChangeUserInfo : BaseActivityKotlin() {
+
     override fun initParams(params: Bundle?) {
     }
 
@@ -26,4 +27,6 @@ class ActivityChangeUserInfo : BaseActivityKotlin() {
     override fun doBusiness(mContext: Context) {
     }
 
+    override fun widgetClick(v: View) {
+    }
 }

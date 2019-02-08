@@ -35,6 +35,7 @@ public class ActivityFunction extends BaseActivity {
     private Button btn_funtcionClassThree;
     private Button btn_functionTest;
     private Button btn_functionWerewolf;
+    private Button btn_functionChat;
     private EditText et_functionUrl;
 
     //other
@@ -101,6 +102,7 @@ public class ActivityFunction extends BaseActivity {
         btn_functionTest = $(R.id.btn_function_test);
         btn_functionWerewolf = $(R.id.btn_function_werewolf);
         et_functionUrl = $(R.id.et_function_url);
+        btn_functionChat = $(R.id.btn_function_chat);
 
         //注册EventBus
         EventBus.getDefault().register(this);
@@ -113,7 +115,7 @@ public class ActivityFunction extends BaseActivity {
         btn_funtcionClassThree.setOnClickListener(this);
         btn_functionTest.setOnClickListener(this);
         btn_functionWerewolf.setOnClickListener(this);
-
+        btn_functionChat.setOnClickListener(this);
         et_functionUrl.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -165,6 +167,9 @@ public class ActivityFunction extends BaseActivity {
                 break;
             case R.id.btn_function_werewolf:
                 ActivityVideoPlay.actionStart(this.getApplicationContext(), Constants.WEREWOLF_URL, true);
+                break;
+            case R.id.btn_function_chat:
+                startActivity(ActivityChatHome.class);
                 break;
             default:
                 break;

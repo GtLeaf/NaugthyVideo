@@ -56,7 +56,7 @@ class FragmentRegister : Fragment() {
     private var selectSex = "男"
 
     //login
-    internal var eh: EventHandler = object : EventHandler() {
+    private var eh: EventHandler = object : EventHandler() {
 
         override fun afterEvent(event: Int, result: Int, data: Any) {
             // afterEvent会在子线程被调用，因此如果后续有UI相关操作，需要将数据发送到UI线程

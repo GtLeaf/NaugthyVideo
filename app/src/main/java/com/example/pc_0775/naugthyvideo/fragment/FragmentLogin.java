@@ -3,16 +3,13 @@ package com.example.pc_0775.naugthyvideo.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +28,8 @@ import com.example.pc_0775.naugthyvideo.bean.UserBean;
 import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.util.SPUtils;
-import com.example.pc_0775.naugthyvideo.view.ActivityHome;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -43,18 +38,9 @@ import java.util.Map;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.RequestCallback;
-import cn.jpush.im.android.api.enums.PlatformType;
 import cn.jpush.im.android.api.model.DeviceInfo;
-import cn.jpush.im.api.BasicCallback;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.

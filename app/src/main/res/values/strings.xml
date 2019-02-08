@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NaugthyVideo</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragmentFriendMessage</string>
     <!--menu-->
     <string name="BACU_UP">Backup</string>
     <string name="DELETE">Delete</string>
@@ -38,6 +38,10 @@
     <string name="ijk_player">Ijk播放器</string>
     <string name="auto_login">自动登录</string>
     <string name="logout">登     出</string>
+
+    <!--chatHome-->
+    <string name="chat_room">聊天室</string>
+    <string name="friend_message">消息</string>
 
     <!--播放器-->
     <string name="change_ratio">切换比例</string>

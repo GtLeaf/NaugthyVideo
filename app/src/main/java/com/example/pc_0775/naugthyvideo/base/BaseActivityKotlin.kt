@@ -3,15 +3,15 @@ package com.example.pc_0775.naugthyvideo.base
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 
 /**
  * Created by PC-0775 on 2018/12/23.
  */
-abstract class BaseActivityKotlin:AppCompatActivity() {
+abstract class BaseActivityKotlin:AppCompatActivity(), View.OnClickListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +62,25 @@ abstract class BaseActivityKotlin:AppCompatActivity() {
      */
     fun startActivity(clz: Class<*>) {
         startActivity(Intent(this@BaseActivityKotlin, clz))
+    }
+
+    @Throws(Exception::class)
+    abstract fun widgetClick(v:View)
+
+    override fun onClick(v: View?) {
+        try {
+            widgetClick(v!!)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * [简化Toast]
+     * @param msg
+     */
+    protected fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {

@@ -10,6 +10,8 @@ import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
 import kotlinx.android.synthetic.main.activity_user_info.*
 
 class ActivityUserInfo : BaseActivityKotlin() {
+
+
     override fun initParams(params: Bundle?) {
     }
 
@@ -36,4 +38,6 @@ class ActivityUserInfo : BaseActivityKotlin() {
     override fun doBusiness(mContext: Context) {
     }
 
+    override fun widgetClick(v: View) {
+    }
 }

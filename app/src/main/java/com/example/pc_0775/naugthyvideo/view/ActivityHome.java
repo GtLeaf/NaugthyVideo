@@ -274,7 +274,7 @@ public class ActivityHome extends BaseActivity {
                     case R.id.nav_home:
                         break;
                     case R.id.nav_function:
-                        if (Constants.user.isIsVIP()){
+                        if (!Boolean.getBoolean(Constants.userInfo.getExtra("isVIP"))){
                             ActivityFunction.actionStart(ActivityHome.this);
                         }else {
                             showToast("功能暂未开放");
