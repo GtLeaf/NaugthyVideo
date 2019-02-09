@@ -5,7 +5,12 @@ import android.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.jpush.im.android.api.ChatRoomManager
+import cn.jpush.im.android.api.callback.RequestCallback
+import cn.jpush.im.android.api.model.ChatRoomInfo
 import com.example.pc_0775.naugthyvideo.R
+import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
+import io.vov.vitamio.utils.Log
 
 /**
  * Created by PC-0775 on 2019/2/8.
@@ -22,5 +27,10 @@ class FragmentChatRoom : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        ChatRoomManager.getChatRoomListByApp(0, 10, object :RequestCallback<List<ChatRoomInfo>>(){
+            override fun gotResult(p0: Int, p1: String?, p2: List<ChatRoomInfo>?) {
+                Log.d("room","p2")
+            }
+        })
     }
 }
