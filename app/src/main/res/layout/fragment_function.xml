@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc_0775.naugthyvideo.fragmentFriendMessage.FragmentFunction">
+    tools:context="com.example.pc_0775.naugthyvideo.fragmentFriendList.FragmentFunction">
 
     <LinearLayout
         android:layout_width="match_parent"

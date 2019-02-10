@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NaugthyVideo</string>
 
-    <string name="hello_blank_fragment">Hello blank fragmentFriendMessage</string>
+    <string name="hello_blank_fragment">Hello blank fragmentFriendList</string>
     <!--menu-->
     <string name="BACU_UP">Backup</string>
     <string name="DELETE">Delete</string>

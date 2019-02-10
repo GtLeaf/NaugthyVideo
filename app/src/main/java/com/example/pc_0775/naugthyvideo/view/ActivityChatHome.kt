@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.view.View
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
-import com.example.pc_0775.naugthyvideo.fragment.FragmentChatRoom
-import com.example.pc_0775.naugthyvideo.fragment.FragmentFriendMessage
-import io.vov.vitamio.utils.Log
+import com.example.pc_0775.naugthyvideo.fragment.FragmentChatRoomList
+import com.example.pc_0775.naugthyvideo.fragment.FragmentFriendList
 import kotlinx.android.synthetic.main.activity_chat_home.*
 
 class ActivityChatHome : BaseActivityKotlin() {
 
-    //fragmentFriendMessage
-    private var fragmentChatRoom:FragmentChatRoom? = null
-    private var fragmentFriendMessage:FragmentFriendMessage? = null
+    //fragmentFriendList
+    private var fragmentChatRoomList: FragmentChatRoomList? = null
+    private var fragmentFriendList: FragmentFriendList? = null
     private var mFragmentManager = fragmentManager
 
     override fun initParams(params: Bundle?) {
@@ -25,8 +24,8 @@ class ActivityChatHome : BaseActivityKotlin() {
     }
 
     override fun initView(view: View) {
-        fragmentFriendMessage = FragmentFriendMessage()
-        mFragmentManager.beginTransaction().add(R.id.fl_chat_home, fragmentFriendMessage).commit()
+        fragmentFriendList = FragmentFriendList()
+        mFragmentManager.beginTransaction().add(R.id.fl_chat_home, fragmentFriendList).commit()
 
 
     }
@@ -44,19 +43,19 @@ class ActivityChatHome : BaseActivityKotlin() {
 
         when(v.id){
             R.id.tv_friend_msg -> {
-                if (null == fragmentFriendMessage){
-                    fragmentFriendMessage = FragmentFriendMessage()
-                    mFragmentManager.beginTransaction().add(R.id.fl_chat_home, fragmentFriendMessage).commit()
+                if (null == fragmentFriendList){
+                    fragmentFriendList = FragmentFriendList()
+                    mFragmentManager.beginTransaction().add(R.id.fl_chat_home, fragmentFriendList).commit()
                 }else{
-                    mFragmentManager.beginTransaction().show(fragmentFriendMessage).commit()
+                    mFragmentManager.beginTransaction().show(fragmentFriendList).commit()
                 }
             }
             R.id.tv_chat_room -> {
-                if (null == fragmentChatRoom){
-                    fragmentChatRoom = FragmentChatRoom()
-                    mFragmentManager.beginTransaction().add(R.id.fl_chat_home, fragmentChatRoom).commit()
+                if (null == fragmentChatRoomList){
+                    fragmentChatRoomList = FragmentChatRoomList()
+                    mFragmentManager.beginTransaction().add(R.id.fl_chat_home, fragmentChatRoomList).commit()
                 }else{
-                    mFragmentManager.beginTransaction().show(fragmentChatRoom).commit()
+                    mFragmentManager.beginTransaction().show(fragmentChatRoomList).commit()
                 }
             }
             else -> {}
@@ -68,11 +67,11 @@ class ActivityChatHome : BaseActivityKotlin() {
 
         //防止fragment重影
         var transation = mFragmentManager.beginTransaction()
-        if (null != fragmentChatRoom){
-            transation.hide(fragmentChatRoom)
+        if (null != fragmentChatRoomList){
+            transation.hide(fragmentChatRoomList)
         }
-        if(null != fragmentFriendMessage){
-            transation.hide(fragmentFriendMessage)
+        if(null != fragmentFriendList){
+            transation.hide(fragmentFriendList)
         }
 
         transation.commit()
