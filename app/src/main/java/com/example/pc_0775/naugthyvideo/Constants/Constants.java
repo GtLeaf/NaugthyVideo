@@ -114,7 +114,7 @@ public class Constants {
     //intent传输VideoInfo用的标识
     //Map中的资源名称
     public static final String TITLE = "title";
-    public static final String IMG = "img";
+    public static final String IMG = "imgUrl";
     public static final String URL = "url";
 
     //文件存储地址

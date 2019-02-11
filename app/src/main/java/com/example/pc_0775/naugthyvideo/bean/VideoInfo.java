@@ -10,7 +10,7 @@ public class VideoInfo implements Serializable{
     /**
      * title : 第55集
      * url : https://www.12qihu.com/html/12/61976.html
-     * img : https://pppp.642p.com/91/2018/07/VMVkLhXw.gif
+     * imgUrl : https://pppp.642p.com/91/2018/07/VMVkLhXw.gif
      * info : 最新
      */
 

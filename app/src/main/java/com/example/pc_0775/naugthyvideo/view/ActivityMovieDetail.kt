@@ -309,6 +309,7 @@ class ActivityMovieDetail : BaseActivity() {
                 var shortCommentView = ShortCommentaryViewHolder.create(this).bind(comment, this)
                 ll_short_commentary_layout.addView(shortCommentView)
             }*/
+            //map返回一个操作后(可能发生改变)的list，可以级联
             movieEntry.popular_comments
                     .map { ShortCommentaryViewHolder.create(this).bind(it, this) }
                     .forEach { ll_short_commentary_layout.addView(it) }

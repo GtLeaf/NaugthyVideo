@@ -8,7 +8,7 @@ public class LiveRoomInfo {
 
     /**
      * address : rtmp://q12.zmsjzm.com/live/217996_98d1
-     * img : http://1yygqb.com/public/attachment/201810/14/13/5bc2d1bf39929.jpg
+     * imgUrl : http://1yygqb.com/public/attachment/201810/14/13/5bc2d1bf39929.jpg
      * title : qq
      */
 
