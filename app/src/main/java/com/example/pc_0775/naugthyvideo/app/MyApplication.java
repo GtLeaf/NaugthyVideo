@@ -21,8 +21,12 @@ import okhttp3.internal.Util;
 
 public class MyApplication extends Application {
 
+    public static Application mApplication;
+
     public void onCreate() {
         super.onCreate();
+
+        mApplication=this;
 
         CrashReport.initCrashReport(getApplicationContext(), "f93662b4ee", false);
 //        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));

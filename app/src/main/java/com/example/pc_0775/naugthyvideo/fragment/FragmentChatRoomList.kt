@@ -1,7 +1,9 @@
 package com.example.pc_0775.naugthyvideo.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ class FragmentChatRoomList : Fragment(){
 
     private var roomAdapter:AdapterNormal? = null
     private var roomList = ArrayList<NormalItem>()
+    private var mActivity:Activity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,7 @@ class FragmentChatRoomList : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        mActivity = activity
         init()
     }
 
@@ -45,6 +49,7 @@ class FragmentChatRoomList : Fragment(){
             }
         })
         roomAdapter = AdapterNormal(R.layout.item_normal, roomList)
-        rv_chat_room_list
+        rv_chat_room_list.adapter = roomAdapter
+        rv_chat_room_list.layoutManager = LinearLayoutManager(mActivity)
     }
 }
