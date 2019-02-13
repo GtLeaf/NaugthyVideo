@@ -39,7 +39,7 @@ public class SplashActivity extends YoumiBaseActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		// 移除标题栏
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_splash);
+		setContentView(R.layout.activity_splash_ad);
 		
 		// 当系统为6.0以上时，需要申请权限
 		mPermissionHelper = new PermissionHelper(this);
