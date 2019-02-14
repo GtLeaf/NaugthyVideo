@@ -68,6 +68,16 @@ class ChatActvity:BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         mImageMsgBody.thumbUrl = "http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg"
         mMessageImage.body = mImageMsgBody
         mReceiveMsgList.add(mMessageImage)
+        //构建文件消息
+        var mMessageFile = getBaseReceiveMessage(MsgType.FILE)
+        var mFileMsgBody = FileMsgBody()
+        mFileMsgBody.displayName = "收到的文件"
+        mFileMsgBody.size = 12
+        mMessageFile.body = mFileMsgBody
+        mReceiveMsgList.add(mMessageFile)
+        mAdapter!!.addData(mMessageFile)
+        swipe_chat.isRefreshing = false
+
     }
 
     private fun getBaseReceiveMessage(msgType: MsgType):Message{
