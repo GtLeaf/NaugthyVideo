@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.hrl.chaui.R;
+import com.example.pc_0775.naugthyvideo.R;
 
 import java.util.List;
 

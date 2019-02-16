@@ -44,15 +44,17 @@
             android:orientation="horizontal">
 
 
-            <com.hrl.chaui.widget.BubbleImageView
+            <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.BubbleImageView
                 android:id="@+id/bivPic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                 android:transitionName="sharedView"
+                android:transitionName="sharedView"
                 app:angle="6dp"
                 app:arrowHeight="8dp"
                 app:arrowLocation="right"

@@ -2,7 +2,7 @@ package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util;
 
 import android.app.Activity;
 
-import com.hrl.chaui.R;
+import com.example.pc_0775.naugthyvideo.R;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;

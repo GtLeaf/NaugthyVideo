@@ -238,6 +238,7 @@
 -dontwarn cn.waps.**
 # --------------------------- Gilde ---------------------------
 -keep public class * implements com.bumptech.glide.module.GlideModule
+-keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
   **[] $VALUES;
   public *;

@@ -110,6 +110,10 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.2.5'
     //BRAVH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    //选择器
+    implementation 'com.nbsp:library:1.8'
+    //多图选择器
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 
 }
 

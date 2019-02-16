@@ -1,30 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="Panel">
-        <!-- Defines panel animation duration in ms. -->
+        <!--&lt;!&ndash; Defines panel animation duration in ms. &ndash;&gt;
         <attr name="animationDuration" format="integer" />
-        <!-- Defines panel position on the screen. -->
+        &lt;!&ndash; Defines panel position on the screen. &ndash;&gt;
         <attr name="position">
-            <!-- Panel placed at top of the screen. -->
+            &lt;!&ndash; Panel placed at top of the screen. &ndash;&gt;
             <enum name="top" value="0" />
-            <!-- Panel placed at bottom of the screen. -->
+            &lt;!&ndash; Panel placed at bottom of the screen. &ndash;&gt;
             <enum name="bottom" value="1" />
-            <!-- Panel placed at left of the screen. -->
+            &lt;!&ndash; Panel placed at left of the screen. &ndash;&gt;
             <enum name="left" value="2" />
-            <!-- Panel placed at right of the screen. -->
+            &lt;!&ndash; Panel placed at right of the screen. &ndash;&gt;
             <enum name="right" value="3" />
         </attr>
-        <!-- Identifier for the child that represents the panel's handle. -->
+        &lt;!&ndash; Identifier for the child that represents the panel's handle. &ndash;&gt;
         <attr name="handle" format="reference" />
-        <!-- Identifier for the child that represents the panel's content. -->
+        &lt;!&ndash; Identifier for the child that represents the panel's content. &ndash;&gt;
         <attr name="content" format="reference" />
-        <!-- Defines if flying gesture forces linear interpolator in animation. -->
+        &lt;!&ndash; Defines if flying gesture forces linear interpolator in animation. &ndash;&gt;
         <attr name="linearFlying" format="boolean" />
-        <!-- Defines size relative to parent (must be in form: nn%p). -->
+        &lt;!&ndash; Defines size relative to parent (must be in form: nn%p). &ndash;&gt;
         <attr name="weight" format="fraction" />
-        <!-- Defines opened handle (drawable/color). -->
+        &lt;!&ndash; Defines opened handle (drawable/color). &ndash;&gt;
         <attr name="openedHandle" format="reference|color" />
-        <!-- Defines closed handle (drawable/color). -->
-        <attr name="closedHandle" format="reference|color" />
+        &lt;!&ndash; Defines closed handle (drawable/color). &ndash;&gt;
+        <attr name="closedHandle" format="reference|color" />-->
     </declare-styleable>
+
+    <declare-styleable name="IndicatorView">
+        <attr name="indicatorColor" format="color"/>
+        <attr name="indicatorColorSelected" format="color"/>
+        <attr name="indicatorWidth" format="integer"/>
+        <attr name="gravity" format="integer"/>
+    </declare-styleable>
+
+
+
+    <declare-styleable name="StateButton">
+
+        <!--text color-->
+        <attr name="normalTextColor" format="color|reference"/>
+        <attr name="pressedTextColor" format="color|reference"/>
+        <attr name="unableTextColor" format="color|reference"/>
+
+        <!--stroke width and color, dash width, dash gap-->
+        <attr name="strokeDashWidth" format="dimension|reference"/>
+        <attr name="strokeDashGap" format="dimension|reference"/>
+        <attr name="normalStrokeWidth" format="dimension|reference"/>
+        <attr name="pressedStrokeWidth" format="dimension|reference"/>
+        <attr name="unableStrokeWidth" format="dimension|reference"/>
+        <attr name="normalStrokeColor" format="color|reference"/>
+        <attr name="pressedStrokeColor" format="color|reference"/>
+        <attr name="unableStrokeColor" format="color|reference"/>
+
+        <!--background color-->
+        <attr name="normalBackgroundColor" format="color|reference"/>
+        <attr name="pressedBackgroundColor" format="color|reference"/>
+        <attr name="unableBackgroundColor" format="color|reference"/>
+
+        <!--background radius-->
+        <attr name="radius" format="dimension|reference"/>
+        <attr name="round" format="boolean|reference"/>
+
+        <!--animation duration-->
+        <attr name="animationDuration" format="integer|reference"/>
+
+    </declare-styleable>
+
+
+    <declare-styleable name="BubbleView">
+        <attr name="arrowWidth" format="dimension" />
+        <attr name="angle" format="dimension" />
+        <attr name="arrowHeight" format="dimension" />
+        <attr name="arrowPosition" format="dimension" />
+        <attr name="bubbleColor" format="color" />
+        <attr name="arrowLocation" format="enum">
+            <enum name="left" value="0x00" />
+            <enum name="right" value="0x01" />
+            <enum name="top" value="0x02" />
+            <enum name="bottom" value="0x03" />
+        </attr>
+    </declare-styleable>
+
 </resources>

@@ -19,8 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hrl.chaui.R;
-import com.hrl.chaui.util.LogUtil;
+
+import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.LogUtil;
 
 import java.io.File;
 

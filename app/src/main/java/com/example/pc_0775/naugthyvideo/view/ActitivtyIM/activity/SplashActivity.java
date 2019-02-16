@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.LogUtil;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.SetPermissionDialog;
 import com.tbruyelle.rxpermissions2.RxPermissions;

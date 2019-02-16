@@ -3,7 +3,8 @@ package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.emoji;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.hrl.chaui.MyApplication;
+
+import com.example.pc_0775.naugthyvideo.app.MyApplication;
 
 import java.io.File;
 import java.io.FileOutputStream;

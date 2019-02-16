@@ -11,7 +11,7 @@
         android:layout_weight="1">
 
         <RelativeLayout
-            android:id="@+id/rlPhoto"
+            android:id="@+id/rl_photo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -36,7 +36,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlVideo"
+            android:id="@+id/rl_video"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -63,7 +63,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/rlFile"
+            android:id="@+id/rl_file"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -89,7 +89,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/rlLocation"
+            android:id="@+id/rl_location"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">

@@ -10,7 +10,7 @@
     <include layout="@layout/common_titlebar" />
 
     <LinearLayout
-        android:id="@+id/llContent"
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -48,7 +48,7 @@
             >
 
             <ImageView
-                android:id="@+id/ivAudio"
+                android:id="@+id/iv_audio"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="10px"
@@ -73,42 +73,42 @@
                     android:paddingLeft="13dp"
                     android:textSize="11dp" />
 
-                <com.hrl.chaui.widget.RecordButton
-                    android:id="@+id/btnAudio"
+                <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.RecordButton
+                    android:id="@+id/btn_audio"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/shape_session_btn_voice"
                     android:text="按住说话"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:visibility="gone" />
 
 
             </RelativeLayout>
 
             <ImageView
-                android:id="@+id/ivEmo"
+                android:id="@+id/iv_emoji"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="10px"
                 android:src="@mipmap/ic_emoji" />
 
             <ImageView
-                android:id="@+id/ivAdd"
+                android:id="@+id/iv_add"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10px"
                 android:layout_marginRight="14px"
                 android:src="@mipmap/ic_add" />
 
-            <com.hrl.chaui.widget.StateButton
+            <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.StateButton
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:padding="1dp"
                 android:layout_marginRight="10dp"
                 android:text="发送"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textColor="@color/white"
                 android:visibility="gone"
                 app:normalBackgroundColor="#127CD6"
@@ -127,13 +127,13 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/bottom_layout"
+        android:id="@+id/rl_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">
         <!--表情-->
         <include
-            android:id="@+id/rlEmotion"
+            android:id="@+id/ll_emotion"
             layout="@layout/include_emoji_layout"
             android:visibility="gone" />
 

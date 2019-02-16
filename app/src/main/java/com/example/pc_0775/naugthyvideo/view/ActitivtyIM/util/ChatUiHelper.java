@@ -24,13 +24,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.hrl.chaui.R;
-import com.hrl.chaui.emoji.EmojiAdapter;
-import com.hrl.chaui.emoji.EmojiBean;
-import com.hrl.chaui.emoji.EmojiDao;
-import com.hrl.chaui.emoji.EmojiVpAdapter;
-import com.hrl.chaui.widget.IndicatorView;
-import com.hrl.chaui.widget.RecordButton;
+import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.emoji.EmojiAdapter;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.emoji.EmojiBean;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.emoji.EmojiDao;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.emoji.EmojiVpAdapter;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.IndicatorView;
+import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.RecordButton;
+
 
 import java.util.ArrayList;
 import java.util.List;

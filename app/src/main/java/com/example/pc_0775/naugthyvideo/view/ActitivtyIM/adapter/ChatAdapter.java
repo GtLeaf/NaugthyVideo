@@ -61,7 +61,7 @@ public class ChatAdapter extends BaseQuickAdapter<Message,BaseViewHolder> {
         setMultiTypeDelegate(new MultiTypeDelegate<Message>() {
             @Override
             protected int getItemType(Message entity) {
-              boolean isSend = entity.getSenderId().equals(ChatActivity.mSenderId);
+              boolean isSend = entity.getSenderId().equals(ChatActivity.Companion.getMSenderId());
                if (MsgType.TEXT==entity.getMsgType()) {
                     return isSend ? TYPE_SEND_TEXT : TYPE_RECEIVE_TEXT;
                 }else if(MsgType.IMAGE==entity.getMsgType()){
@@ -103,7 +103,7 @@ public class ChatAdapter extends BaseQuickAdapter<Message,BaseViewHolder> {
                 || msgContent instanceof AudioMsgBody ||msgContent instanceof VideoMsgBody ||msgContent instanceof FileMsgBody) {
             //只需要设置自己发送的状态
             MsgSendStatus sentStatus = item.getSentStatus();
-            boolean isSend = item.getSenderId().equals(ChatActivity.mSenderId);
+            boolean isSend = item.getSenderId().equals(ChatActivity.Companion.getMSenderId());
             if (isSend){
                 if (sentStatus == MsgSendStatus.SENDING) {
                     helper.setVisible(R.id.chat_item_progress, true).setVisible(R.id.chat_item_fail, false);
@@ -114,7 +114,7 @@ public class ChatAdapter extends BaseQuickAdapter<Message,BaseViewHolder> {
                 }
             }
         } else if (msgContent instanceof ImageMsgBody) {
-            boolean isSend = item.getSenderId().equals(ChatActivity.mSenderId);
+            boolean isSend = item.getSenderId().equals(ChatActivity.Companion.getMSenderId());
             if (isSend) {
                 MsgSendStatus sentStatus = item.getSentStatus();
                 if (sentStatus == MsgSendStatus.SENDING) {

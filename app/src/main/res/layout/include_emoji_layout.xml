@@ -22,7 +22,7 @@
 
 
 
-        <com.hrl.chaui.widget.IndicatorView
+        <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.IndicatorView
             android:id="@+id/ind_emoji"
             android:layout_width="match_parent"
             android:layout_height="20dp"

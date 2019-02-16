@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.hrl.chaui.R;
+import com.example.pc_0775.naugthyvideo.R;
 
 
 public class GlideUtils {

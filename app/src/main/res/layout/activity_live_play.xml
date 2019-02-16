@@ -55,5 +55,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:text="@string/change_ratio"
-        android:onClick="changeLayout"/>
+        android:onClick="changeLayout" />
 </RelativeLayout>

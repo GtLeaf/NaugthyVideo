@@ -58,7 +58,7 @@
                     android:background="@drawable/message_text_send">
 
                     <ImageView
-                         android:id="@+id/ivAudio"
+                         android:id="@+id/iv_audio"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_alignParentRight="true"
