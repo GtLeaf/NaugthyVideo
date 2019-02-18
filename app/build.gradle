@@ -110,7 +110,10 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.2.5'
     //BRAVH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-
+    //多图选择器
+    implementation ('com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'){
+        exclude group: 'com.github.bumptech.glide'
+    }
 }
 
 configurations.all {
