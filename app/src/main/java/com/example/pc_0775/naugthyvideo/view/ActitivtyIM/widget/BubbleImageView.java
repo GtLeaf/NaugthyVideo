@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 
-import com.hrl.chaui.R;
+import com.example.pc_0775.naugthyvideo.R;
 
 
 /**

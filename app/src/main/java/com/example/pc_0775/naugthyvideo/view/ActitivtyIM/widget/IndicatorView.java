@@ -11,7 +11,8 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import com.hrl.chaui.R;
+import com.example.pc_0775.naugthyvideo.R;
+
 
 public class IndicatorView extends LinearLayout {
 

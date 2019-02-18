@@ -12,6 +12,7 @@ import android.support.annotation.IntRange;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
+import com.example.pc_0775.naugthyvideo.R;
 
 
 public class StateButton extends AppCompatButton {
