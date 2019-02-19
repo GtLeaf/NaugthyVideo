@@ -812,6 +812,7 @@ public class ActivityHome extends BaseActivity {
                 if (0 == i){
                     Constants.userInfo = JMessageClient.getMyInfo();
                     showToast("自动登录成功");
+                    setNavigationViewMenu();
                 }
             }
         });

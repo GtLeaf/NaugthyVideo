@@ -45,6 +45,9 @@ class FragmentChatRoomList : Fragment(){
                 Log.d("room","p2")
                 p2!!.forEach{
                     roomList.add(NormalItem(it.roomID, "null", it.name, it.description))
+                    if (roomAdapter != null){
+                        roomAdapter!!.notifyDataSetChanged()
+                    }
                 }
             }
         })

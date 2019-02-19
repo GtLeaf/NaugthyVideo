@@ -29,7 +29,6 @@ public class Constants {
     public static UserInfo userInfo;
     public static List<DeviceInfo> deviceInfoList = new ArrayList<>();
     public static DeviceInfo androidDeviceInfo;
-//    public static Boolean isLogin = false;
 
     //国家
     public static String country = "86";
