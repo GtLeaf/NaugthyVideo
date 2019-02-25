@@ -1,5 +1,6 @@
 package com.example.pc_0775.naugthyvideo.base;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -32,16 +33,22 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
         Bundle bundle = getArguments();
         initParams(bundle);
-        view = bindView(inflater);
+        view = bindView(inflater, container);
         initView(view);
         mIsPrepare = true;
         setListener();
         doBusiness();
         return view;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     protected abstract void initParams(Bundle bundle);
 
-    protected abstract View bindView(LayoutInflater inflater);
+    protected abstract View bindView(LayoutInflater inflater, ViewGroup container);
 
     protected abstract void initView(final View view);
 
@@ -67,7 +74,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public void startActivity(Class<?> clz) {
-        startActivity(new Intent(getContext(),clz));
+//        startActivity(new Intent(getContext(),clz));
+        startActivity(new Intent(mContext,clz));
     }
 
     /**
