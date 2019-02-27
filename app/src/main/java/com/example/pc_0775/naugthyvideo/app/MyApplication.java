@@ -28,6 +28,7 @@ public class MyApplication extends Application {
 
         mApplication=this;
 
+        //注册消息监听
         CrashReport.initCrashReport(getApplicationContext(), "f93662b4ee", false);
 //        Thread.setDefaultUncaughtExceptionHandler(CrashExceptionHandler.Companion.getInstance(this));
         JPushInterface.setDebugMode(true);
@@ -36,5 +37,8 @@ public class MyApplication extends Application {
         JMessageClient.init(this, true);
     }
 
-
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
 }

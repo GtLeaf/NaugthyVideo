@@ -24,6 +24,9 @@ public class Constants {
 
 
 
+    //包名
+    public static final String PACKAGE = "com.example.pc_0775.naugthyvideo";
+
     //用户
     public static UserBean user;
     public static UserInfo userInfo;

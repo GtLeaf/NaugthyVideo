@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.app.MyApplication;
 
 import java.io.File;
@@ -65,7 +66,7 @@ public class EmojiDao {
     public static String CopySqliteFileFromRawToDatabases(String SqliteFileName) throws IOException {
         // 第一次运行应用程序时，加载数据库到data/data/当前包的名称/database/<db_name>
         //复制的话这里需要换成自己项目的包名
-        File dir = new File("data/data/" + "com.hrl.chaui" + "/databases");
+        File dir = new File("data/data/" + Constants.PACKAGE + "/databases");
 
         if (!dir.exists() || !dir.isDirectory()) {
             dir.mkdir();

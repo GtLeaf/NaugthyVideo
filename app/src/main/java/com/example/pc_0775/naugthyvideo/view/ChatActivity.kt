@@ -1,10 +1,9 @@
-package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.activity
+package com.example.pc_0775.naugthyvideo.view
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Picture
 import android.graphics.drawable.AnimationDrawable
 import android.media.MediaMetadataRetriever
 import android.os.Bundle
@@ -22,13 +21,28 @@ import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.ChatUiHelper
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.LogUtil
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.PictureFileUtil
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.MediaManager
-import android.media.MediaPlayer
 import android.os.Environment
+import cn.jpush.im.android.api.ChatRoomManager
+import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.callback.RequestCallback
+import cn.jpush.im.android.api.content.TextContent
+import cn.jpush.im.android.api.event.ChatRoomMessageEvent
+import cn.jpush.im.android.api.event.ChatRoomNotificationEvent
+import cn.jpush.im.android.api.model.ChatRoomInfo
+import cn.jpush.im.android.api.model.Conversation
+import cn.jpush.im.api.BasicCallback
+import com.example.pc_0775.naugthyvideo.Constants.Constants
+import com.example.pc_0775.naugthyvideo.bean.MessageEvent
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.FileUtils
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.entity.LocalMedia
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.common_titlebar.*
+import kotlinx.android.synthetic.main.include_add_layout.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -42,6 +56,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
     private var ivAudio:ImageView? = null
     private var mAdapter:ChatAdapter? = null
+    private var currentRoom:ChatRoomInfo? = null
 
 
     companion object{
@@ -60,6 +75,8 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun initView(view: View) {
+        //注册evenBus
+        EventBus.getDefault().register(this)
         mAdapter = ChatAdapter(this, ArrayList<Message>())
         rv_chat_list.layoutManager = LinearLayoutManager(this)
         rv_chat_list.adapter = mAdapter
@@ -75,7 +92,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
                 ivAudio = view.findViewById(R.id.iv_audio)
                 MediaManager.reset()
                 ivAudio!!.setBackgroundResource(R.drawable.audio_animation_right_list)
-                var drawable = ivAudio!!.background as AnimationDrawable
+                val drawable = ivAudio!!.background as AnimationDrawable
                 drawable.start()
                 MediaManager.playSound(this@ChatActivity, (mAdapter!!.data.get(position).body as AudioMsgBody).localPath) {
                     LogUtil.d("播放结束")
@@ -88,9 +105,25 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun setListener() {
+        btn_send.setOnClickListener(this)
+        iv_common_title_bar_back.setOnClickListener(this)
+        rl_photo.setOnClickListener(this)
+        rl_video.setOnClickListener(this)
+        rl_file.setOnClickListener(this)
+        rl_location.setOnClickListener(this)
     }
 
     override fun doBusiness(mContext: Context) {
+        //注册消息接收
+        JMessageClient.registerEventReceiver(this);
+    }
+
+    override fun onDestroy() {
+        JMessageClient.unRegisterEventReceiver(this)
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this)
+        }
+        super.onDestroy()
     }
 
     override fun widgetClick(v: View) {
@@ -109,33 +142,36 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
                 PictureFileUtil.openFile(this, REQUEST_CODE_FILE)
             }
             R.id.rl_location -> {}
+            R.id.iv_common_title_bar_back ->{
+                onBackPressed()
+            }
             else ->{}
         }
     }
 
     override fun onRefresh() {
         //下拉刷新模拟获取历史消息
-        var mReceiveMsgList = ArrayList<Message>()
+        val mReceiveMsgList = ArrayList<Message>()
         //构建文本消息
-        var mMessageText = getBaseReceiveMessage(MsgType.TEXT)
-        var mTextMsgBody = TextMsgBody()
+        val mMessageText = getBaseReceiveMessage(MsgType.TEXT)
+        val mTextMsgBody = TextMsgBody()
         mTextMsgBody.message = "收到的消息"
         mMessageText.body = mTextMsgBody
         mReceiveMsgList.add(mMessageText)
         //构建图片消息
-        var mMessageImage = getBaseReceiveMessage(MsgType.IMAGE)
-        var mImageMsgBody = ImageMsgBody()
+        val mMessageImage = getBaseReceiveMessage(MsgType.IMAGE)
+        val mImageMsgBody = ImageMsgBody()
         mImageMsgBody.thumbUrl = "http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg"
         mMessageImage.body = mImageMsgBody
         mReceiveMsgList.add(mMessageImage)
         //构建文件消息
-        var mMessageFile = getBaseReceiveMessage(MsgType.FILE)
-        var mFileMsgBody = FileMsgBody()
+        val mMessageFile = getBaseReceiveMessage(MsgType.FILE)
+        val mFileMsgBody = FileMsgBody()
         mFileMsgBody.displayName = "收到的文件"
         mFileMsgBody.size = 12
         mMessageFile.body = mFileMsgBody
         mReceiveMsgList.add(mMessageFile)
-        mAdapter!!.addData(mMessageFile)
+        mAdapter!!.addData(0, mReceiveMsgList)
         swipe_chat.isRefreshing = false
 
     }
@@ -178,7 +214,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         //
         btn_audio.setOnFinishedRecordListener{ audioPath, time ->  
             LogUtil.d("录音结束回调")
-            var file = File(audioPath)
+            val file = File(audioPath)
             if (file.exists()){
                 sendAudioMessage(audioPath, time)
             }
@@ -191,13 +227,13 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
             when(requestCode){
                 REQUEST_CODE_FILE -> {
                     //文件选择结果回调
-                    var filePath = data!!.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
+                    val filePath = data!!.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
                     LogUtil.d("获取到的文件路径:" + filePath)
                     sendFileMessage(mSenderId, mTargetId, filePath)
                 }
                 REQUEST_CODE_IMAGE -> {
                     // 图片选择结果回调
-                    var selectListPic = PictureSelector.obtainMultipleResult(data)
+                    val selectListPic = PictureSelector.obtainMultipleResult(data)
                     /*for ( media in selectListPic){
                         LogUtil.d("获取图片路径成功:" + media.path)
                         sendImageMessage(media)
@@ -210,7 +246,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
                 }
                 REQUEST_CODE_VEDIO -> {
                     // 视频选择结果回调
-                    var selectListVideo = PictureSelector.obtainMultipleResult(data)
+                    val selectListVideo = PictureSelector.obtainMultipleResult(data)
                     selectListVideo.forEach {
                         LogUtil.d("获取视频路径成功:" + it.getPath())
                         sendVedioMessage(it)
@@ -226,16 +262,37 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         var mMessage = getBaseSendMessage(MsgType.TEXT)
         var mTextMsgBody = TextMsgBody()
         mTextMsgBody.message = text
+        mMessage.body = mTextMsgBody
         //开始发送
         mAdapter!!.addData(mMessage)
+
+        //将消息发上服务器
+        var conv = JMessageClient.getChatRoomConversation(currentRoom!!.roomID)
+        if (null == conv){
+            conv = Conversation.createChatRoomConversation(currentRoom!!.roomID)
+        }
+        val msg = conv.createSendTextMessage(text)
+        msg.setOnSendCompleteCallback(object :BasicCallback(){
+            override fun gotResult(p0: Int, p1: String?) {
+                if (0 == p0){
+                    msgCompleteUpdate(mMessage)
+                }else{
+                    showToast("消息发送失败")
+                }
+            }
+        })
+        JMessageClient.sendMessage(msg)
+        rv_chat_list.scrollToPosition(mAdapter!!.itemCount - 1)
+
         //模拟两秒后发送成功
+
         updateMsg(mMessage)
     }
 
     //发送音频文件
     private fun sendAudioMessage(path:String, time:Int){
         val mMessage = getBaseSendMessage(MsgType.AUDIO)
-        var mFileMsgBody = AudioMsgBody()
+        val mFileMsgBody = AudioMsgBody()
         mFileMsgBody.localPath = path
         mFileMsgBody.duration = time.toLong()
         mMessage.body = mFileMsgBody
@@ -273,19 +330,19 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     private fun sendVedioMessage(media:LocalMedia){
         val mMessage = getBaseSendMessage(MsgType.VIDEO)
         //生成缩略图路径
-        var vedioPath = media.path
-        var mediaMetadataRetriever = MediaMetadataRetriever()
+        val vedioPath = media.path
+        val mediaMetadataRetriever = MediaMetadataRetriever()
         mediaMetadataRetriever.setDataSource(vedioPath)
-        var bitmap = mediaMetadataRetriever.frameAtTime
-        var imgName = System.currentTimeMillis().toString() + ".jpg"
+        val bitmap = mediaMetadataRetriever.frameAtTime
+        val imgName = System.currentTimeMillis().toString() + ".jpg"
         //路径拼接??
-        var urlPath = Environment.getExternalStorageDirectory().path + "/" + imgName
-        var f = File(urlPath)
+        val urlPath = Environment.getExternalStorageDirectory().path + "/" + imgName
+        val f = File(urlPath)
         try {
             if (f.exists()){
                 f.delete()
             }
-            var out = FileOutputStream(f)
+            val out = FileOutputStream(f)
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
             out.flush()
             out.close()
@@ -293,7 +350,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
             LogUtil.d("视频缩略图路径获取失败：" + e.toString())
             e.printStackTrace()
         }
-        var mVideoMsgBody = VideoMsgBody()
+        val mVideoMsgBody = VideoMsgBody()
         mVideoMsgBody.extra = urlPath
         mMessage.body = mVideoMsgBody
         //开始发送
@@ -341,4 +398,72 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
         }, 2000)
     }
+
+    private fun msgCompleteUpdate(mMessage:Message){
+        var position = 0
+        mMessage.sentStatus = MsgSendStatus.SENT
+        //更新单个子条目
+        for (i in 0 until mAdapter!!.data.size) {
+            val mAdapterMessage = mAdapter!!.data[i]
+            if (mMessage.uuid == mAdapterMessage.uuid) {
+                position = i
+            }
+        }
+        mAdapter!!.notifyItemChanged(position)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun event(chatRoomInfo: ChatRoomInfo) {
+        currentRoom = chatRoomInfo
+        //进入聊天室
+        ChatRoomManager.enterChatRoom(chatRoomInfo.roomID, object :RequestCallback<Conversation>(){
+            override fun gotResult(p0: Int, p1: String?, p2: Conversation?) {
+                var responseCode = p0
+                var responseMessage = p1
+                //弹框进入成功前阻止所有操作
+
+                //进入失败直接退出
+                if (871323 == p0){
+                    Constants.createAlertDialog(this@ChatActivity, p1)
+                    finish()
+                }
+            }
+        })
+    }
+
+
+    public fun onEventMainThread(event: ChatRoomMessageEvent ){
+        var msgs = event.messages
+        val mReceiveMsgList = ArrayList<Message>()
+
+        msgs.forEach{
+            val mMessageText = getBaseReceiveMessage(MsgType.TEXT)
+            val mTextMsgBody = TextMsgBody()
+            mTextMsgBody.message = (it.content as TextContent).text
+            mMessageText.body = mTextMsgBody
+            mReceiveMsgList.add(mMessageText)
+        }
+
+
+        mAdapter!!.addData(mReceiveMsgList)
+    }
+
+    private fun onMyBackPressed(){
+        //如果已经进入房间，就退出房间，否则直接结束activity
+        if (null != currentRoom){
+            ChatRoomManager.leaveChatRoom(currentRoom!!.roomID, object :BasicCallback(){
+                override fun gotResult(p0: Int, p1: String?) {
+                    var responseCode = p0
+                    var responseMessage = p1
+                }
+            })
+        }
+
+    }
+
+    override fun onBackPressed() {
+        onMyBackPressed()
+        super.onBackPressed()
+    }
+
 }

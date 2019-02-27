@@ -13,7 +13,7 @@
         android:orientation="vertical"
         >
 
-    <com.hrl.chaui.widget.WrapContentHeightViewPager
+    <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.WrapContentHeightViewPager
         android:id="@+id/vp_emoji"
          android:layout_width="match_parent"
         android:layout_height="wrap_content"

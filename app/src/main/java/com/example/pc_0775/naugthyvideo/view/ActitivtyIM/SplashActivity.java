@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.activity;
+package com.example.pc_0775.naugthyvideo.view.ActitivtyIM;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.LogUtil;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.SetPermissionDialog;
+import com.example.pc_0775.naugthyvideo.view.ChatActivity;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import io.reactivex.functions.Consumer;

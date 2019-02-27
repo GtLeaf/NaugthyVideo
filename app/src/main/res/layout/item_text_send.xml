@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textColor="#999999"
-        android:textSize="12dp"
-         android:visibility="gone" />
+        android:textSize="12sp"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp">
 
-        <com.hrl.chaui.widget.CircleImageView
+        <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.CircleImageView
             android:id="@+id/chat_item_header"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -50,7 +50,7 @@
                 android:background="@drawable/message_text_send"
                 android:text="你好"
                 android:textColor="#333333"
-                android:textSize="14dp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

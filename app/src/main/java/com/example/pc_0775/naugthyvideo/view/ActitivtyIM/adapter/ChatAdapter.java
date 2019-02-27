@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.activity.ChatActivity;
+import com.example.pc_0775.naugthyvideo.view.ChatActivity;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.AudioMsgBody;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.FileMsgBody;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.ImageMsgBody;
