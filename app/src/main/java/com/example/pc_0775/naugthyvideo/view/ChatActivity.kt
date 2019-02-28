@@ -50,16 +50,15 @@ import java.util.*
 /**
  * Created by PC-0775 on 2019/2/12.
  */
-class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
+class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
 
+    private var ivAudio: ImageView? = null
+    private var mAdapter: ChatAdapter? = null
+    private var currentRoom: ChatRoomInfo? = null
 
-    private var ivAudio:ImageView? = null
-    private var mAdapter:ChatAdapter? = null
-    private var currentRoom:ChatRoomInfo? = null
 
-
-    companion object{
+    companion object {
         val mSenderId = "right"
         val mTargetId = "left"
         val REQUEST_CODE_IMAGE = 1000
@@ -82,12 +81,12 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         rv_chat_list.adapter = mAdapter
         swipe_chat.setOnRefreshListener(this)
         initChatUi()
-        mAdapter!!.setOnItemChildClickListener{ adapter, view, position ->
-            if (ivAudio != null){
+        mAdapter!!.setOnItemChildClickListener { adapter, view, position ->
+            if (ivAudio != null) {
                 ivAudio!!.setBackgroundResource(R.mipmap.audio_animation_list_right_3)
                 ivAudio = null
                 MediaManager.reset()
-            }else{
+            } else {
                 //是哪个xml中的iv_audio??
                 ivAudio = view.findViewById(R.id.iv_audio)
                 MediaManager.reset()
@@ -120,14 +119,14 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onDestroy() {
         JMessageClient.unRegisterEventReceiver(this)
-        if (EventBus.getDefault().isRegistered(this)){
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
         super.onDestroy()
     }
 
     override fun widgetClick(v: View) {
-        when(v.id){
+        when (v.id) {
             R.id.btn_send -> {
                 sendTextMessage(et_content.text.toString())
                 et_content.setText("")
@@ -141,11 +140,13 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
             R.id.rl_file -> {
                 PictureFileUtil.openFile(this, REQUEST_CODE_FILE)
             }
-            R.id.rl_location -> {}
-            R.id.iv_common_title_bar_back ->{
+            R.id.rl_location -> {
+            }
+            R.id.iv_common_title_bar_back -> {
                 onBackPressed()
             }
-            else ->{}
+            else -> {
+            }
         }
     }
 
@@ -176,7 +177,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
-    private fun initChatUi(){
+    private fun initChatUi() {
         //mBtnAudio
         val mUiHelper = ChatUiHelper.with(this)
         mUiHelper.bindContentLayout(ll_content)
@@ -192,10 +193,10 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
                 .bindEmojiData()
         //底部布局弹出,聊天列表上滑
         rv_chat_list.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            if (bottom < oldBottom){
-                rv_chat_list.post(object :Runnable{ //为什么要开线程？
+            if (bottom < oldBottom) {
+                rv_chat_list.post(object : Runnable { //为什么要开线程？
                     override fun run() {
-                        if (mAdapter!!.itemCount > 0){
+                        if (mAdapter!!.itemCount > 0) {
                             rv_chat_list.smoothScrollToPosition(mAdapter!!.itemCount - 1)
                         }
                     }
@@ -212,10 +213,10 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
             false
         }
         //
-        btn_audio.setOnFinishedRecordListener{ audioPath, time ->  
+        btn_audio.setOnFinishedRecordListener { audioPath, time ->
             LogUtil.d("录音结束回调")
             val file = File(audioPath)
-            if (file.exists()){
+            if (file.exists()) {
                 sendAudioMessage(audioPath, time)
             }
         }
@@ -223,8 +224,8 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK){
-            when(requestCode){
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
                 REQUEST_CODE_FILE -> {
                     //文件选择结果回调
                     val filePath = data!!.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
@@ -252,13 +253,14 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
                         sendVedioMessage(it)
                     }
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
 
     //发送文本消息
-    private fun sendTextMessage(text:String){
+    private fun sendTextMessage(text: String) {
         var mMessage = getBaseSendMessage(MsgType.TEXT)
         var mTextMsgBody = TextMsgBody()
         mTextMsgBody.message = text
@@ -268,15 +270,15 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
         //将消息发上服务器
         var conv = JMessageClient.getChatRoomConversation(currentRoom!!.roomID)
-        if (null == conv){
+        if (null == conv) {
             conv = Conversation.createChatRoomConversation(currentRoom!!.roomID)
         }
         val msg = conv.createSendTextMessage(text)
-        msg.setOnSendCompleteCallback(object :BasicCallback(){
+        msg.setOnSendCompleteCallback(object : BasicCallback() {
             override fun gotResult(p0: Int, p1: String?) {
-                if (0 == p0){
+                if (0 == p0) {
                     msgCompleteUpdate(mMessage)
-                }else{
+                } else {
                     showToast("消息发送失败")
                 }
             }
@@ -290,7 +292,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     //发送音频文件
-    private fun sendAudioMessage(path:String, time:Int){
+    private fun sendAudioMessage(path: String, time: Int) {
         val mMessage = getBaseSendMessage(MsgType.AUDIO)
         val mFileMsgBody = AudioMsgBody()
         mFileMsgBody.localPath = path
@@ -303,7 +305,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     //发送文件消息
-    private fun sendFileMessage(from:String, to:String, path: String){
+    private fun sendFileMessage(from: String, to: String, path: String) {
         val mMessage = getBaseSendMessage(MsgType.FILE)
         val mFileMsgBody = FileMsgBody()
         mFileMsgBody.localPath = path
@@ -315,7 +317,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     //图片消息
-    private fun sendImageMessage(media:LocalMedia){
+    private fun sendImageMessage(media: LocalMedia) {
         val mMessage = getBaseSendMessage(MsgType.IMAGE)
         val mImageMsgBody = ImageMsgBody()
         mImageMsgBody.thumbUrl = media.compressPath
@@ -327,7 +329,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     //视频消息
-    private fun sendVedioMessage(media:LocalMedia){
+    private fun sendVedioMessage(media: LocalMedia) {
         val mMessage = getBaseSendMessage(MsgType.VIDEO)
         //生成缩略图路径
         val vedioPath = media.path
@@ -339,14 +341,14 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         val urlPath = Environment.getExternalStorageDirectory().path + "/" + imgName
         val f = File(urlPath)
         try {
-            if (f.exists()){
+            if (f.exists()) {
                 f.delete()
             }
             val out = FileOutputStream(f)
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
             out.flush()
             out.close()
-        }catch (e:Exception){
+        } catch (e: Exception) {
             LogUtil.d("视频缩略图路径获取失败：" + e.toString())
             e.printStackTrace()
         }
@@ -359,7 +361,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         updateMsg(mMessage)
     }
 
-    private fun getBaseSendMessage(msgType: MsgType):Message{
+    private fun getBaseSendMessage(msgType: MsgType): Message {
         var mMessage = Message()
         mMessage.uuid = UUID.randomUUID().toString()
         mMessage.senderId = mSenderId
@@ -370,7 +372,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         return mMessage
     }
 
-    private fun getBaseReceiveMessage(msgType: MsgType):Message{
+    private fun getBaseReceiveMessage(msgType: MsgType): Message {
         var mMessage = Message()
         mMessage.uuid = UUID.randomUUID().toString()
         mMessage.senderId = mTargetId
@@ -381,7 +383,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         return mMessage
     }
 
-    private fun updateMsg(mMessage:Message){
+    private fun updateMsg(mMessage: Message) {
         rv_chat_list.scrollToPosition(mAdapter!!.itemCount - 1)
         //模拟2秒后发送成
         Handler().postDelayed({
@@ -399,7 +401,7 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
         }, 2000)
     }
 
-    private fun msgCompleteUpdate(mMessage:Message){
+    private fun msgCompleteUpdate(mMessage: Message) {
         var position = 0
         mMessage.sentStatus = MsgSendStatus.SENT
         //更新单个子条目
@@ -416,14 +418,14 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     fun event(chatRoomInfo: ChatRoomInfo) {
         currentRoom = chatRoomInfo
         //进入聊天室
-        ChatRoomManager.enterChatRoom(chatRoomInfo.roomID, object :RequestCallback<Conversation>(){
+        ChatRoomManager.enterChatRoom(chatRoomInfo.roomID, object : RequestCallback<Conversation>() {
             override fun gotResult(p0: Int, p1: String?, p2: Conversation?) {
                 var responseCode = p0
                 var responseMessage = p1
                 //弹框进入成功前阻止所有操作
 
                 //进入失败直接退出
-                if (871323 == p0){
+                if (871323 == p0) {
                     Constants.createAlertDialog(this@ChatActivity, p1)
                     finish()
                 }
@@ -432,26 +434,32 @@ class ChatActivity :BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
     }
 
 
-    public fun onEventMainThread(event: ChatRoomMessageEvent ){
-        var msgs = event.messages
+    fun onEventMainThread(event: ChatRoomMessageEvent) {
+        val msgs = event.messages
         val mReceiveMsgList = ArrayList<Message>()
+        msgs.forEach {
 
-        msgs.forEach{
-            val mMessageText = getBaseReceiveMessage(MsgType.TEXT)
+            val mMessageText: Message
+            if (it.fromUser.userID == Constants.userInfo.userID) {
+                mMessageText = getBaseSendMessage(MsgType.TEXT)
+                mMessageText.sentStatus = MsgSendStatus.SENT
+            } else {
+                mMessageText = getBaseReceiveMessage(MsgType.TEXT)
+            }
             val mTextMsgBody = TextMsgBody()
             mTextMsgBody.message = (it.content as TextContent).text
             mMessageText.body = mTextMsgBody
             mReceiveMsgList.add(mMessageText)
         }
 
-
         mAdapter!!.addData(mReceiveMsgList)
+        rv_chat_list.scrollToPosition(mAdapter!!.itemCount - 1)
     }
 
-    private fun onMyBackPressed(){
+    private fun onMyBackPressed() {
         //如果已经进入房间，就退出房间，否则直接结束activity
-        if (null != currentRoom){
-            ChatRoomManager.leaveChatRoom(currentRoom!!.roomID, object :BasicCallback(){
+        if (null != currentRoom) {
+            ChatRoomManager.leaveChatRoom(currentRoom!!.roomID, object : BasicCallback() {
                 override fun gotResult(p0: Int, p1: String?) {
                     var responseCode = p0
                     var responseMessage = p1

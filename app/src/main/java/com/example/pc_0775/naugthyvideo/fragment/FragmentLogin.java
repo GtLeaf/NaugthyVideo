@@ -303,19 +303,6 @@ public class FragmentLogin extends Fragment {
         });
     }
 
-    /*private void initPreferences(){
-        if (null == preferences){
-            preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-            editor = preferences.edit();
-        }
-        if (null == editor){
-            if (null == preferences){
-                return;//获取不到
-            }
-            editor = preferences.edit();
-        }
-    }*/
-
     /**
      * 记住密码
      * @param phone_number

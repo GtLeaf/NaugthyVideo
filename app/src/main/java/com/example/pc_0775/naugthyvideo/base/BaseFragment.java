@@ -74,8 +74,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public void startActivity(Class<?> clz) {
-//        startActivity(new Intent(getContext(),clz));
-        startActivity(new Intent(mContext,clz));
+        startActivity(new Intent(getActivity(),clz));
     }
 
     /**

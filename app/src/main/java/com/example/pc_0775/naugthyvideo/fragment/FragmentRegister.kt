@@ -368,8 +368,6 @@ class FragmentRegister : Fragment() {
                     val json = response.body()?.string()
                     val msg = JSONObject(json).getString("message")
                     if (msg == "success"){
-                        val intent = Intent(activity, ActivityHome::class.java)
-                        startActivity(intent)
                         activity.finish()
                     }
                 }

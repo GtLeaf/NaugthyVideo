@@ -1,16 +1,16 @@
 package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean;
 
 
-public  class Message {
+public class Message {
 
-     private String uuid;
-      private String msgId;
-     private MsgType msgType;
-     private MsgBody body;
-     private MsgSendStatus sentStatus;
-     private String senderId;
-     private String targetId;
-     private long sentTime;
+    private String uuid;
+    private String msgId;
+    private MsgType msgType;
+    private MsgBody body;
+    private MsgSendStatus sentStatus;
+    private String senderId;
+    private String targetId;
+    private long sentTime;
 
 
     public String getUuid() {
@@ -68,7 +68,6 @@ public  class Message {
     public void setSentStatus(MsgSendStatus sentStatus) {
         this.sentStatus = sentStatus;
     }
-
 
 
     public long getSentTime() {
