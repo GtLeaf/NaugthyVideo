@@ -15,7 +15,7 @@ class AdapterNormal(layoutResId: Int, data: MutableList<NormalItem>?) : BaseQuic
     override fun convert(helper: BaseViewHolder?, item: NormalItem?) {
         helper!!.setText(R.id.tv_normal_title, item!!.title)
         helper.setText(R.id.tv_normal_describe, item.describe)
-        Glide.with(mContext).load(item.imgUrl).crossFade().into(helper.getView<ImageView>(R.id.iv_chat_room_image))
+        Glide.with(mContext).load(item.imgUrl).into(helper.getView<ImageView>(R.id.iv_chat_room_image))
     }
 
 }

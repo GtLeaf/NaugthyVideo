@@ -1,6 +1,7 @@
 package com.example.pc_0775.naugthyvideo.CardSwipeControl;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import android.graphics.drawable.Drawable;
+
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  */
 
 public class CardShowInfoBean {
-    private GlideDrawable glideDrawable;
+    private Drawable drawable;
     private List<String> categories;
     private int type;
     private VideoInfo videoInfo;
@@ -18,17 +19,17 @@ public class CardShowInfoBean {
     public CardShowInfoBean() {
     }
 
-    public CardShowInfoBean(GlideDrawable glideDrawable, VideoInfo videoInfo) {
-        this.glideDrawable = glideDrawable;
+    public CardShowInfoBean(Drawable drawable, VideoInfo videoInfo) {
+        this.drawable = drawable;
         this.videoInfo = videoInfo;
     }
 
-    public GlideDrawable getGlideDrawable() {
-        return glideDrawable;
+    public Drawable getDrawable() {
+        return drawable;
     }
 
-    public void setGlideDrawable(GlideDrawable glideDrawable) {
-        this.glideDrawable = glideDrawable;
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
     }
 
     public VideoInfo getVideoInfo() {

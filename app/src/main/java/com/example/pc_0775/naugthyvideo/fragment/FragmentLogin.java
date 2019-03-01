@@ -262,7 +262,10 @@ public class FragmentLogin extends Fragment {
                 if (0 == i){
                     Constants.userInfo = JMessageClient.getMyInfo();
                     activity.finish();
+                }else {
+                    Constants.createAlertDialog(activity,  s);
                 }
+
             }
         });
     }

@@ -26,13 +26,12 @@ import cn.jpush.im.android.api.ChatRoomManager
 import cn.jpush.im.android.api.JMessageClient
 import cn.jpush.im.android.api.callback.RequestCallback
 import cn.jpush.im.android.api.content.TextContent
+import cn.jpush.im.android.api.enums.ContentType
 import cn.jpush.im.android.api.event.ChatRoomMessageEvent
-import cn.jpush.im.android.api.event.ChatRoomNotificationEvent
 import cn.jpush.im.android.api.model.ChatRoomInfo
 import cn.jpush.im.android.api.model.Conversation
 import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.Constants.Constants
-import com.example.pc_0775.naugthyvideo.bean.MessageEvent
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.FileUtils
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.entity.LocalMedia
@@ -250,7 +249,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     val selectListVideo = PictureSelector.obtainMultipleResult(data)
                     selectListVideo.forEach {
                         LogUtil.d("获取视频路径成功:" + it.getPath())
-                        sendVedioMessage(it)
+                        sendVideoMessage(it)
                     }
                 }
                 else -> {
@@ -277,10 +276,13 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         msg.setOnSendCompleteCallback(object : BasicCallback() {
             override fun gotResult(p0: Int, p1: String?) {
                 if (0 == p0) {
-                    msgCompleteUpdate(mMessage)
+                    mMessage.sentStatus = MsgSendStatus.SENT
+
                 } else {
                     showToast("消息发送失败")
+                    mMessage.sentStatus = MsgSendStatus.FAILED
                 }
+                msgCompleteUpdate(mMessage)
             }
         })
         JMessageClient.sendMessage(msg)
@@ -288,7 +290,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
 
         //模拟两秒后发送成功
 
-        updateMsg(mMessage)
+//        updateMsg(mMessage)
     }
 
     //发送音频文件
@@ -329,15 +331,15 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
     }
 
     //视频消息
-    private fun sendVedioMessage(media: LocalMedia) {
+    private fun sendVideoMessage(media: LocalMedia) {
         val mMessage = getBaseSendMessage(MsgType.VIDEO)
         //生成缩略图路径
-        val vedioPath = media.path
+        val videoPath = media.path
         val mediaMetadataRetriever = MediaMetadataRetriever()
-        mediaMetadataRetriever.setDataSource(vedioPath)
+        mediaMetadataRetriever.setDataSource(videoPath)
         val bitmap = mediaMetadataRetriever.frameAtTime
         val imgName = System.currentTimeMillis().toString() + ".jpg"
-        //路径拼接??
+        //路径拼接
         val urlPath = Environment.getExternalStorageDirectory().path + "/" + imgName
         val f = File(urlPath)
         try {
@@ -357,8 +359,24 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         mMessage.body = mVideoMsgBody
         //开始发送
         mAdapter!!.addData(mMessage)
+        val during = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+        val JPmsg = JMessageClient.createGroupVideoMessage(currentRoom!!.roomID, bitmap, System.currentTimeMillis().toString(), File(videoPath), null,during.toInt())
+        JPmsg.setOnSendCompleteCallback(object :BasicCallback(){
+            override fun gotResult(p0: Int, p1: String?) {
+                if (0 == p0) {
+                    mMessage.sentStatus = MsgSendStatus.SENT
+
+                } else {
+                    showToast("消息发送失败")
+                    mMessage.sentStatus = MsgSendStatus.FAILED
+                }
+                msgCompleteUpdate(mMessage)
+            }
+        })
+        JMessageClient.sendMessage(JPmsg)
+
         //模拟两秒后发送成功
-        updateMsg(mMessage)
+//        updateMsg(mMessage)
     }
 
     private fun getBaseSendMessage(msgType: MsgType): Message {
@@ -403,7 +421,6 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
 
     private fun msgCompleteUpdate(mMessage: Message) {
         var position = 0
-        mMessage.sentStatus = MsgSendStatus.SENT
         //更新单个子条目
         for (i in 0 until mAdapter!!.data.size) {
             val mAdapterMessage = mAdapter!!.data[i]
@@ -437,19 +454,57 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
     fun onEventMainThread(event: ChatRoomMessageEvent) {
         val msgs = event.messages
         val mReceiveMsgList = ArrayList<Message>()
+        //处理每一条信息
         msgs.forEach {
-
-            val mMessageText: Message
-            if (it.fromUser.userID == Constants.userInfo.userID) {
-                mMessageText = getBaseSendMessage(MsgType.TEXT)
-                mMessageText.sentStatus = MsgSendStatus.SENT
-            } else {
-                mMessageText = getBaseReceiveMessage(MsgType.TEXT)
+            when(it.contentType){
+                //文本消息
+                ContentType.text -> {
+                    val mMessageText: Message
+                    if (it.fromUser.userID == Constants.userInfo.userID) {
+                        mMessageText = getBaseSendMessage(MsgType.TEXT)
+                        mMessageText.sentStatus = MsgSendStatus.SENT
+                    } else {
+                        mMessageText = getBaseReceiveMessage(MsgType.TEXT)
+                    }
+                    val mTextMsgBody = TextMsgBody()
+                    mTextMsgBody.message = (it.content as TextContent).text
+                    mMessageText.body = mTextMsgBody
+                    mReceiveMsgList.add(mMessageText)
+                }
+                //图片消息
+                ContentType.image -> {
+                    val mMessageImage: Message
+                    if (it.fromUser.userID == Constants.userInfo.userID) {
+                        mMessageImage = getBaseSendMessage(MsgType.IMAGE)
+                        mMessageImage.sentStatus = MsgSendStatus.SENT
+                    } else {
+                        mMessageImage = getBaseReceiveMessage(MsgType.IMAGE)
+                    }
+                    val mImageMsgBody = ImageMsgBody()
+                    mImageMsgBody.thumbUrl = "http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg"
+                    mMessageImage.body = mImageMsgBody
+                    mReceiveMsgList.add(mMessageImage)
+                }
+                //视频消息
+                ContentType.video -> {
+                    val mMessageVideo:Message
+                    if (it.fromUser.userID == Constants.userInfo.userID){
+                        mMessageVideo = getBaseSendMessage(MsgType.VIDEO)
+                        mMessageVideo.sentStatus = MsgSendStatus.SENT
+                    } else {
+                        mMessageVideo = getBaseReceiveMessage(MsgType.VIDEO)
+                    }
+                    val mVideoMsgBody = VideoMsgBody()
+                    mMessageVideo.body = mVideoMsgBody
+                    mReceiveMsgList.add(mMessageVideo)
+                }
+                //文件消息
+                ContentType.voice -> {}
+                //位置消息
+                ContentType.location -> {}
+                else -> {}
             }
-            val mTextMsgBody = TextMsgBody()
-            mTextMsgBody.message = (it.content as TextContent).text
-            mMessageText.body = mTextMsgBody
-            mReceiveMsgList.add(mMessageText)
+
         }
 
         mAdapter!!.addData(mReceiveMsgList)

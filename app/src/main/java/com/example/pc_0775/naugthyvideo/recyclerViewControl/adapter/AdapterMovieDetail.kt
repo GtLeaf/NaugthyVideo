@@ -57,7 +57,7 @@ class AdapterMovieDetail(context: Context) : PagedListAdapter<DoubanMovie.Subjec
         private val tv_detailMovieTitle = itemView.findViewById<TextView>(R.id.tv_detail_movie_title)
 
         fun bind(movieInfo: DoubanMovie.SubjectsBean?, context: Context?){
-            Glide.with(context).load(movieInfo?.images?.medium).into(iv_detailMovieImg)
+            Glide.with(context!!).load(movieInfo?.images?.medium).into(iv_detailMovieImg)
             tv_detailMovieAverage.text = movieInfo?.rating?.average.toString()
             tv_detailMovieDescribe.text = movieInfo?.alt
             tv_detailMovieTitle.text = movieInfo?.title

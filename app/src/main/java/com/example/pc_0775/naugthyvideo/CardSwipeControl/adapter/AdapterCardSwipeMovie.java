@@ -1,7 +1,10 @@
 package com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -13,9 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.ListObservable;
@@ -113,7 +115,7 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final CardShowInfoBean cardShowInfo = mCardShowInfoBeanList.get(position);
-        holder.iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getGlideDrawable());
+        holder.iv_avatar.setImageDrawable(mCardShowInfoBeanList.get(position).getDrawable());
         holder.tv_name.setText(mCardShowInfoBeanList.get(position).getVideoInfo().getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,10 +149,10 @@ public class AdapterCardSwipeMovie extends Adapter<AdapterCardSwipeMovie.ViewHol
             final CardShowInfoBean cardShowInfoBean = setcardShowInfoBean(object);
             Glide.with(mContext)
                     .load(cardShowInfoBean.getVideoInfo().getImg())
-                    .into(new SimpleTarget<GlideDrawable>(336, 326) {
+                    .into(new SimpleTarget<Drawable>(336, 326) {
                         @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            cardShowInfoBean.setGlideDrawable(resource);
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            cardShowInfoBean.setDrawable(resource);
                             mCardShowInfoBeanList.add(cardShowInfoBean);
                             AdapterCardSwipeMovie.this.notifyDataSetChanged();
                         }

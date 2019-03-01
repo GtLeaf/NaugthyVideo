@@ -166,8 +166,16 @@ public class ChatAdapter extends BaseQuickAdapter<Message, BaseViewHolder> {
 
     private void setOnClick(BaseViewHolder helper, Message item) {
         MsgBody msgContent = item.getBody();
-        if (msgContent instanceof AudioMsgBody) {
+        if (msgContent instanceof TextMsgBody){
+
+        }else if (msgContent instanceof AudioMsgBody) {
             helper.addOnClickListener(R.id.rlAudio);
+        }else if (msgContent instanceof ImageMsgBody){
+
+        }else if (msgContent instanceof VideoMsgBody){
+
+        }else if (msgContent instanceof VideoMsgBody){
+
         }
     }
 

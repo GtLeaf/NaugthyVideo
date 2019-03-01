@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
@@ -66,21 +65,6 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
     }
 
     /*
-    * 获取海报图片对应的GlideDrawer
-    * */
-    fun getGlideDrawerList(differentList:List<DoubanMovie.SubjectsBean>){
-        for (moive in differentList){
-            Glide.with(context)
-                    .load(moive.images.large)
-                    .asBitmap()
-                    .into(object :SimpleTarget<Bitmap>(380, 500){
-                override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
-                    bitmapMap.put(moive.id, resource!!)
-                }
-            })
-        }
-    }
-    /*
     * 获取发生改变，新增的数组
     * */
     fun getDifferentData():ArrayList<DoubanMovie.SubjectsBean>{
@@ -114,7 +98,7 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
 
         fun bind(movieInfo: DoubanMovie.SubjectsBean?, context: Context?){
             //电影海报
-            Glide.with(context).load(movieInfo?.images?.medium).asBitmap().into(iv_homeMovieImg)
+            Glide.with(context!!).asBitmap().load(movieInfo?.images?.medium).into(iv_homeMovieImg)//为什么要asBitmap??
 
             //拼接导演们的名字
             var directStr = ""

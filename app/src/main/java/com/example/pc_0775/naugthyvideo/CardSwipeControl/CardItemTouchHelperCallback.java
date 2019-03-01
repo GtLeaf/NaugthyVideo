@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeLive;
 import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
 
@@ -19,7 +18,6 @@ import java.util.List;
 public class CardItemTouchHelperCallback<T> extends ItemTouchHelper.Callback {
 
     private AdapterCardSwipeLive adapterCardSwipeLive;
-    private List<GlideDrawable> glideDrawableList;
 
     private RecyclerView.Adapter adapter;
     private List<T> dataList;

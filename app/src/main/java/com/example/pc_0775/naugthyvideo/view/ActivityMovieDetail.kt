@@ -94,11 +94,11 @@ class ActivityMovieDetail : BaseActivity() {
 
     override fun initView(view: View?) {
 
-        //电影海报
+        //电影海报!!可能出现卡顿
         Glide.with(this)
                 .load(movieInfo.images.medium)
-                .skipMemoryCache(false)
-                .dontAnimate()
+//                .skipMemoryCache(false)
+//                .dontAnimate()
                 .into(iv_detail_movie)
 
         //电影标题名
