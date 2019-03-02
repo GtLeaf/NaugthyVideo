@@ -46,7 +46,7 @@ class FragmentChatRoomList : BaseFragment(){
     override fun setListener() {
         roomAdapter!!.setOnItemClickListener { adapter, view, position ->
             EventBus.getDefault().postSticky(chatRoomInfoList[position])
-            JMessageClient.registerEventReceiver(ChatActivity())
+//            JMessageClient.registerEventReceiver(ChatActivity())
             startActivity(ChatActivity::class.java)
         }
     }
