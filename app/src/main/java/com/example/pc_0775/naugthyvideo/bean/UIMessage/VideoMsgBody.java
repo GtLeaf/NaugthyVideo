@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean;
+package com.example.pc_0775.naugthyvideo.bean.UIMessage;
 
 
 
@@ -9,8 +9,6 @@ public class VideoMsgBody extends FileMsgBody{
     private int height;
     //宽度
     private int width;
-
-
 
 
     public long getDuration() {

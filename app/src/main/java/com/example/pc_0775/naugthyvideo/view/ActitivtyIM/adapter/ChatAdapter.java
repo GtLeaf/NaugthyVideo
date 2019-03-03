@@ -9,15 +9,15 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.view.ChatActivity;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.AudioMsgBody;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.FileMsgBody;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.ImageMsgBody;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.Message;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.MsgBody;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.MsgSendStatus;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.MsgType;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.TextMsgBody;
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.VideoMsgBody;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.AudioMsgBody;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.FileMsgBody;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.ImageMsgBody;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.Message;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.MsgBody;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.MsgSendStatus;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.MsgType;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.TextMsgBody;
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.VideoMsgBody;
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.GlideUtils;
 
 

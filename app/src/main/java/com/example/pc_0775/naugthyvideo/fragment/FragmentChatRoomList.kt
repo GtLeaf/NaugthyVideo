@@ -38,8 +38,7 @@ class FragmentChatRoomList : BaseFragment(){
 
     override fun initView(view: View?) {
         roomAdapter = AdapterChatRoomInfo(R.layout.item_chat_room, chatRoomInfoList)
-        rv_chat_room_list.adapter = roomAdapter
-        rv_chat_room_list.layoutManager = LinearLayoutManager(mActivity)
+
 
     }
 
@@ -55,6 +54,8 @@ class FragmentChatRoomList : BaseFragment(){
     }
 
     override fun doBusiness() {
+        rv_chat_room_list.adapter = roomAdapter
+        rv_chat_room_list.layoutManager = LinearLayoutManager(mActivity)
         ChatRoomManager.getChatRoomListByApp(0, 10, object :RequestCallback<List<ChatRoomInfo>>(){
             override fun gotResult(p0: Int, p1: String?, p2: List<ChatRoomInfo>?) {
                 Log.d("room","p2")

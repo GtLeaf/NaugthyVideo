@@ -34,13 +34,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         Bundle bundle = getArguments();
         initParams(bundle);
         view = bindView(inflater, container);
+        initView(view);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initView(view);
+
         mIsPrepare = true;
         setListener();
         doBusiness();

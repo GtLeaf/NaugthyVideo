@@ -1,4 +1,4 @@
-package com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean;
+package com.example.pc_0775.naugthyvideo.bean.UIMessage;
 
 public enum MsgSendStatus {
     DEFAULT,
@@ -7,8 +7,5 @@ public enum MsgSendStatus {
     //发送失败
     FAILED,
     //已发送
-    SENT;
-
-
-
+    SENT
 }

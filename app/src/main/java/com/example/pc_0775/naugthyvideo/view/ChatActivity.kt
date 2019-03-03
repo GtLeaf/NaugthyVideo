@@ -16,7 +16,6 @@ import android.widget.LinearLayout
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.adapter.ChatAdapter
-import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.bean.*
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.ChatUiHelper
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.LogUtil
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.PictureFileUtil
@@ -24,7 +23,6 @@ import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.MediaManager
 import android.os.Environment
 import cn.jpush.im.android.api.ChatRoomManager
 import cn.jpush.im.android.api.JMessageClient
-import cn.jpush.im.android.api.callback.DownloadCompletionCallback
 import cn.jpush.im.android.api.callback.RequestCallback
 import cn.jpush.im.android.api.content.ImageContent
 import cn.jpush.im.android.api.content.TextContent
@@ -35,8 +33,8 @@ import cn.jpush.im.android.api.event.ChatRoomMessageEvent
 import cn.jpush.im.android.api.model.ChatRoomInfo
 import cn.jpush.im.android.api.model.Conversation
 import cn.jpush.im.api.BasicCallback
-import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.Constants.Constants
+import com.example.pc_0775.naugthyvideo.bean.UIMessage.*
 import com.example.pc_0775.naugthyvideo.view.ActitivtyIM.util.FileUtils
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.entity.LocalMedia
@@ -83,7 +81,6 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         if (null == currentRoom){
         }
         //注册极光消息接收
-//        JMessageClient.registerEventReceiver(this)
         mAdapter = ChatAdapter(this, ArrayList<Message>())
         rv_chat_list.layoutManager = LinearLayoutManager(this)
         rv_chat_list.adapter = mAdapter
@@ -533,7 +530,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 }
                 //视频消息
                 ContentType.video -> {
-                    val mMessageVideo:Message
+                    val mMessageVideo: Message
                     if (it.fromUser.userID == Constants.userInfo.userID){
                         mMessageVideo = getBaseSendMessage(MsgType.VIDEO)
                         mMessageVideo.sentStatus = MsgSendStatus.SENT
@@ -548,7 +545,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 }
                 //音频消息
                 ContentType.voice -> {
-                    val mMessageVoice:Message
+                    val mMessageVoice: Message
                     if (it.fromUser.userID == Constants.userInfo.userID){
                         mMessageVoice = getBaseSendMessage(MsgType.AUDIO)
                         mMessageVoice.sentStatus = MsgSendStatus.SENT
@@ -595,4 +592,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         super.onBackPressed()
     }
 
+    fun mySetOnSendCompleteCallback(){
+
+    }
 }
