@@ -7,14 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cn.jpush.im.android.api.ChatRoomManager
-import cn.jpush.im.android.api.JMessageClient
 import cn.jpush.im.android.api.callback.RequestCallback
 import cn.jpush.im.android.api.model.ChatRoomInfo
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseFragment
-import com.example.pc_0775.naugthyvideo.bean.MessageEvent
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterChatRoomInfo
-import com.example.pc_0775.naugthyvideo.view.ChatActivity
+import com.example.pc_0775.naugthyvideo.ui.ChatActivity
 import io.vov.vitamio.utils.Log
 import kotlinx.android.synthetic.main.fragment_chat_room_list.*
 import org.greenrobot.eventbus.EventBus

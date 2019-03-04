@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityChangeUserInfo">
+    tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityChangeUserInfo">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/abl_change_user_info"

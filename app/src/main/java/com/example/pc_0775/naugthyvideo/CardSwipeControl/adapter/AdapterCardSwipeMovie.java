@@ -29,7 +29,7 @@ import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
-import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityLivePlay;
 
 import org.greenrobot.eventbus.EventBus;
 

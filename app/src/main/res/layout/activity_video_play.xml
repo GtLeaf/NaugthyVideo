@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay">
+    tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityVideoPlay">
 
     <WebView
         android:id="@+id/wv_function_video_play"

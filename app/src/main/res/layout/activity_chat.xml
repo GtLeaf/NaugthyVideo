@@ -73,7 +73,7 @@
                     android:paddingLeft="13dp"
                     android:textSize="11dp" />
 
-                <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.RecordButton
+                <com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.widget.RecordButton
                     android:id="@+id/btn_audio"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                 android:layout_marginRight="14px"
                 android:src="@mipmap/ic_add" />
 
-            <com.example.pc_0775.naugthyvideo.view.ActitivtyIM.widget.StateButton
+            <com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.widget.StateButton
                 android:id="@+id/btn_send"
                 android:layout_width="50dp"
                 android:layout_height="30dp"

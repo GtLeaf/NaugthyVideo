@@ -1,10 +1,8 @@
 package com.example.pc_0775.naugthyvideo.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.app.Fragment
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Handler
 import android.text.Editable
 import android.text.InputType
@@ -26,10 +24,7 @@ import cn.jpush.im.android.api.model.UserInfo
 import cn.jpush.im.android.api.options.RegisterOptionalUserInfo
 import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.bean.BaseResult
-import com.example.pc_0775.naugthyvideo.bean.UserBean
 import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader
-import com.example.pc_0775.naugthyvideo.view.ActivityHome
-import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import okhttp3.*

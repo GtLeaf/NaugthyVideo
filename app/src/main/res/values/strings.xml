@@ -137,4 +137,6 @@
     <string name="VideoView_player_IjkMediaPlayer">Player: IjkMediaPlayer</string>
     <string name="VideoView_player_IjkExoMediaPlayer">Player: IjkExoMediaPlayer</string>
     <string name="title_activity_change_user_info">ActivityChangeUserInfo</string>
+
+    <string name="jmui_local_picture_not_found_toast">暂无外部存储，某些本地图片不可预览</string>
 </resources>

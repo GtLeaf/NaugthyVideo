@@ -2,7 +2,6 @@ package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter;
 
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,15 +16,12 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.bean.mmBean.VideoInfoMiMi;
 import com.example.pc_0775.naugthyvideo.util.GifCacheUtil;
-import com.example.pc_0775.naugthyvideo.view.ActivityIjkLivePlay;
-import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
-import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityIjkLivePlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityLivePlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityVideoPlay;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 

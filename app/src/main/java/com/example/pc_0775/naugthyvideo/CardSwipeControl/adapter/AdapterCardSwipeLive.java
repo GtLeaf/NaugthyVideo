@@ -28,9 +28,9 @@ import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.bean.mmBean.LiveRoomMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.myAdapterInterface.OnDataUpdateListen;
-import com.example.pc_0775.naugthyvideo.view.ActivityIjkLivePlay;
-import com.example.pc_0775.naugthyvideo.view.ActivityLivePlay;
-import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityIjkLivePlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityLivePlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityVideoPlay;
 
 import org.greenrobot.eventbus.EventBus;
 

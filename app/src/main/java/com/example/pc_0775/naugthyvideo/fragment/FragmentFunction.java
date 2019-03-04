@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.view.ActivityFunctionVideo;
+import com.example.pc_0775.naugthyvideo.ui.ActivityFunctionVideo;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
-import com.example.pc_0775.naugthyvideo.view.ActivityVideoPlay;
+import com.example.pc_0775.naugthyvideo.ui.ActivityVideoPlay;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;

@@ -34,7 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.SplashActivity"
+            android:name=".ui.SplashActivity"
             android:label="NaugthyVideo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,19 +42,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.Main2Activity" />
-        <activity android:name=".view.ActivityFunctionVideo" />
-        <activity android:name=".view.ActivityVideoPlay" />
-        <activity android:name=".view.ActivityLogin" />
-        <activity android:name=".view.ActivityFunction" />
-        <activity android:name=".view.ActivityPartSlide" />
-        <activity android:name=".view.ActivityCardSilde" />
-        <activity android:name=".view.ActivityLiveCardSilde" />
-        <activity android:name=".view.ActivityCardSildeWithPaging" />
-        <activity android:name=".kotlinTest.ActivityFirstKotlinTest" />
-        <activity android:name=".view.ActivityLivePlay" />
+        <activity android:name=".ui.Main2Activity" />
+        <activity android:name=".ui.ActivityFunctionVideo" />
+        <activity android:name=".ui.ActivityVideoPlay" />
+        <activity android:name=".ui.ActivityLogin" />
+        <activity android:name=".ui.ActivityFunction" />
+        <activity android:name=".ui.ActivityCardSilde" />
+        <activity android:name=".ui.ActivityLiveCardSilde" />
+        <activity android:name=".ui.ActivityCardSildeWithPaging" />
+        <activity android:name=".ui.ActivityLivePlay" />
         <activity
-            android:name=".view.ActivityHome"
+            android:name=".ui.ActivityHome"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"
@@ -62,15 +60,16 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".view.ActivitySetting" />
-        <activity android:name=".view.ActivityIjkLivePlay" />
-        <activity android:name=".view.ActivityMovieDetail" />
-        <activity android:name=".view.ActivityMovieTop250" />
-        <activity android:name=".view.ActivityUserInfo" />
-        <activity android:name=".view.ActivityChangeUserInfo" />
-        <activity android:name=".view.ActivityChatHome" />
-        <activity android:name=".view.ActivityChatRoom"/>
-        <activity android:name=".view.ChatActivity"/>
+        <activity android:name=".ui.ActivitySetting" />
+        <activity android:name=".ui.ActivityIjkLivePlay" />
+        <activity android:name=".ui.ActivityMovieDetail" />
+        <activity android:name=".ui.ActivityMovieTop250" />
+        <activity android:name=".ui.ActivityUserInfo" />
+        <activity android:name=".ui.ActivityChangeUserInfo" />
+        <activity android:name=".ui.ActivityChatHome" />
+        <activity android:name=".ui.ActivityChatRoom" />
+        <activity android:name=".ui.ChatActivity" />
+        <activity android:name=".ui.ActivityBrowserViewPager"></activity>
     </application>
 
 </manifest>

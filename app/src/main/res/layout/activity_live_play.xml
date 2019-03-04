@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#000000"
-    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityLivePlay">
+    tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityLivePlay">
 
     <io.vov.vitamio.widget.CenterLayout
         android:id="@+id/cl_live_dd"

@@ -5,7 +5,7 @@
     android:id="@+id/dl_card_slide"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityCardSilde">
+    tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityCardSilde">
 
     <RelativeLayout
         android:layout_width="match_parent"

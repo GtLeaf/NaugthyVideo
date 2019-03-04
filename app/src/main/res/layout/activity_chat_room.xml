@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc_0775.naugthyvideo.view.ActivityChatRoom">
+    tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityChatRoom">
 
     <LinearLayout
         android:id="@+id/ll_chat_room_content"
