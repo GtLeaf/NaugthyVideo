@@ -71,7 +71,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     protected void showToast(String msg) {
-        Toast.makeText(mContext,msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),msg, Toast.LENGTH_SHORT).show();
     }
 
     public void startActivity(Class<?> clz) {

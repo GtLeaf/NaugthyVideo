@@ -70,9 +70,19 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         val REQUEST_CODE_IMAGE = 1000
         val REQUEST_CODE_VEDIO = 2000
         val REQUEST_CODE_FILE = 3000
+
+        fun actionStart(context: Context, roomID:Long){
+            val intent = Intent(context, ChatActivity::class.java)
+            val bundle = Bundle()
+            bundle.putLong("roomID" ,roomID)
+            intent.putExtras(bundle)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        }
     }
 
     override fun initParams(params: Bundle?) {
+
     }
 
     override fun bindLayout(): Int {
@@ -82,8 +92,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
     override fun initView(view: View) {
         //注册evenBus
         EventBus.getDefault().register(this)
-        if (null == currentRoom){
-        }
+
         //注册极光消息接收
         mAdapter = ChatAdapter(this, ArrayList<UIMessage>())
         rv_chat_list.layoutManager = LinearLayoutManager(this)
@@ -106,6 +115,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 when(it.msgType){
                     MsgType.TEXT -> {}
                     MsgType.IMAGE -> {
+                        if (it.sentStatus != MsgSendStatus.SENT) return@setOnItemChildClickListener
                         EventBus.getDefault().postSticky(imgMsgList)
                         ActivityBrowserViewPager.actionStart(this@ChatActivity, it.msgId.toLong())
                     }
@@ -145,7 +155,6 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
 
     override fun onDestroy() {
         JMessageClient.exitConversation()
-        JMessageClient.unRegisterEventReceiver(this)
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
@@ -385,7 +394,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 }
             })
             JMessageClient.sendMessage(msg)
-        }catch (e:FileNotFoundException){
+        }catch (e:Exception){
             showToast("发送失败，图片不存在")
             return
         }
@@ -421,8 +430,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         mVideoMsgBody.extra = urlPath
         mVideoMsgBody.localPath = videoPath
         mMessage.body = mVideoMsgBody
-        //开始发送
-        mAdapter!!.addData(mMessage)
+
         val during = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
         var JPmsg:Message
         try {
@@ -440,7 +448,9 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     msgCompleteUpdate(mMessage)
                 }
             })
+            //开始发送
             JMessageClient.sendMessage(JPmsg)
+            mAdapter!!.addData(mMessage)
         }catch (e:IOException){
             e.printStackTrace()
             showToast("消息发送失败,文件不存在")
@@ -504,23 +514,6 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun event(chatRoomInfo: ChatRoomInfo) {
         currentRoom = chatRoomInfo
-        //注册极光消息接收，先注册，后进入聊天室
-        JMessageClient.registerEventReceiver(this)
-        //进入聊天室
-        ChatRoomManager.enterChatRoom(chatRoomInfo.roomID, object : RequestCallback<Conversation>() {
-            override fun gotResult(p0: Int, p1: String?, p2: Conversation?) {
-                var responseCode = p0
-                var responseMessage = p1
-                //弹框进入成功前阻止所有操作
-
-                //进入失败直接退出
-                if (871323 == p0) {
-                    Constants.createAlertDialog(this@ChatActivity, p1)
-                    finish()
-                }
-            }
-        })
-
     }
 
 
@@ -533,11 +526,10 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
             when(it.contentType){
                 //文本消息
                 ContentType.text -> {
-                    if (it.fromUser.userID == Constants.userInfo.userID) {
-                        mUIMessage = getBaseSendMessage(MsgType.TEXT)
-                        mUIMessage.sentStatus = MsgSendStatus.SENT
+                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID) {
+                        getBaseSendMessage(MsgType.TEXT)
                     } else {
-                        mUIMessage = getBaseReceiveMessage(MsgType.TEXT)
+                        getBaseReceiveMessage(MsgType.TEXT)
                     }
                     val mTextMsgBody = TextMsgBody()
                     mTextMsgBody.message = (it.content as TextContent).text
@@ -545,11 +537,10 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 }
                 //图片消息
                 ContentType.image -> {
-                    if (it.fromUser.userID == Constants.userInfo.userID) {
-                        mUIMessage = getBaseSendMessage(MsgType.IMAGE)
-                        mUIMessage.sentStatus = MsgSendStatus.SENT
+                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID) {
+                        getBaseSendMessage(MsgType.IMAGE)
                     } else {
-                        mUIMessage = getBaseReceiveMessage(MsgType.IMAGE)
+                        getBaseReceiveMessage(MsgType.IMAGE)
                     }
                     val mImageMsgBody = ImageMsgBody()//"http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg"
                     mImageMsgBody.thumbUrl = (it.content as ImageContent).localThumbnailPath
@@ -559,11 +550,10 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 }
                 //视频消息
                 ContentType.video -> {
-                    if (it.fromUser.userID == Constants.userInfo.userID){
-                        mUIMessage = getBaseSendMessage(MsgType.VIDEO)
-                        mUIMessage.sentStatus = MsgSendStatus.SENT
+                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID){
+                        getBaseSendMessage(MsgType.VIDEO)
                     } else {
-                        mUIMessage = getBaseReceiveMessage(MsgType.VIDEO)
+                        getBaseReceiveMessage(MsgType.VIDEO)
                     }
                     val mVideoMsgBody = VideoMsgBody()
                     mVideoMsgBody.extra = (it.content as VideoContent).thumbLocalPath
@@ -573,11 +563,11 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                 }
                 //音频消息
                 ContentType.voice -> {
-                    if (it.fromUser.userID == Constants.userInfo.userID){
-                        mUIMessage = getBaseSendMessage(MsgType.AUDIO)
-                        mUIMessage.sentStatus = MsgSendStatus.SENT
+                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID){
+                        getBaseSendMessage(MsgType.AUDIO)
+
                     } else {
-                        mUIMessage = getBaseReceiveMessage(MsgType.AUDIO)
+                        getBaseReceiveMessage(MsgType.AUDIO)
                     }
                     val mAudioMsgBody = AudioMsgBody()
                     mAudioMsgBody.localPath = (it.content as VoiceContent).localPath
@@ -593,6 +583,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     LogUtil.d("aa")
                 }
             }
+            mUIMessage.sentStatus = MsgSendStatus.SENT
             mUIMessage.msgId = it.serverMessageId.toString()
             mReceiveMsgList.add(mUIMessage)
         }

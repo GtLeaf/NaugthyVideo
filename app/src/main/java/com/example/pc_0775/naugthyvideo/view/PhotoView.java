@@ -16,10 +16,16 @@
 package com.example.pc_0775.naugthyvideo.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.AttributeSet;
+
+import com.example.pc_0775.naugthyvideo.util.LogUtil;
 
 
 public class PhotoView extends android.support.v7.widget.AppCompatImageView implements IPhotoView {
@@ -28,8 +34,20 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView impl
 
 	private ScaleType mPendingScaleType;
 
+	//绘制加载效果
+	private float per;
+
+	private boolean isfinished = true;
+
+
+	private Paint paintLayer;
+	private Paint textPaint;
+
+	private Rect textBound;
+
 	public PhotoView(boolean fromChatActivity, Context context) {
 		this(fromChatActivity, context, null);
+
 	}
 
 	public PhotoView(boolean fromChatActivity, Context context, AttributeSet attr) {
@@ -45,6 +63,48 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView impl
 			setScaleType(mPendingScaleType);
 			mPendingScaleType = null;
 		}
+		init();
+	}
+
+	private void init(){
+		paintLayer = new Paint();
+		paintLayer.setColor(Color.LTGRAY);
+		paintLayer.setAlpha(100);
+		textPaint = new Paint();
+		textPaint.setColor(Color.DKGRAY);
+		textPaint.setTextSize(25);
+		textBound = new Rect();
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		if (isfinished){
+			return;
+		}
+		String perStr = (int) (per*100) + "%";
+		//获取文字区域的矩形大小，以便确定文字正中间的位置
+		textPaint.getTextBounds(perStr, 0, perStr.length(), textBound);
+		float layer_w = getWidth();
+		float layer_h = getHeight() * per;
+		float y = getHeight() - layer_h;
+		//画遮蔽层
+		canvas.drawRect(0, y, layer_w,getHeight(), paintLayer);
+		//画文字
+		canvas.drawText(perStr, getWidth()/2 - textBound.width()/2, getHeight()/2+ textBound.height()/2, textPaint);
+		LogUtil.Companion.d("PhotoView", per+"");
+	}
+
+	public void setPer(float per){
+		this.per = per;
+		isfinished = false;
+		//在主线程刷新
+		postInvalidate();
+	}
+
+	public void finish(){
+		isfinished = true;
+		postInvalidate();
 	}
 
 	@Override

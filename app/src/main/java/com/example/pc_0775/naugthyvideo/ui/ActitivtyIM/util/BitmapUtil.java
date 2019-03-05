@@ -31,6 +31,7 @@ public class BitmapUtil {
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(byteTmp, 0, byteTmp.length, bitmapOptions);
+        BitmapFactory.decodeFile(bitmap, bitmapOptions);
         int outWidth = bitmapOptions.outWidth;
         int outHeight = bitmapOptions.outHeight;
         int maxWidth = 400;

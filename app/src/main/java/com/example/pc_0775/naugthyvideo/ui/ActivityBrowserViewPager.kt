@@ -1,5 +1,6 @@
 package com.example.pc_0775.naugthyvideo.ui
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,10 +12,9 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.callback.DownloadCompletionCallback
+import cn.jpush.im.android.api.callback.ProgressUpdateCallback
 import cn.jpush.im.android.api.content.ImageContent
-import cn.jpush.im.android.api.enums.ContentType
-import cn.jpush.im.android.api.model.ChatRoomInfo
 import cn.jpush.im.android.api.model.Conversation
 import cn.jpush.im.android.api.model.Message
 import com.bumptech.glide.Glide
@@ -28,7 +28,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
-import java.io.Serializable
 import java.lang.ref.WeakReference
 import java.util.ArrayList
 
@@ -40,11 +39,13 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
     private var mHeight = 0
     private lateinit var mConv: Conversation
     private var msgID:Long = 0
+    private var currentItem:Int = 0
 
     //存放所有图片的路径
     private var mPathList: MutableList<String> = ArrayList()
     private var mMsgIDList: MutableList<Long> = ArrayList()
     private var mImgMsgList = ArrayList<Message>()
+
     companion object {
         val BROWSER_AVATAR = "browserAvatar"
         val FROM_CHAT_ACTIVITY = "fromChatActivity"
@@ -204,12 +205,12 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         }
         val mMsg = mImgMsgList.find { it.serverMessageId == msgID }
         photoView = PhotoView(true, this)
-        val currentItem = mImgMsgList.map { it.serverMessageId }.indexOf(msgID)
+        currentItem = mImgMsgList.map { it.serverMessageId }.indexOf(msgID)
         try {
             val ic = mMsg!!.content as ImageContent
-            //如果点击的是第一张图片并且图片未下载过，则显示大图
-            if (null == ic.localPath && currentItem == 0){
-                //downloadImage()
+            //如果点击的是第一张图片并且图片未下载过，则显示大图//&& currentItem == mImgMsgList.size-1
+            if (null == ic.localPath ){
+                downloadImage(mMsg)
             }
             val path = mPathList[currentItem]
             //如果发送方上传了原图，处理原图函数
@@ -231,6 +232,35 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         initImgPathList()
         img_browser_viewpager.adapter = pagerAdapter
         initCurrentItem()
+    }
+
+    private fun downloadImage(mMsg:Message){
+        var imgContent = mMsg.content as ImageContent
+        //如果不存在进度条Callback，重新注册
+        if (!mMsg.isContentDownloadProgressCallbackExists){
+            //显示下载进度条
+            mMsg.setOnContentDownloadProgressCallback(object :ProgressUpdateCallback(){
+                override fun onProgressUpdate(p0: Double) {
+                    if (p0<1.0){
+                        photoView.setPer(p0.toFloat())
+                    }else{
+                        photoView.finish()
+                    }
+                }
+            })
+
+            imgContent.downloadOriginImage(mMsg, object :DownloadCompletionCallback(){
+                override fun onComplete(p0: Int, p1: String?, p2: File?) {
+                    //此处处理查看原图按钮的消失
+                    if (0 == p0){
+                        mPathList[currentItem] = p2!!.absolutePath
+                        pagerAdapter.notifyDataSetChanged()
+                        photoView.finish()
+                    }
+                }
+            })
+        }
+
     }
 
 }

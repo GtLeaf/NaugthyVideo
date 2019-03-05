@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import cn.jpush.im.android.api.ChatRoomManager
 import cn.jpush.im.android.api.callback.RequestCallback
 import cn.jpush.im.android.api.model.ChatRoomInfo
+import cn.jpush.im.android.api.model.Conversation
+import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseFragment
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterChatRoomInfo
@@ -42,9 +44,23 @@ class FragmentChatRoomList : BaseFragment(){
 
     override fun setListener() {
         roomAdapter!!.setOnItemClickListener { adapter, view, position ->
-            EventBus.getDefault().postSticky(chatRoomInfoList[position])
-//            JMessageClient.registerEventReceiver(ChatActivity())
-            startActivity(ChatActivity::class.java)
+            //进入聊天室
+            ChatRoomManager.leaveChatRoom(chatRoomInfoList[position].roomID, null)
+            ChatRoomManager.enterChatRoom(chatRoomInfoList[position].roomID, object : RequestCallback<Conversation>() {
+                override fun gotResult(p0: Int, p1: String?, p2: Conversation?) {
+                    var responseCode = p0
+                    var responseMessage = p1
+                    //弹框进入成功前阻止所有操作
+                    //进入失败直接退出
+                    if (0 != p0) {
+                        showToast("进入聊天室失败:"+p1)
+                        return
+                    }
+                    EventBus.getDefault().postSticky(chatRoomInfoList[position])
+                    startActivity(ChatActivity::class.java)
+                }
+            })
+
         }
     }
 

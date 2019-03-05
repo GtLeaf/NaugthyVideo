@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.event.LoginStateChangeEvent
 
 /**
  * Created by PC-0775 on 2018/12/23.
@@ -16,6 +18,8 @@ abstract class BaseActivityKotlin:AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //注册sdk的event用于接收各种event事件
+        JMessageClient.registerEventReceiver(this)
         var bundle = intent.extras
         initParams(bundle)
         val mContextView = LayoutInflater.from(this).inflate(bindLayout(), null)
@@ -84,6 +88,9 @@ abstract class BaseActivityKotlin:AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onDestroy() {
+        JMessageClient.unRegisterEventReceiver(this)
         super.onDestroy()
     }
+
+    fun  onEventMainThread(event: LoginStateChangeEvent) {}
 }
