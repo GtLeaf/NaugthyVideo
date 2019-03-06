@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.example.pc_0775.naugthyvideo.app.ActivityCollector;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
@@ -35,6 +36,8 @@ public class MyApplication extends Application {
         JPushInterface.init(this);
         //极光IM
         JMessageClient.init(this, true);
+        //LeakCanary
+        LeakCanary.install(this);
     }
 
     @Override

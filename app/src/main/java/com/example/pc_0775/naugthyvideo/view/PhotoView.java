@@ -27,6 +27,11 @@ import android.util.AttributeSet;
 
 import com.example.pc_0775.naugthyvideo.util.LogUtil;
 
+import cn.jpush.im.android.api.callback.DownloadCompletionCallback;
+import cn.jpush.im.android.api.callback.ProgressUpdateCallback;
+import cn.jpush.im.android.api.content.ImageContent;
+import cn.jpush.im.android.api.model.Message;
+
 
 public class PhotoView extends android.support.v7.widget.AppCompatImageView implements IPhotoView {
 
@@ -37,11 +42,12 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView impl
 	//绘制加载效果
 	private float per;
 
-	private boolean isfinished = true;
+	private boolean isfinished = false;
 
 
 	private Paint paintLayer;
 	private Paint textPaint;
+	private Message message;
 
 	private Rect textBound;
 
@@ -87,17 +93,29 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView impl
 		textPaint.getTextBounds(perStr, 0, perStr.length(), textBound);
 		float layer_w = getWidth();
 		float layer_h = getHeight() * per;
-		float y = getHeight() - layer_h;
 		//画遮蔽层
-		canvas.drawRect(0, y, layer_w,getHeight(), paintLayer);
+		canvas.drawRect(0, layer_h, layer_w,getHeight(), paintLayer);
 		//画文字
 		canvas.drawText(perStr, getWidth()/2 - textBound.width()/2, getHeight()/2+ textBound.height()/2, textPaint);
 		LogUtil.Companion.d("PhotoView", per+"");
 	}
 
+	public void setMessage(Message message, DownloadCompletionCallback callback){
+		message.setOnContentDownloadProgressCallback(new ProgressUpdateCallback(){
+			@Override
+			public void onProgressUpdate(double v) {
+				if (v<1.0){
+					setPer((float) v);
+				}else{
+					finish();
+				}
+			}
+		});
+		((ImageContent)message.getContent()).downloadOriginImage(message, callback);
+	}
+
 	public void setPer(float per){
 		this.per = per;
-		isfinished = false;
 		//在主线程刷新
 		postInvalidate();
 	}

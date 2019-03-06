@@ -2,6 +2,7 @@ package com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,7 +32,6 @@ public class BitmapUtil {
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(byteTmp, 0, byteTmp.length, bitmapOptions);
-        BitmapFactory.decodeFile(bitmap, bitmapOptions);
         int outWidth = bitmapOptions.outWidth;
         int outHeight = bitmapOptions.outHeight;
         int maxWidth = 400;
@@ -77,9 +77,54 @@ public class BitmapUtil {
         return imageSize;
     }
 
+    public static ImageSize getImageSize(Drawable drawable){
 
+        ImageSize imageSize = new ImageSize();
 
+        int outWidth = drawable.getIntrinsicWidth();
+        int outHeight = drawable.getIntrinsicHeight();
+        int maxWidth = 400;
+        int maxHeight = 400;
+        int minWidth = 150;
+        int minHeight = 150;
+        if (outWidth / maxWidth > outHeight / maxHeight) {//
+            if (outWidth >= maxWidth) {//
+                imageSize.setWidth(maxWidth);
+                imageSize.setHeight(outHeight * maxWidth / outWidth);
+            } else {
+                imageSize.setWidth(outWidth);
+                imageSize.setHeight(outHeight);
+            }
+            if (outHeight < minHeight) {
+                imageSize.setHeight(minHeight);
+                int width = outWidth * minHeight / outHeight;
+                if (width > maxWidth) {
+                    imageSize.setWidth(maxWidth);
+                } else {
+                    imageSize.setWidth(width);
+                }
+            }
+        } else {
+            if (outHeight >= maxHeight) {
+                imageSize.setHeight(maxHeight);
+                imageSize.setWidth(outWidth * maxHeight / outHeight);
+            } else {
+                imageSize.setHeight(outHeight);
+                imageSize.setWidth(outWidth);
+            }
+            if (outWidth < minWidth) {
+                imageSize.setWidth(minWidth);
+                int height = outHeight * minWidth / outWidth;
+                if (height > maxHeight) {
+                    imageSize.setHeight(maxHeight);
+                } else {
+                    imageSize.setHeight(height);
+                }
+            }
+        }
 
+        return imageSize;
+    }
 
 
 }

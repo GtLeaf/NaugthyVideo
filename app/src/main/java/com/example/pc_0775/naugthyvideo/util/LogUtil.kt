@@ -27,22 +27,22 @@ class LogUtil {
 
         fun d(tag:String, msg:String){
             if (level <= DEBUG){
-                Log.v(tag, msg)
+                Log.d(tag, msg)
             }
         }
         fun i(tag:String, msg:String){
             if (level <= INFO){
-                Log.v(tag, msg)
+                Log.i(tag, msg)
             }
         }
         fun w(tag:String, msg:String){
             if (level <= WARN){
-                Log.v(tag, msg)
+                Log.w(tag, msg)
             }
         }
         fun e(tag:String, msg:String){
             if (level <= ERROR){
-                Log.v(tag, msg)
+                Log.e(tag, msg)
             }
         }
 

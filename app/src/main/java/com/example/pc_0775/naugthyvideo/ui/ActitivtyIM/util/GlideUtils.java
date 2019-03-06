@@ -30,7 +30,8 @@ public class GlideUtils {
 				.into(new SimpleTarget<Drawable>() {
 					@Override
 					public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-						ImageSize imageSize = BitmapUtil.getImageSize(((BitmapDrawable)resource).getBitmap() );
+//						ImageSize imageSize = BitmapUtil.getImageSize(((BitmapDrawable)resource).getBitmap() );
+						ImageSize imageSize = BitmapUtil.getImageSize(resource);
 						RelativeLayout.LayoutParams imageLP =(RelativeLayout.LayoutParams )(imageView.getLayoutParams());
 						imageLP.width = imageSize.getWidth();
 						imageLP.height = imageSize.getHeight();

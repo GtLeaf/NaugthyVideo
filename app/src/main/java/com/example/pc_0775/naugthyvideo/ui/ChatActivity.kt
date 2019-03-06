@@ -521,7 +521,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         val msgs = event.messages
         val mReceiveMsgList = ArrayList<UIMessage>()
         //处理每一条信息
-        var mUIMessage = UIMessage()
+        var mUIMessage:UIMessage? = null
         msgs.forEach {
             when(it.contentType){
                 //文本消息
@@ -533,7 +533,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     }
                     val mTextMsgBody = TextMsgBody()
                     mTextMsgBody.message = (it.content as TextContent).text
-                    mUIMessage.body = mTextMsgBody
+                    mUIMessage!!.body = mTextMsgBody
                 }
                 //图片消息
                 ContentType.image -> {
@@ -543,9 +543,9 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                         getBaseReceiveMessage(MsgType.IMAGE)
                     }
                     val mImageMsgBody = ImageMsgBody()//"http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg"
-                    mImageMsgBody.thumbUrl = (it.content as ImageContent).localThumbnailPath
+                    mImageMsgBody.thumbPath = (it.content as ImageContent).localThumbnailPath
                     mImageMsgBody.localPath = (it.content as ImageContent).localPath
-                    mUIMessage.body = mImageMsgBody
+                    mUIMessage!!.body = mImageMsgBody
                     imgMsgList.add(it)
                 }
                 //视频消息
@@ -559,7 +559,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     mVideoMsgBody.extra = (it.content as VideoContent).thumbLocalPath
                     mVideoMsgBody.localPath = (it.content as VideoContent).videoLocalPath
                     mVideoMsgBody.duration = (it.content as VideoContent).duration.toLong()
-                    mUIMessage.body = mVideoMsgBody
+                    mUIMessage!!.body = mVideoMsgBody
                 }
                 //音频消息
                 ContentType.voice -> {
@@ -572,7 +572,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     val mAudioMsgBody = AudioMsgBody()
                     mAudioMsgBody.localPath = (it.content as VoiceContent).localPath
                     mAudioMsgBody.duration = (it.content as VoiceContent).duration.toLong()
-                    mUIMessage.body = mAudioMsgBody
+                    mUIMessage!!.body = mAudioMsgBody
 
                 }
                 //文件消息
@@ -583,9 +583,11 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     LogUtil.d("aa")
                 }
             }
-            mUIMessage.sentStatus = MsgSendStatus.SENT
-            mUIMessage.msgId = it.serverMessageId.toString()
-            mReceiveMsgList.add(mUIMessage)
+            if (mUIMessage != null){
+                mUIMessage!!.sentStatus = MsgSendStatus.SENT
+                mUIMessage!!.msgId = it.serverMessageId.toString()
+                mReceiveMsgList.add(mUIMessage!!)
+            }
         }
 
         mAdapter!!.addData(mReceiveMsgList)
@@ -598,8 +600,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         if (null != currentRoom) {
             ChatRoomManager.leaveChatRoom(currentRoom!!.roomID, object : BasicCallback() {
                 override fun gotResult(p0: Int, p1: String?) {
-                    var responseCode = p0
-                    var responseMessage = p1
+
                 }
             })
         }

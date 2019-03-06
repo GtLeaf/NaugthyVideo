@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.View
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
 import com.example.pc_0775.naugthyvideo.util.BitmapLoader
+import com.example.pc_0775.naugthyvideo.util.LogUtil
 import com.example.pc_0775.naugthyvideo.util.NativeImageLoader
 import com.example.pc_0775.naugthyvideo.view.PhotoView
 import kotlinx.android.synthetic.main.activity_browser_view_pager.*
@@ -33,48 +35,22 @@ import java.util.ArrayList
 
 class ActivityBrowserViewPager : BaseActivityKotlin() {
 
-    private val mUIHandler = UIHandler(this)
     private lateinit var photoView:PhotoView
     private var mWidth = 0
     private var mHeight = 0
-    private lateinit var mConv: Conversation
     private var msgID:Long = 0
     private var currentItem:Int = 0
+    private lateinit var mMsg:Message
 
     //存放所有图片的路径
     private var mPathList: MutableList<String> = ArrayList()
-    private var mMsgIDList: MutableList<Long> = ArrayList()
     private var mImgMsgList = ArrayList<Message>()
 
     companion object {
         val BROWSER_AVATAR = "browserAvatar"
         val FROM_CHAT_ACTIVITY = "fromChatActivity"
-        private val INITIAL_PICTURE_LIST = 0x2000
-        private val INIT_ADAPTER = 0x2001
-        private val GET_NEXT_PAGE_OF_PICTURE = 0x2002
-        private val SET_CURRENT_POSITION = 0x2003
         private val IMG_MSG_LIST = "imgMsgList"
         private val MESSAGE_ID = "messageID"
-
-        private class UIHandler(activity:ActivityBrowserViewPager): Handler(){
-            private val mActivity = WeakReference<ActivityBrowserViewPager>(activity)
-
-            override fun handleMessage(msg: android.os.Message?) {
-                super.handleMessage(msg)
-                val activity = mActivity.get() ?: return
-
-                when(msg!!.what){
-                    INIT_ADAPTER -> {
-                        activity.img_browser_viewpager.adapter = activity.pagerAdapter
-                        activity.img_browser_viewpager.adapter!!.notifyDataSetChanged()
-                        var position = msg.obj as Int
-                        activity.img_browser_viewpager.currentItem = position
-                    }
-                    else -> {}
-                }
-
-            }
-        }
 
         fun actionStart(context: Context, msgID:Long) {
             val intent = Intent(context, ActivityBrowserViewPager::class.java)
@@ -101,6 +77,19 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
     }
 
     override fun setListener() {
+        img_browser_viewpager.addOnPageChangeListener(object :ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                LogUtil.d("ViewPager", "滑动中")
+            }
+
+            override fun onPageSelected(position: Int) {
+                LogUtil.d("ViewPager", "滑动后")
+//                downloadImage(mImgMsgList[position])
+            }
+        })
     }
 
     override fun doBusiness(mContext: Context) {
@@ -113,7 +102,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
     override fun widgetClick(v: View) {
     }
 
-    var pagerAdapter = object :PagerAdapter(){
+    private var pagerAdapter = object :PagerAdapter(){
         override fun getCount(): Int {
             return mPathList.size
         }
@@ -128,6 +117,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             photoView = PhotoView(true, container.context)
             photoView.tag = position
+            var msg = mImgMsgList[position]
             var path:String? = mPathList[position]
             if (path != null){
                 val file = File(path)
@@ -136,6 +126,15 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                     if (bitmap != null) {
                         photoView.maxScale = 9.toFloat()
                         photoView.setImageBitmap(bitmap)
+                        photoView.setMessage(msg, object :DownloadCompletionCallback(){
+                            override fun onComplete(p0: Int, p1: String?, p2: File?) {
+                                //此处处理查看原图按钮的消失
+                                if (0 == p0){
+                                    mPathList[currentItem] = p2!!.absolutePath
+                                    img_browser_viewpager.adapter!!.notifyDataSetChanged()
+                                }
+                            }
+                        })
                     } else {
                         photoView.setImageResource(R.mipmap.default_img_failed)
                     }
@@ -152,6 +151,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                 photoView.setImageResource(R.mipmap.default_img_failed)
             }
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+
             //图片长按保存到手机
             onImageViewFound(photoView, path!!)
             return photoView
@@ -203,26 +203,10 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
             Toast.makeText(this, this.getString(R.string.jmui_local_picture_not_found_toast), Toast.LENGTH_SHORT).show()
         }
-        val mMsg = mImgMsgList.find { it.serverMessageId == msgID }
-        photoView = PhotoView(true, this)
-        currentItem = mImgMsgList.map { it.serverMessageId }.indexOf(msgID)
-        try {
-            val ic = mMsg!!.content as ImageContent
-            //如果点击的是第一张图片并且图片未下载过，则显示大图//&& currentItem == mImgMsgList.size-1
-            if (null == ic.localPath ){
-                downloadImage(mMsg)
-            }
-            val path = mPathList[currentItem]
-            //如果发送方上传了原图，处理原图函数
-            //TO DO..
-
-            Glide.with(this).load(File(path)).into(photoView)
-            img_browser_viewpager.currentItem = currentItem
-        }catch (e:NullPointerException){
-            photoView.setImageResource(R.mipmap.default_img_failed)
-            img_browser_viewpager.currentItem = currentItem
-        }finally {
-            //滑动到当前页图片的第一张时，加载上一页消息中的图片
+        val ic = mMsg.content as ImageContent
+        //如果点击的是第一张图片并且图片未下载过，则显示大图//&& currentItem == mImgMsgList.size-1
+        if (null == ic.localPath ){
+            downloadImage(mMsg)
         }
     }
 
@@ -231,11 +215,14 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         mImgMsgList = imgMsgList
         initImgPathList()
         img_browser_viewpager.adapter = pagerAdapter
-        initCurrentItem()
+        mMsg = mImgMsgList.find { it.serverMessageId == msgID }!!
+        currentItem = mImgMsgList.indexOf(mMsg)
+        img_browser_viewpager.currentItem = currentItem
+//        initCurrentItem()
     }
 
     private fun downloadImage(mMsg:Message){
-        var imgContent = mMsg.content as ImageContent
+        val imgContent = mMsg.content as ImageContent
         //如果不存在进度条Callback，重新注册
         if (!mMsg.isContentDownloadProgressCallbackExists){
             //显示下载进度条
@@ -254,13 +241,11 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                     //此处处理查看原图按钮的消失
                     if (0 == p0){
                         mPathList[currentItem] = p2!!.absolutePath
-                        pagerAdapter.notifyDataSetChanged()
+                        img_browser_viewpager.adapter!!.notifyDataSetChanged()
                         photoView.finish()
                     }
                 }
             })
         }
-
     }
-
 }
