@@ -126,7 +126,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                     if (bitmap != null) {
                         photoView.maxScale = 9.toFloat()
                         photoView.setImageBitmap(bitmap)
-                        photoView.setMessage(msg, object :DownloadCompletionCallback(){
+                        /*photoView.setMessage(msg, object :DownloadCompletionCallback(){
                             override fun onComplete(p0: Int, p1: String?, p2: File?) {
                                 //此处处理查看原图按钮的消失
                                 if (0 == p0){
@@ -134,7 +134,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                                     img_browser_viewpager.adapter!!.notifyDataSetChanged()
                                 }
                             }
-                        })
+                        })*/
                     } else {
                         photoView.setImageResource(R.mipmap.default_img_failed)
                     }
@@ -151,7 +151,18 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                 photoView.setImageResource(R.mipmap.default_img_failed)
             }
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            Thread{
+                Thread.sleep(3000)
+                LogUtil.i("photoView","开始更换图片")
+                runOnUiThread{
+                    if (position == img_browser_viewpager.currentItem)
+                    {
+                        photoView.setImageResource(R.mipmap.default_img_failed)
+                    }
 
+                }
+                LogUtil.i("photoView","更换结束")
+            }.start()
             //图片长按保存到手机
             onImageViewFound(photoView, path!!)
             return photoView
