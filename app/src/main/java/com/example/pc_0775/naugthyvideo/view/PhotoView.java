@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.example.pc_0775.naugthyvideo.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -50,6 +51,11 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView impl
 	private Message message;
 
 	private Rect textBound;
+	private RectF rectF = new RectF();
+	private Paint paint = new Paint();
+
+	ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 100);
+	int progress = 0;
 
 	public PhotoView(boolean fromChatActivity, Context context) {
 		this(fromChatActivity, context, null);
@@ -98,19 +104,24 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView impl
 		//画文字
 		canvas.drawText(perStr, getWidth()/2 - textBound.width()/2, getHeight()/2+ textBound.height()/2, textPaint);
 		LogUtil.Companion.d("PhotoView", per+"");
-	}
 
-	public void setMessage(Message message, DownloadCompletionCallback callback){
-		message.setOnContentDownloadProgressCallback(new ProgressUpdateCallback(){
+
+		valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 			@Override
-			public void onProgressUpdate(double v) {
-				if (v<1.0){
-					setPer((float) v);
-				}else{
-					finish();
-				}
+			public void onAnimationUpdate(ValueAnimator animation) {
+				progress = (int)animation.getAnimatedValue();
+				invalidate();
 			}
 		});
+		rectF.set(100, 100, 150, 200);
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.STROKE);
+		canvas.drawArc(rectF, 0, progress*3.6f, false, paint);
+
+	}
+
+	public void setMessage(Message message, ProgressUpdateCallback updateCallback, DownloadCompletionCallback callback){
+		message.setOnContentDownloadProgressCallback(updateCallback);
 		((ImageContent)message.getContent()).downloadOriginImage(message, callback);
 	}
 

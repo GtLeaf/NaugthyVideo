@@ -126,15 +126,6 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                     if (bitmap != null) {
                         photoView.maxScale = 9.toFloat()
                         photoView.setImageBitmap(bitmap)
-                        /*photoView.setMessage(msg, object :DownloadCompletionCallback(){
-                            override fun onComplete(p0: Int, p1: String?, p2: File?) {
-                                //此处处理查看原图按钮的消失
-                                if (0 == p0){
-                                    mPathList[currentItem] = p2!!.absolutePath
-                                    img_browser_viewpager.adapter!!.notifyDataSetChanged()
-                                }
-                            }
-                        })*/
                     } else {
                         photoView.setImageResource(R.mipmap.default_img_failed)
                     }
@@ -151,7 +142,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                 photoView.setImageResource(R.mipmap.default_img_failed)
             }
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            Thread{
+            /*Thread{
                 Thread.sleep(3000)
                 LogUtil.i("photoView","开始更换图片")
                 runOnUiThread{
@@ -162,7 +153,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
 
                 }
                 LogUtil.i("photoView","更换结束")
-            }.start()
+            }.start()*/
             //图片长按保存到手机
             onImageViewFound(photoView, path!!)
             return photoView
@@ -217,7 +208,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         val ic = mMsg.content as ImageContent
         //如果点击的是第一张图片并且图片未下载过，则显示大图//&& currentItem == mImgMsgList.size-1
         if (null == ic.localPath ){
-            downloadImage(mMsg)
+//            downloadImage(mMsg)
         }
     }
 
@@ -229,7 +220,7 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         mMsg = mImgMsgList.find { it.serverMessageId == msgID }!!
         currentItem = mImgMsgList.indexOf(mMsg)
         img_browser_viewpager.currentItem = currentItem
-//        initCurrentItem()
+        initCurrentItem()
     }
 
     private fun downloadImage(mMsg:Message){
