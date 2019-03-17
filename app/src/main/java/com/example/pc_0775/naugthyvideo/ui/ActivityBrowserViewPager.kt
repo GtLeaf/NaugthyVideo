@@ -47,9 +47,6 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
     private var mImgMsgList = ArrayList<Message>()
 
     companion object {
-        val BROWSER_AVATAR = "browserAvatar"
-        val FROM_CHAT_ACTIVITY = "fromChatActivity"
-        private val IMG_MSG_LIST = "imgMsgList"
         private val MESSAGE_ID = "messageID"
 
         fun actionStart(context: Context, msgID:Long) {
@@ -87,7 +84,6 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
 
             override fun onPageSelected(position: Int) {
                 LogUtil.d("ViewPager", "滑动后")
-//                downloadImage(mImgMsgList[position])
             }
         })
     }
@@ -142,18 +138,6 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                 photoView.setImageResource(R.mipmap.default_img_failed)
             }
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            /*Thread{
-                Thread.sleep(3000)
-                LogUtil.i("photoView","开始更换图片")
-                runOnUiThread{
-                    if (position == img_browser_viewpager.currentItem)
-                    {
-                        photoView.setImageResource(R.mipmap.default_img_failed)
-                    }
-
-                }
-                LogUtil.i("photoView","更换结束")
-            }.start()*/
             //图片长按保存到手机
             onImageViewFound(photoView, path!!)
             return photoView
@@ -201,17 +185,6 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
                 }
     }
 
-    private fun initCurrentItem(){
-        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            Toast.makeText(this, this.getString(R.string.jmui_local_picture_not_found_toast), Toast.LENGTH_SHORT).show()
-        }
-        val ic = mMsg.content as ImageContent
-        //如果点击的是第一张图片并且图片未下载过，则显示大图//&& currentItem == mImgMsgList.size-1
-        if (null == ic.localPath ){
-//            downloadImage(mMsg)
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun event(imgMsgList: ArrayList<Message>){
         mImgMsgList = imgMsgList
@@ -220,34 +193,35 @@ class ActivityBrowserViewPager : BaseActivityKotlin() {
         mMsg = mImgMsgList.find { it.serverMessageId == msgID }!!
         currentItem = mImgMsgList.indexOf(mMsg)
         img_browser_viewpager.currentItem = currentItem
-        initCurrentItem()
     }
 
-    private fun downloadImage(mMsg:Message){
-        val imgContent = mMsg.content as ImageContent
-        //如果不存在进度条Callback，重新注册
-        if (!mMsg.isContentDownloadProgressCallbackExists){
-            //显示下载进度条
-            mMsg.setOnContentDownloadProgressCallback(object :ProgressUpdateCallback(){
-                override fun onProgressUpdate(p0: Double) {
-                    if (p0<1.0){
-                        photoView.setPer(p0.toFloat())
-                    }else{
-                        photoView.finish()
-                    }
-                }
-            })
 
-            imgContent.downloadOriginImage(mMsg, object :DownloadCompletionCallback(){
-                override fun onComplete(p0: Int, p1: String?, p2: File?) {
-                    //此处处理查看原图按钮的消失
-                    if (0 == p0){
-                        mPathList[currentItem] = p2!!.absolutePath
-                        img_browser_viewpager.adapter!!.notifyDataSetChanged()
-                        photoView.finish()
-                    }
-                }
-            })
-        }
-    }
 }
+/*
+private fun downloadImage(mMsg:Message){
+    val imgContent = mMsg.content as ImageContent
+    //如果不存在进度条Callback，重新注册
+    if (!mMsg.isContentDownloadProgressCallbackExists){
+        //显示下载进度条
+        mMsg.setOnContentDownloadProgressCallback(object :ProgressUpdateCallback(){
+            override fun onProgressUpdate(p0: Double) {
+                if (p0<1.0){
+                    photoView.setPer(p0.toFloat())
+                }else{
+                    photoView.finish()
+                }
+            }
+        })
+
+        imgContent.downloadOriginImage(mMsg, object :DownloadCompletionCallback(){
+            override fun onComplete(p0: Int, p1: String?, p2: File?) {
+                //此处处理查看原图按钮的消失
+                if (0 == p0){
+                    mPathList[currentItem] = p2!!.absolutePath
+                    img_browser_viewpager.adapter!!.notifyDataSetChanged()
+                    photoView.finish()
+                }
+            }
+        })
+    }
+}*/

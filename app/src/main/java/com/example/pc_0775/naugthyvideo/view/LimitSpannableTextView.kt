@@ -56,7 +56,7 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
         //行数没有超，字符串长度没有超过限制
         if (lastCharIndex<0){
             //行数没超过限制
-            this.setText(textString)
+            this.text = textString
             return
         }
         //行数超出了限制
@@ -126,16 +126,16 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
 
         }, sourceLength, explicitText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         //默认设置为“展开”状态下的TextVie
-        this.setText(mSpan)
+        this.text = mSpan
         Log.i("info", "字符串处理耗时" + (System.currentTimeMillis() - startTime) + " ms");
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
         //处理ClicekSpan与textIsSelectable属性冲突，暂时不起作用
-        /*if(this.text != null && text is Spannable){
+        if(this.text != null && text is Spannable){
             handleLinkMovementMethod(this, text as Spannable, event)
-        }*/
+        }
 
 
         return super.onTouchEvent(event)
@@ -253,7 +253,7 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
             }
         }, text.length, explicitTextAll.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         //默认为需要展开状态
-        textView.setText(mSpan)
+        textView.text = mSpan
     }
 
 }

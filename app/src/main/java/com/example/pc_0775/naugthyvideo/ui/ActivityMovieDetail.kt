@@ -18,6 +18,7 @@ import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.view.LimitSpannableTextView
@@ -369,6 +370,7 @@ class ActivityMovieDetail : BaseActivity() {
             }
             editor = preferences?.edit()
         }
+        //??没提交commit
     }
 
     //
