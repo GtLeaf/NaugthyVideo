@@ -68,8 +68,9 @@
         <activity android:name=".ui.ActivityChangeUserInfo" />
         <activity android:name=".ui.ActivityChatHome" />
         <activity android:name=".ui.ActivityChatRoom" />
-        <activity android:name=".ui.ChatActivity" />
-        <activity android:name=".ui.ActivityBrowserViewPager"></activity>
+        <activity android:name=".ui.ChatActivity"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+        <activity android:name=".ui.ActivityBrowserViewPager"/>
     </application>
 
 </manifest>

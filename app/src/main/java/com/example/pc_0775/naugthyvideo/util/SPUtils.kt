@@ -1,6 +1,5 @@
 package com.example.pc_0775.naugthyvideo.util
 
-import android.annotation.SuppressLint
 import android.content.Context
 
 /**
@@ -18,7 +17,20 @@ class SPUtils {
         /*
         * 保存数据
         * */
-        fun put(context: Context, key:String, obj: Any){
+        fun putApply(context: Context, key:String, obj: Any){
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val editor = sp.edit()
+            when (obj) {
+                is Boolean -> editor.putBoolean(key, obj)
+                is Float -> editor.putFloat(key, obj)
+                is Int -> editor.putInt(key, obj)
+                is Long -> editor.putLong(key, obj)
+                else -> editor.putString(key, obj as String)
+            }
+            editor.apply()
+        }
+
+        fun put(context: Context, key:String, obj: Any):Boolean{
             val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             val editor = sp.edit()
             when (obj) {
@@ -28,14 +40,14 @@ class SPUtils {
                 is Long -> editor.putLong(key, obj)
                 else -> editor.putString(key, obj as String)
             }
-            editor.commit()
+            return editor.commit()
         }
 
         /*
         * 获取指定数据
         * */
         fun get(context: Context, key: String, defaultObj:Any):Any?{
-            var sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             return when(defaultObj){
                 is Boolean -> sp.getBoolean(key, defaultObj)
                 is Float -> sp.getFloat(key, defaultObj)
@@ -49,28 +61,42 @@ class SPUtils {
         /*
         * 删除指定数据
         * */
-        fun remove(context: Context, key: String){
-            var sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-            var editor = sp.edit()
+        fun removeApply(context: Context, key: String){
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val editor = sp.edit()
             editor.remove(key)
-            editor.commit()
+            editor.apply()
+        }
+
+        fun remove(context: Context, key: String):Boolean{
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.remove(key)
+            return editor.commit()
         }
 
         /*
         * 删除所有数据
         * */
-        fun clear(context: Context){
-            var sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-            var editor = sp.edit()
+        fun clearApply(context: Context){
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val editor = sp.edit()
             editor.clear()
-            editor.commit()
+            editor.apply()
+        }
+
+        fun clear(context: Context):Boolean{
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.clear()
+            return editor.commit()
         }
 
         /*
         * 检查key对应的数据是否存在
         * */
         fun contains(context: Context, key: String):Boolean{
-            var sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+            val sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
             return sp.contains(key)
         }
     }

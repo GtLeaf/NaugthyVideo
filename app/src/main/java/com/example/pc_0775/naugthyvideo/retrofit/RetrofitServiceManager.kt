@@ -12,30 +12,6 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by PC-0775 on 2019/1/5.
  */
-/*
-class RetrofitServiceManager private constructor(){
-    private var r:Retrofit? = null
-
-    init {
-
-    }
-
-    companion object {
-        private val DEFAULT_TIME_OUT = 5//超时时间5s
-        private val DEFAULT_READ_TIME_OUT = 10
-        private var instance:RetrofitServiceManager? = null
-            get(){
-                if (field == null){
-                    field = RetrofitServiceManager()
-                }
-                return field
-            }
-
-        fun get(): RetrofitServiceManager{
-            return instance!!
-        }
-    }
-}*/
 
 object RetrofitServiceManager{
     private val DEFAULT_TIME_OUT = 5//超时时间5s

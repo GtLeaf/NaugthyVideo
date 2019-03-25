@@ -313,9 +313,9 @@ public class FragmentLogin extends Fragment {
      */
     private void rememberPassword(String phone_number, String password){
         if (cb_rememberPass.isChecked()){
-            SPUtils.Companion.put(activity, "isRemember", true);
-            SPUtils.Companion.put(activity, "phone_number", phone_number);
-            SPUtils.Companion.put(activity, "password", password);
+            SPUtils.Companion.putApply(activity, "isRemember", true);
+            SPUtils.Companion.putApply(activity, "phone_number", phone_number);
+            SPUtils.Companion.putApply(activity, "password", password);
         }
     }
 

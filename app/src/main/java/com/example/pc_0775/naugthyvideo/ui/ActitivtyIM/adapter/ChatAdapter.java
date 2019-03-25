@@ -7,7 +7,9 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
+import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
+import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.LogUtil;
 import com.example.pc_0775.naugthyvideo.ui.ChatActivity;
 import com.example.pc_0775.naugthyvideo.bean.UIMessage.AudioMsgBody;
 import com.example.pc_0775.naugthyvideo.bean.UIMessage.FileMsgBody;
@@ -23,6 +25,10 @@ import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.GlideUtils;
 
 import java.io.File;
 import java.util.List;
+
+import cn.jpush.im.android.api.callback.DownloadCompletionCallback;
+import cn.jpush.im.android.api.content.VideoContent;
+import cn.jpush.im.android.api.enums.ContentType;
 
 public class ChatAdapter extends BaseQuickAdapter<UIMessage, BaseViewHolder> {
 
@@ -55,10 +61,12 @@ public class ChatAdapter extends BaseQuickAdapter<UIMessage, BaseViewHolder> {
 
     public ChatAdapter(Context context, List<UIMessage> data) {
         super(data);
+
         setMultiTypeDelegate(new MultiTypeDelegate<UIMessage>() {
             @Override
             protected int getItemType(UIMessage entity) {
-                boolean isSend = entity.getSenderId().equals(ChatActivity.Companion.getMSenderId());
+                boolean isSend = entity.getSenderId().equals(String.valueOf(Constants.userInfo.getUserID()));;
+//                boolean isSend = entity.getSenderId().equals(ChatActivity.Companion.getMSenderId());
                 if (MsgType.TEXT == entity.getMsgType()) {
                     return isSend ? TYPE_SEND_TEXT : TYPE_RECEIVE_TEXT;
                 } else if (MsgType.IMAGE == entity.getMsgType()) {
@@ -100,8 +108,12 @@ public class ChatAdapter extends BaseQuickAdapter<UIMessage, BaseViewHolder> {
                 || msgContent instanceof AudioMsgBody || msgContent instanceof VideoMsgBody || msgContent instanceof FileMsgBody) {
             //只需要设置自己发送的状态
             MsgSendStatus sentStatus = item.getSentStatus();
-            boolean isSend = item.getSenderId().equals(ChatActivity.Companion.getMSenderId());
+            boolean isSend = item.getSenderId().equals(String.valueOf(Constants.userInfo.getUserID()));
             if (isSend) {
+                if (null == helper){
+                    LogUtil.d("helper is null"+item.getServerMessage().getContentType());
+                    return;
+                }
                 if (sentStatus == MsgSendStatus.SENDING) {
                     helper.setVisible(R.id.chat_item_progress, true).setVisible(R.id.chat_item_fail, false);
                 } else if (sentStatus == MsgSendStatus.FAILED) {
@@ -121,15 +133,11 @@ public class ChatAdapter extends BaseQuickAdapter<UIMessage, BaseViewHolder> {
                 } else if (sentStatus == MsgSendStatus.SENT) {
                     helper.setVisible(R.id.chat_item_progress, false).setVisible(R.id.chat_item_fail, false);
                 }
-            } else {
-
             }
         }
-
-
     }
 
-    private void setContent(BaseViewHolder helper, UIMessage item) {
+    private void setContent(final BaseViewHolder helper, final UIMessage item) {
         if (item.getMsgType().equals(MsgType.TEXT)) {   //文字信息
             TextMsgBody msgBody = (TextMsgBody) item.getBody();
             helper.setText(R.id.chat_item_content_text, msgBody.getMessage());
@@ -146,7 +154,23 @@ public class ChatAdapter extends BaseQuickAdapter<UIMessage, BaseViewHolder> {
                 }
             }
         } else if (item.getMsgType().equals(MsgType.VIDEO)) {   //视频信息
-            VideoMsgBody msgBody = (VideoMsgBody) item.getBody();
+            final BaseViewHolder myHelp = helper;
+            GlideUtils.loadChatImage(mContext, "", (ImageView) myHelp.getView(R.id.bivPic));
+            String path = ((VideoMsgBody)item.getBody()).getLocalPath();
+            if (null == path){
+                ((VideoContent)item.getServerMessage().getContent()).downloadThumbImage(item.getServerMessage(), new DownloadCompletionCallback() {
+                    @Override
+                    public void onComplete(int i, String s, File file) {
+                        if (file.exists()) {
+                            ((VideoMsgBody)item.getBody()).setExtra(file.getAbsolutePath());
+                            GlideUtils.loadChatImage(mContext, file.getAbsolutePath(), (ImageView) myHelp.getView(R.id.bivPic));
+                        }
+                    }
+                });
+            }else {
+                GlideUtils.loadChatImage(mContext, path, (ImageView) myHelp.getView(R.id.bivPic));
+            }
+
             /*File file = new File(msgBody.getExtra());
             if (file.exists()) {
                 GlideUtils.loadChatImage(mContext, msgBody.getExtra(), (ImageView) helper.getView(R.id.bivPic));

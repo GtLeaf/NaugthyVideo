@@ -21,8 +21,10 @@ import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.LogUtil
 import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.PictureFileUtil
 import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.widget.MediaManager
 import android.os.Environment
+import android.util.ArrayMap
 import cn.jpush.im.android.api.ChatRoomManager
 import cn.jpush.im.android.api.JMessageClient
+import cn.jpush.im.android.api.callback.DownloadCompletionCallback
 import cn.jpush.im.android.api.callback.RequestCallback
 import cn.jpush.im.android.api.content.ImageContent
 import cn.jpush.im.android.api.content.TextContent
@@ -35,6 +37,7 @@ import cn.jpush.im.android.api.model.Conversation
 import cn.jpush.im.android.api.model.Message
 import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.Constants.Constants
+import com.example.pc_0775.naugthyvideo.ViewModel.ChatMsgModel
 import com.example.pc_0775.naugthyvideo.bean.UIMessage.*
 import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.FileUtils
 import com.luck.picture.lib.PictureSelector
@@ -50,6 +53,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -58,11 +62,12 @@ import kotlin.collections.ArrayList
  */
 class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener {
 
-
     private var ivAudio: ImageView? = null
     private var mAdapter: ChatAdapter? = null
     private var currentRoom: ChatRoomInfo? = null
     private var imgMsgList = ArrayList<Message>()
+    private var handler = ChatActivityHandler(this)
+    private var chatMsgModel = ChatMsgModel()
 
     companion object {
         val mSenderId = "right"
@@ -70,6 +75,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
         val REQUEST_CODE_IMAGE = 1000
         val REQUEST_CODE_VEDIO = 2000
         val REQUEST_CODE_FILE = 3000
+        val DOWNLOAD_VIDEO_IMAGE = 4000
 
         fun actionStart(context: Context, roomID:Long){
             val intent = Intent(context, ChatActivity::class.java)
@@ -78,6 +84,21 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
             intent.putExtras(bundle)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
+        }
+
+        class ChatActivityHandler(activity: ChatActivity) : Handler(){
+            var activity = WeakReference<ChatActivity>(activity)
+
+            override fun handleMessage(msg: android.os.Message?) {
+                when(msg!!.what){
+                    DOWNLOAD_VIDEO_IMAGE->{
+
+                    }
+                    else ->{
+                    }
+                }
+            }
+
         }
     }
 
@@ -116,7 +137,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
                     MsgType.TEXT -> {}
                     MsgType.IMAGE -> {
                         if (it.sentStatus != MsgSendStatus.SENT) return@setOnItemChildClickListener
-                        EventBus.getDefault().postSticky(imgMsgList)
+                        EventBus.getDefault().postSticky(chatMsgModel.getAllImgMsgList())
                         ActivityBrowserViewPager.actionStart(this@ChatActivity, it.msgId.toLong())
                     }
                     MsgType.AUDIO -> {
@@ -462,7 +483,7 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
     private fun getBaseSendMessage(msgType: MsgType): UIMessage {
         var mMessage = UIMessage()
         mMessage.uuid = UUID.randomUUID().toString()
-        mMessage.senderId = mSenderId
+        mMessage.senderId = Constants.userInfo.userID.toString()
         mMessage.targetId = mTargetId
         mMessage.sentTime = System.currentTimeMillis()
         mMessage.sentStatus = MsgSendStatus.SENDING
@@ -518,81 +539,15 @@ class ChatActivity : BaseActivityKotlin(), SwipeRefreshLayout.OnRefreshListener 
 
 
     fun onEventMainThread(event: ChatRoomMessageEvent) {
-        val msgs = event.messages
-        val mReceiveMsgList = ArrayList<UIMessage>()
-        //处理每一条信息
-        var mUIMessage:UIMessage? = null
-        msgs.forEach {
-            when(it.contentType){
-                //文本消息
-                ContentType.text -> {
-                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID) {
-                        getBaseSendMessage(MsgType.TEXT)
-                    } else {
-                        getBaseReceiveMessage(MsgType.TEXT)
-                    }
-                    val mTextMsgBody = TextMsgBody()
-                    mTextMsgBody.message = (it.content as TextContent).text
-                    mUIMessage!!.body = mTextMsgBody
-                }
-                //图片消息
-                ContentType.image -> {
-                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID) {
-                        getBaseSendMessage(MsgType.IMAGE)
-                    } else {
-                        getBaseReceiveMessage(MsgType.IMAGE)
-                    }
-                    val mImageMsgBody = ImageMsgBody()//"http://pic19.nipic.com/20120323/9248108_173720311160_2.jpg"
-                    mImageMsgBody.thumbPath = (it.content as ImageContent).localThumbnailPath
-                    mImageMsgBody.localPath = (it.content as ImageContent).localPath
-                    mUIMessage!!.body = mImageMsgBody
-                    imgMsgList.add(it)
-                }
-                //视频消息
-                ContentType.video -> {
-                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID){
-                        getBaseSendMessage(MsgType.VIDEO)
-                    } else {
-                        getBaseReceiveMessage(MsgType.VIDEO)
-                    }
-                    val mVideoMsgBody = VideoMsgBody()
-                    mVideoMsgBody.extra = (it.content as VideoContent).thumbLocalPath
-                    mVideoMsgBody.localPath = (it.content as VideoContent).videoLocalPath
-                    mVideoMsgBody.duration = (it.content as VideoContent).duration.toLong()
-                    mUIMessage!!.body = mVideoMsgBody
-                }
-                //音频消息
-                ContentType.voice -> {
-                    mUIMessage = if (it.fromUser.userID == Constants.userInfo.userID){
-                        getBaseSendMessage(MsgType.AUDIO)
+        chatMsgModel.addChatRoomMsg(event)
+        val mMessageText = getBaseReceiveMessage(MsgType.TEXT)
 
-                    } else {
-                        getBaseReceiveMessage(MsgType.AUDIO)
-                    }
-                    val mAudioMsgBody = AudioMsgBody()
-                    mAudioMsgBody.localPath = (it.content as VoiceContent).localPath
-                    mAudioMsgBody.duration = (it.content as VoiceContent).duration.toLong()
-                    mUIMessage!!.body = mAudioMsgBody
-
-                }
-                //文件消息
-                ContentType.file -> {}
-                //位置消息
-                ContentType.location -> {}
-                else -> {
-                    LogUtil.d("aa")
-                }
-            }
-            if (mUIMessage != null){
-                mUIMessage!!.sentStatus = MsgSendStatus.SENT
-                mUIMessage!!.msgId = it.serverMessageId.toString()
-                mReceiveMsgList.add(mUIMessage!!)
-            }
-        }
-
-        mAdapter!!.addData(mReceiveMsgList)
+        mAdapter!!.addData( chatMsgModel.getMsgList())
         mAdapter!!.notifyDataSetChanged()
         rv_chat_list.scrollToPosition(mAdapter!!.itemCount - 1)
+
+
+
     }
 
     private fun onMyBackPressed() {

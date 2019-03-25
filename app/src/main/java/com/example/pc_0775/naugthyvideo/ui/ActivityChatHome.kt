@@ -60,7 +60,6 @@ class ActivityChatHome : BaseActivityKotlin() {
             }
             else -> {}
         }
-
     }
 
     private fun reset(){

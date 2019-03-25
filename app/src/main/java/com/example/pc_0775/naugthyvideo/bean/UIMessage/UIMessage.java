@@ -1,6 +1,8 @@
 package com.example.pc_0775.naugthyvideo.bean.UIMessage;
 
 
+import cn.jpush.im.android.api.model.Message;
+
 public class UIMessage {
 
     private String uuid;
@@ -11,6 +13,7 @@ public class UIMessage {
     private String senderId;
     private String targetId;
     private long sentTime;
+    private Message serverMessage;
 
 
     public String getUuid() {
@@ -76,5 +79,13 @@ public class UIMessage {
 
     public void setSentTime(long sentTime) {
         this.sentTime = sentTime;
+    }
+
+    public Message getServerMessage() {
+        return serverMessage;
+    }
+
+    public void setServerMessage(Message serverMessage) {
+        this.serverMessage = serverMessage;
     }
 }
