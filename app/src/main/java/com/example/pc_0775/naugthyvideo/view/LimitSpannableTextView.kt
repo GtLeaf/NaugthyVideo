@@ -130,17 +130,6 @@ class LimitSpannableTextView(context: Context, attrs: AttributeSet?=null) : AppC
         Log.i("info", "字符串处理耗时" + (System.currentTimeMillis() - startTime) + " ms");
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        //处理ClicekSpan与textIsSelectable属性冲突，暂时不起作用
-        if(this.text != null && text is Spannable){
-            handleLinkMovementMethod(this, text as Spannable, event)
-        }
-
-
-        return super.onTouchEvent(event)
-    }
-
     private fun handleLinkMovementMethod(widget: TextView, buffer: Spannable, event: MotionEvent?):Boolean{
         val action = event?.action
         if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN){
