@@ -1,263 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:background="@color/lightgray"
     tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityMovieDetail">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/iv_detail_movie"
+            android:layout_width="380dp"
+            android:layout_height="520dp"
+            android:background="@color/white"
+            android:scaleType="fitXY"
+            android:transitionName="@string/transition_movie_img" />
+
+
+        <TextView
+            android:id="@+id/tv_detail_movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_detail_movie"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="肖申克的救赎"
+            android:textSize="@dimen/title_font_size" />
+
+        <TextView
+            android:id="@+id/tv_detail_movie_original_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_title"
+            android:layout_centerHorizontal="true"
+            android:text="肖申克的救赎"
+            android:textSize="@dimen/title_font_size" />
+
+        <View
+            android:id="@+id/v_title_line"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="1dp"
+            android:layout_alignEnd="@+id/tv_detail_ratings_count"
+            android:layout_alignRight="@+id/tv_detail_ratings_count"
+            android:layout_below="@+id/tv_detail_movie_original_title"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/gray" />
 
-            <ImageView
-                android:id="@+id/iv_detail_movie"
-                android:layout_width="380dp"
-                android:layout_height="520dp"
-                android:background="@color/white"
-                android:scaleType="fitXY"
-                android:transitionName="@string/transition_movie_img"/>
+        <TextView
+            android:id="@+id/tv_detail_movie_average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/v_title_line"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Average"
+            android:textSize="30sp"
+            android:transitionName="@string/transition_movie_average" />
 
-            <RelativeLayout
-                android:id="@+id/ll_detail_movie_info"
-                android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_detail_ratings_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_detail_movie_average"
+            android:layout_marginRight="10dp"
+            android:text="评价人数" />
+
+        <TextView
+            android:id="@+id/tv_detail_movie_direct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/v_title_line"
+            android:layout_marginLeft="@dimen/movie_detail_magrin"
+            android:layout_marginTop="@dimen/movie_detail_magrinTop"
+            android:text="导演:"
+            android:textSize="@dimen/normal_font_size"
+            android:transitionName="@string/transition_movie_direct_name" />
+
+        <TextView
+            android:id="@+id/tv_detail_movie_casts"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_direct"
+            android:layout_marginLeft="@dimen/movie_detail_magrin"
+            android:layout_marginTop="@dimen/movie_detail_magrinTop"
+            android:text="演员阵容:"
+            android:textSize="@dimen/normal_font_size" />
+
+        <TextView
+            android:id="@+id/tv_detail_movie_genre"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_casts"
+            android:layout_marginLeft="@dimen/movie_detail_magrin"
+            android:layout_marginTop="@dimen/movie_detail_magrinTop"
+            android:text="类型："
+            android:textSize="@dimen/normal_font_size"
+            android:transitionName="@string/transition_movie_genre" />
+
+        <TextView
+            android:id="@+id/tv_detail_movie_pubdate"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_genre"
+            android:layout_marginLeft="@dimen/movie_detail_magrin"
+            android:layout_marginTop="@dimen/movie_detail_magrinTop"
+            android:text="上映时间："
+            android:textSize="@dimen/normal_font_size" />
+
+        <TextView
+            android:id="@+id/tv_detail_movie_durations"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_pubdate"
+            android:layout_marginLeft="@dimen/movie_detail_magrin"
+            android:layout_marginTop="@dimen/movie_detail_magrinTop"
+            android:text="影片时长："
+            android:textSize="@dimen/normal_font_size" />
+
+        <TextView
+            android:id="@+id/tv_movie_summary_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_durations"
+            android:layout_margin="10dp"
+            android:background="@drawable/left_side_label"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:text="剧情简介"
+            android:textColor="@color/black"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/normal_font_size" />
+
+        <com.example.pc_0775.naugthyvideo.view.LimitSpannableTextView
+            android:id="@+id/tv_detail_movie_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_movie_summary_label"
+            android:layout_marginLeft="@dimen/movie_detail_magrin"
+            android:layout_marginRight="@dimen/movie_detail_magrin"
+            android:layout_marginTop="@dimen/movie_detail_magrin"
+            android:lineSpacingExtra="@dimen/movie_detail_lineSpacingExtra_magrin"
+            android:text="summary"
+            android:textSize="@dimen/normal_font_size" />
+
+        <LinearLayout
+            android:id="@+id/ll_moive_summary_division_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_detail_movie_summary"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:background="@color/green" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/iv_detail_movie"
-                android:layout_margin="3dp"
-                android:background="@color/white">
+                android:text="@string/movie_short_commentary"
+                android:textColor="@color/green"
+                android:textSize="@dimen/normal_font_size" />
 
-                <TextView
-                    android:id="@+id/tv_detail_movie_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
-                    android:text="肖申克的救赎"
-                    android:textSize="@dimen/title_font_size"/>
-                <TextView
-                    android:id="@+id/tv_detail_movie_original_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_title"
-                    android:layout_centerHorizontal="true"
-                    android:text="肖申克的救赎"
-                    android:textSize="@dimen/title_font_size"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:background="@color/green" />
 
-                <View
-                    android:id="@+id/v_title_line"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignEnd="@+id/tv_detail_ratings_count"
-                    android:layout_alignRight="@+id/tv_detail_ratings_count"
-                    android:layout_below="@+id/tv_detail_movie_original_title"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/gray" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_detail_movie_average"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/v_title_line"
-                    android:text="Average"
-                    android:textSize="30sp"
-                    android:transitionName="@string/transition_movie_average"/>
+        <LinearLayout
+            android:id="@+id/ll_short_commentary_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_moive_summary_division_layout"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_detail_ratings_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_average"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:text="评价人数" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_detail_movie_direct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/v_title_line"
-                    android:layout_marginLeft="@dimen/movie_detail_magrin"
-                    android:layout_marginTop="@dimen/movie_detail_magrinTop"
-                    android:text="导演:"
-                    android:textSize="@dimen/normal_font_size"
-                    android:transitionName="@string/transition_movie_direct_name"/>
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_detail_movie_casts"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_direct"
-                    android:layout_marginLeft="@dimen/movie_detail_magrin"
-                    android:layout_marginTop="@dimen/movie_detail_magrinTop"
-                    android:text="演员阵容:"
-                    android:textSize="@dimen/normal_font_size"/>
-
-                <TextView
-                    android:id="@+id/tv_detail_movie_genre"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_casts"
-                    android:layout_marginLeft="@dimen/movie_detail_magrin"
-                    android:layout_marginTop="@dimen/movie_detail_magrinTop"
-                    android:text="类型："
-                    android:textSize="@dimen/normal_font_size"
-                    android:transitionName="@string/transition_movie_genre"/>
-                <TextView
-                    android:id="@+id/tv_detail_movie_pubdate"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_genre"
-                    android:layout_marginLeft="@dimen/movie_detail_magrin"
-                    android:layout_marginTop="@dimen/movie_detail_magrinTop"
-                    android:text="上映时间："
-                    android:textSize="@dimen/normal_font_size"/>
-
-                <TextView
-                    android:id="@+id/tv_detail_movie_durations"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_pubdate"
-                    android:layout_marginLeft="@dimen/movie_detail_magrin"
-                    android:layout_marginTop="@dimen/movie_detail_magrinTop"
-                    android:text="影片时长："
-                    android:textSize="@dimen/normal_font_size"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_moive_genre_division_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_durations"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/green"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/movie_synopsis"
-                        android:textSize="@dimen/normal_font_size"
-                        android:textColor="@color/green"/>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/green"/>
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_movie_summary_label_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_durations"
-                    android:layout_marginTop="10dp">
-
-                    <ImageView
-                        android:id="@+id/iv_movie_summary_label_bg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:src="@drawable/left_side_label"/>
-
-                    <TextView
-                        android:id="@+id/tv_movie_summary_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/normal_font_size"
-                        android:text="剧情简介"
-                        android:textSize="@dimen/normal_font_size"
-                        android:textColor="@color/black"
-                        android:textIsSelectable="true"/>
-
-                </RelativeLayout>
-
-                <com.example.pc_0775.naugthyvideo.view.LimitSpannableTextView
-                    android:id="@+id/tv_detail_movie_summary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/rl_movie_summary_label_layout"
-                    android:layout_marginLeft="@dimen/movie_detail_magrin"
-                    android:layout_marginRight="@dimen/movie_detail_magrin"
-                    android:layout_marginTop="@dimen/movie_detail_magrin"
-                    android:text="summary"
-                    android:textSize="@dimen/normal_font_size"
-                    android:lineSpacingExtra="@dimen/movie_detail_lineSpacingExtra_magrin"
-                    android:background="@color/white" />
-
-                <LinearLayout
-                    android:id="@+id/ll_moive_summary_division_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_detail_movie_summary"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/green"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/movie_short_commentary"
-                        android:textSize="@dimen/normal_font_size"
-                        android:textColor="@color/green"/>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/green"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_short_commentary_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="5dp"
-                    android:layout_below="@id/ll_moive_summary_division_layout">
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-    </ScrollView>
-</LinearLayout>
+</ScrollView>
