@@ -25,6 +25,7 @@ import android.transition.Slide;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -115,6 +116,9 @@ public class ActivityHome extends BaseActivity {
      * rv_homeList的数据源
      */
     private List dataList;
+
+    //两次退出标志位
+    private long mExitTime = System.currentTimeMillis();
 
 
     //豆瓣电影top250 data
@@ -332,6 +336,18 @@ public class ActivityHome extends BaseActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        /*if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            if ((System.currentTimeMillis() - mExitTime > 2000)){
+                showToast("再按一次退出");
+            }else {
+
+            }
+        }*/
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public void onBackPressed() {
         //关闭抽屉
         if (drawer_layout.isDrawerOpen(nav_headerView)){
@@ -340,7 +356,12 @@ public class ActivityHome extends BaseActivity {
             // 点击后退关闭插屏广告
             SpotManager.getInstance(ActivityHome.this).hideSpot();
         } else {
-            super.onBackPressed();
+            if ((System.currentTimeMillis() - mExitTime > 2000)){
+                showToast("再按一次退出");
+                mExitTime = System.currentTimeMillis();
+            }else {
+                super.onBackPressed();
+            }
         }
     }
 
