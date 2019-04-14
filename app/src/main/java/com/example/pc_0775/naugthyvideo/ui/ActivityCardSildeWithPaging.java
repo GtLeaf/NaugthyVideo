@@ -22,15 +22,15 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardConfig;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardItemTouchHelperCallback;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.CardShowInfoBean;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.OnCardSwipeListener;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.adapter.AdapterCardSwipeLive;
-import com.example.pc_0775.naugthyvideo.CardSwipeControl.myLayoutManager.CardLayoutManager;
+import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.CardConfig;
+import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.CardItemTouchHelperCallback;
+import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.CardShowInfoBean;
+import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.OnCardSwipeListener;
+import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.adapter.AdapterCardSwipeLive;
+import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.myLayoutManager.CardLayoutManager;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
 
 import java.util.ArrayList;

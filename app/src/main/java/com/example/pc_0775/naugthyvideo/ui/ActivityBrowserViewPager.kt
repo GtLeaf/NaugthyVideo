@@ -1,40 +1,30 @@
 package com.example.pc_0775.naugthyvideo.ui
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import cn.jpush.im.android.api.callback.DownloadCompletionCallback
-import cn.jpush.im.android.api.callback.ProgressUpdateCallback
 import cn.jpush.im.android.api.content.ImageContent
-import cn.jpush.im.android.api.model.Conversation
 import cn.jpush.im.android.api.model.Message
-import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivityKotlin
 import com.example.pc_0775.naugthyvideo.util.BitmapLoader
 import com.example.pc_0775.naugthyvideo.util.LogUtil
 import com.example.pc_0775.naugthyvideo.util.NativeImageLoader
-import com.example.pc_0775.naugthyvideo.view.PhotoView
+import com.example.pc_0775.naugthyvideo.ui.view.PhotoView
 import kotlinx.android.synthetic.main.activity_browser_view_pager.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
-import java.lang.ref.WeakReference
 import java.util.ArrayList
 
 class ActivityBrowserViewPager : BaseActivityKotlin() {
-
     private lateinit var photoView:PhotoView
     private var mWidth = 0
     private var mHeight = 0

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="com.example.pc_0775.naugthyvideo.ui.ActivityBrowserViewPager">
 
-    <com.example.pc_0775.naugthyvideo.view.ImgBrowserViewPager
+    <com.example.pc_0775.naugthyvideo.ui.view.ImgBrowserViewPager
         android:id="@+id/img_browser_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -18,16 +18,15 @@ import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.Constants.Constants
-import com.example.pc_0775.naugthyvideo.view.LimitSpannableTextView
+import com.example.pc_0775.naugthyvideo.ui.view.LimitSpannableTextView
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivity
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieDetail
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieEntry
-import com.example.pc_0775.naugthyvideo.retrofit.MovieLoader
+import com.example.pc_0775.naugthyvideo.other.retrofit.MovieLoader
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -370,7 +369,6 @@ class ActivityMovieDetail : BaseActivity() {
             }
             editor = preferences?.edit()
         }
-        //??没提交commit
     }
 
     //

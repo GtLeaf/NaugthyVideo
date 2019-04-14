@@ -10,9 +10,8 @@ import cn.jpush.im.android.api.ChatRoomManager
 import cn.jpush.im.android.api.callback.RequestCallback
 import cn.jpush.im.android.api.model.ChatRoomInfo
 import cn.jpush.im.android.api.model.Conversation
-import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseFragment
+import com.example.pc_0775.naugthyvideo.ui.base.BaseFragment
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterChatRoomInfo
 import com.example.pc_0775.naugthyvideo.ui.ChatActivity
 import io.vov.vitamio.utils.Log

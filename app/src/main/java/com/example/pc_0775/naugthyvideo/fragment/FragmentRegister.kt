@@ -24,7 +24,7 @@ import cn.jpush.im.android.api.model.UserInfo
 import cn.jpush.im.android.api.options.RegisterOptionalUserInfo
 import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.bean.BaseResult
-import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader
+import com.example.pc_0775.naugthyvideo.other.retrofit.UserLoginLoader
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import okhttp3.*
@@ -324,9 +324,7 @@ class FragmentRegister : Fragment() {
                 et_register_nickname.text.toString(), et_register_password.text.toString(), selectSex)
                 .subscribe(object : Observer<BaseResult<Objects>> {
                     override fun onSubscribe(d: Disposable) {
-
                     }
-
                     override fun onNext(userBeanBaseResult: BaseResult<Objects>) {
                         var msg = userBeanBaseResult.message
                         activity.runOnUiThread { Constants.createAlertDialog(activity, msg) }

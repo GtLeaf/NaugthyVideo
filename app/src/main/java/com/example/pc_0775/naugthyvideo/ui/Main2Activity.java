@@ -15,7 +15,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 
 public class Main2Activity extends BaseActivity {

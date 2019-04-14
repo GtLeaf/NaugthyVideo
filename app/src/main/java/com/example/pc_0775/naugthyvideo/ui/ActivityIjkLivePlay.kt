@@ -11,8 +11,8 @@ import android.widget.FrameLayout
 import android.widget.SeekBar
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivity
-import com.example.pc_0775.naugthyvideo.media.AndroidMediaController
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity
+import com.example.pc_0775.naugthyvideo.other.media.AndroidMediaController
 import kotlinx.android.synthetic.main.activity_ijk_live_play.*
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 

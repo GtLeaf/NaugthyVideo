@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.fragment.FragmentLogin;
 import com.example.pc_0775.naugthyvideo.fragment.FragmentRegister;
 

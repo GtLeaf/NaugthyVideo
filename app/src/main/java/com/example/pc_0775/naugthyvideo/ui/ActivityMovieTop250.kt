@@ -18,7 +18,7 @@ import android.view.View
 import android.widget.Toast
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivity
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterMoiveTop250
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil

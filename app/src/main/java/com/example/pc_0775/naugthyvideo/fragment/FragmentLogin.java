@@ -25,7 +25,7 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.bean.BaseResult;
 import com.example.pc_0775.naugthyvideo.bean.UserBean;
-import com.example.pc_0775.naugthyvideo.retrofit.UserLoginLoader;
+import com.example.pc_0775.naugthyvideo.other.retrofit.UserLoginLoader;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 import com.example.pc_0775.naugthyvideo.util.SPUtils;
 import com.google.gson.reflect.TypeToken;

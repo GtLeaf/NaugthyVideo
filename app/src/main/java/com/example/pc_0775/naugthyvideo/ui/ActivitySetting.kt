@@ -8,7 +8,7 @@ import android.widget.CompoundButton
 import cn.jpush.im.android.api.JMessageClient
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivity
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity
 import com.example.pc_0775.naugthyvideo.util.SPUtils
 import kotlinx.android.synthetic.main.activity_setting.*
 

@@ -6,7 +6,7 @@ import android.view.View
 import cn.jpush.im.android.api.model.UserInfo
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivityKotlin
 import kotlinx.android.synthetic.main.activity_user_info.*
 
 class ActivityUserInfo : BaseActivityKotlin() {

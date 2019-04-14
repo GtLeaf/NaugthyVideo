@@ -16,7 +16,7 @@ import android.webkit.WebViewClient;
 import com.example.pc_0775.naugthyvideo.Anno.ViewInject;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.base.BaseActivity;
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
 import com.example.pc_0775.naugthyvideo.util.AdFilterTool;
 import com.example.pc_0775.naugthyvideo.Anno.annoUtil.ViewInjectUtils;
 

@@ -7,7 +7,6 @@ import cdc.sed.yff.nm.cm.ErrorCode
 import cdc.sed.yff.nm.sp.SpotListener
 import cdc.sed.yff.nm.sp.SpotManager
 import com.example.pc_0775.naugthyvideo.Constants.Constants
-import com.example.pc_0775.naugthyvideo.base.BaseActivity
 
 /**
  * Created by PC-0775 on 2018/12/21.

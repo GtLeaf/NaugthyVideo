@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.base.BaseActivityKotlin
+import com.example.pc_0775.naugthyvideo.ui.base.BaseActivityKotlin
 import kotlinx.android.synthetic.main.activity_change_user_info.*
 
 class ActivityChangeUserInfo : BaseActivityKotlin() {

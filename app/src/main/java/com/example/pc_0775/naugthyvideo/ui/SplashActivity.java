@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.base.YoumiBaseActivity;
+import com.example.pc_0775.naugthyvideo.ui.base.YoumiBaseActivity;
 import com.example.pc_0775.naugthyvideo.util.PermissionHelper;
 
 import cdc.sed.yff.AdManager;

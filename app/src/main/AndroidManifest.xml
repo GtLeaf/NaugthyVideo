@@ -51,8 +51,7 @@
         <activity android:name=".ui.ActivityLiveCardSilde" />
         <activity android:name=".ui.ActivityCardSildeWithPaging" />
         <activity android:name=".ui.ActivityLivePlay" />
-        <activity
-            android:name=".ui.ActivityHome"
+        <activity android:name=".ui.ActivityHome"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"

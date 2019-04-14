@@ -143,7 +143,7 @@ class AdapterHome(context: Context): PagedListAdapter<DoubanMovie.SubjectsBean, 
                         var DirectPair:Pair<View, String> = Pair(tv_homeMovieDirect, tv_homeMovieDirect.transitionName)
                         compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context, imagePair)
                     }
-                    ActivityMovieDetail.actionStart(context!!, bundle, compat)
+                    ActivityMovieDetail.actionStart(context, bundle, compat)
                 }
             })
         }
