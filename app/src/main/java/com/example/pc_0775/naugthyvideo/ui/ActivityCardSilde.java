@@ -23,13 +23,13 @@ import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.adapter.AdapterCa
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
+import com.example.pc_0775.naugthyvideo.model.bean.MessageEvent;
 import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.CardConfig;
 import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.CardItemTouchHelperCallback;
 import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.OnCardSwipeListener;
 import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.myLayoutManager.CardLayoutManager;
-import com.example.pc_0775.naugthyvideo.bean.liveBean.LivePlatform;
-import com.example.pc_0775.naugthyvideo.bean.liveBean.LiveRoomInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.liveBean.LivePlatform;
+import com.example.pc_0775.naugthyvideo.model.bean.liveBean.LiveRoomInfo;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 
 import org.greenrobot.eventbus.EventBus;

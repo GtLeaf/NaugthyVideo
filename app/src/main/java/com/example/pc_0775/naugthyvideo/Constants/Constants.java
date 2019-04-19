@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 
-import com.example.pc_0775.naugthyvideo.bean.UserBean;
+import com.example.pc_0775.naugthyvideo.model.bean.UserBean;
 
 import java.util.ArrayList;
 import java.util.List;

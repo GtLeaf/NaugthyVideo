@@ -23,9 +23,9 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.ui.view.LimitSpannableTextView
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity
-import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
-import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieDetail
-import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovieEntry
+import com.example.pc_0775.naugthyvideo.model.bean.douban.DoubanMovie
+import com.example.pc_0775.naugthyvideo.model.bean.douban.DoubanMovieDetail
+import com.example.pc_0775.naugthyvideo.model.bean.douban.DoubanMovieEntry
 import com.example.pc_0775.naugthyvideo.other.retrofit.MovieLoader
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
 import io.reactivex.Observer

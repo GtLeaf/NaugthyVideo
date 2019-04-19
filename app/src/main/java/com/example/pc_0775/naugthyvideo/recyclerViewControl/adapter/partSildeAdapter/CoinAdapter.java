@@ -3,7 +3,7 @@ package com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.partSildeAd
 import android.content.Context;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.CoinInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.CoinInfo;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.viewHolder.CommonViewHolder;
 
 import java.util.List;
