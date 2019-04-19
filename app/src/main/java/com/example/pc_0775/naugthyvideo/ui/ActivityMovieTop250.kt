@@ -19,7 +19,7 @@ import android.widget.Toast
 import com.example.pc_0775.naugthyvideo.Constants.Constants
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity
-import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
+import com.example.pc_0775.naugthyvideo.model.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterMoiveTop250
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil
 import kotlinx.android.synthetic.main.activity_movie_top_250.*

@@ -186,10 +186,10 @@
 #--------(实体Model不能混淆，否则找不到对应的属性获取不到值)-----
 #
 -dontwarn com.suchengkeji.android.confusiondemo.md.**
--dontwarn com.example.pc_0775.naugthyvideo.bean.**
+-dontwarn com.example.pc_0775.naugthyvideo.Model.bean.**
 #对含有反射类的处理
 -keep class com.suchengkeji.android.confusiondemo.md.** { *; }
--keepnames class com.example.pc_0775.naugthyvideo.bean.** { *;}
+-keepnames class com.example.pc_0775.naugthyvideo.Model.bean.** { *;}
 #
 # ----------------------------- 其他的 -----------------------------
 #

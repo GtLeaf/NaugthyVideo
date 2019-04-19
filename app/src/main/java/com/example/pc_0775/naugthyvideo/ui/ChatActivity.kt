@@ -29,8 +29,8 @@ import cn.jpush.im.android.api.model.Conversation
 import cn.jpush.im.android.api.model.Message
 import cn.jpush.im.api.BasicCallback
 import com.example.pc_0775.naugthyvideo.Constants.Constants
-import com.example.pc_0775.naugthyvideo.ViewModel.ChatMsgModel
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.*
+import com.example.pc_0775.naugthyvideo.viewModel.ChatMsgModel
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.*
 import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.FileUtils
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.entity.LocalMedia

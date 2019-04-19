@@ -31,7 +31,7 @@ import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.myLayoutManager.C
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.EuropeVideoInfo;
 
 import java.util.ArrayList;
 import java.util.List;

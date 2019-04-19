@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.pc_0775.naugthyvideo.other.CardSwipeControl.CardShowInfoBean;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.EuropeVideoInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.EuropeVideoInfo;
 
 
 import java.util.ArrayList;

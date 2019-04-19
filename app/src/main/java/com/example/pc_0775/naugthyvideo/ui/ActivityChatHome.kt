@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.View
 import com.example.pc_0775.naugthyvideo.R
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivityKotlin
-import com.example.pc_0775.naugthyvideo.fragment.FragmentChatRoomList
-import com.example.pc_0775.naugthyvideo.fragment.FragmentFriendList
+import com.example.pc_0775.naugthyvideo.ui.fragment.FragmentChatRoomList
+import com.example.pc_0775.naugthyvideo.ui.fragment.FragmentFriendList
 import kotlinx.android.synthetic.main.activity_chat_home.*
 
 class ActivityChatHome : BaseActivityKotlin() {

@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.bean.NormalItem
+import com.example.pc_0775.naugthyvideo.model.bean.NormalItem
 
 /**
  * Created by PC-0775 on 2019/2/11.

@@ -45,9 +45,9 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.ui.view.CommonPopupWindow;
 import com.example.pc_0775.naugthyvideo.ui.view.CommonPopupWindow.LayoutGravity;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
-import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie;
-import com.example.pc_0775.naugthyvideo.myInterface.BookService;
+import com.example.pc_0775.naugthyvideo.model.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.douban.DoubanMovie;
+import com.example.pc_0775.naugthyvideo.model.remote.BookService;
 import com.example.pc_0775.naugthyvideo.ui.receiver.SimpleJPushReceiver;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterHome;
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
@@ -336,18 +336,6 @@ public class ActivityHome extends BaseActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        /*if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
-            if ((System.currentTimeMillis() - mExitTime > 2000)){
-                showToast("再按一次退出");
-            }else {
-
-            }
-        }*/
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public void onBackPressed() {
         //关闭抽屉
         if (drawer_layout.isDrawerOpen(nav_headerView)){
@@ -395,7 +383,7 @@ public class ActivityHome extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.backup:
                 Toast.makeText(this, "You click Backup", Toast.LENGTH_SHORT).show();
                 break;
@@ -412,21 +400,8 @@ public class ActivityHome extends BaseActivity {
         return true;
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-//        Toast.makeText(this, "用户自定义拦截方法", Toast.LENGTH_SHORT).show();
-    }
-
-
     /**
      * 请求豆瓣最新电影数据，异步，初始化使用
-     *
      */
     private void requestLatestMoviesData(MyHandler myHandler){
         /*HashMap<String, String> parameter = new HashMap<>();
@@ -467,7 +442,6 @@ public class ActivityHome extends BaseActivity {
 
     /**
      * 请求豆瓣最新电影数据，同步，后续加载使用
-     *
      */
     private DoubanMovie syncRequestLatestMoviesData(){
         HashMap<String, String> parameter = new HashMap<>();
@@ -771,8 +745,9 @@ public class ActivityHome extends BaseActivity {
         });
     }
 
+    //发送登录请求
     public void sendLoginRequest() {
-
+        //从本地文件中获取用户名密码
         String phoneNumber = SPUtils.Companion.get(this, Constants.PHONE_NUMBER, "").toString();
         String password = SPUtils.Companion.get(this, Constants.PASSWORD, "").toString();
         /*UserLoginLoader userLoginLoader = new UserLoginLoader();
@@ -806,6 +781,7 @@ public class ActivityHome extends BaseActivity {
 
                     }
                 });*/
+        //极光登录
         JMessageClient.login(phoneNumber, password, new RequestCallback<List<DeviceInfo>>() {
             @Override
             public void gotResult(int i, String s, List<DeviceInfo> deviceInfos) {

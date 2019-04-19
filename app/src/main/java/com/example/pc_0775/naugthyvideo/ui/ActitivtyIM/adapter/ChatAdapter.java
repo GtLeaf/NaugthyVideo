@@ -11,15 +11,15 @@ import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.R;
 import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.LogUtil;
 import com.example.pc_0775.naugthyvideo.ui.ChatActivity;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.AudioMsgBody;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.FileMsgBody;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.ImageMsgBody;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.UIMessage;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.MsgBody;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.MsgSendStatus;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.MsgType;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.TextMsgBody;
-import com.example.pc_0775.naugthyvideo.bean.UIMessage.VideoMsgBody;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.AudioMsgBody;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.FileMsgBody;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.ImageMsgBody;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.UIMessage;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.MsgBody;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.MsgSendStatus;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.MsgType;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.TextMsgBody;
+import com.example.pc_0775.naugthyvideo.model.bean.UIMessage.VideoMsgBody;
 import com.example.pc_0775.naugthyvideo.ui.ActitivtyIM.util.GlideUtils;
 
 
@@ -28,7 +28,6 @@ import java.util.List;
 
 import cn.jpush.im.android.api.callback.DownloadCompletionCallback;
 import cn.jpush.im.android.api.content.VideoContent;
-import cn.jpush.im.android.api.enums.ContentType;
 
 public class ChatAdapter extends BaseQuickAdapter<UIMessage, BaseViewHolder> {
 

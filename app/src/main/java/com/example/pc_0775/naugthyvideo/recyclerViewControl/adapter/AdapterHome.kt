@@ -20,7 +20,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.pc_0775.naugthyvideo.R
-import com.example.pc_0775.naugthyvideo.bean.douban.DoubanMovie
+import com.example.pc_0775.naugthyvideo.model.bean.douban.DoubanMovie
 import com.example.pc_0775.naugthyvideo.ui.ActivityMovieDetail
 import io.vov.vitamio.utils.Base64
 import java.io.ByteArrayOutputStream

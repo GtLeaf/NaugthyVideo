@@ -1,8 +1,8 @@
 package com.example.pc_0775.naugthyvideo.other.retrofit
 
-import com.example.pc_0775.naugthyvideo.bean.BaseResult
-import com.example.pc_0775.naugthyvideo.bean.UserBean
-import com.example.pc_0775.naugthyvideo.myInterface.LoginService
+import com.example.pc_0775.naugthyvideo.model.bean.BaseResult
+import com.example.pc_0775.naugthyvideo.model.bean.UserBean
+import com.example.pc_0775.naugthyvideo.model.remote.LoginService
 import io.reactivex.Observable
 import java.util.*
 

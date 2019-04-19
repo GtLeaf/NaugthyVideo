@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.MessageEvent;
-import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.MessageEvent;
+import com.example.pc_0775.naugthyvideo.model.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.util.GifCacheUtil;
 import com.example.pc_0775.naugthyvideo.ui.ActivityVideoPlay;
 

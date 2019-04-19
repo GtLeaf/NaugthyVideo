@@ -23,10 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc_0775.naugthyvideo.R;
-import com.example.pc_0775.naugthyvideo.bean.mmBean.VideoInfoMiMi;
+import com.example.pc_0775.naugthyvideo.model.bean.mmBean.VideoInfoMiMi;
 import com.example.pc_0775.naugthyvideo.recyclerViewControl.adapter.AdapterFunctionVideo;
 import com.example.pc_0775.naugthyvideo.ui.base.BaseActivity;
-import com.example.pc_0775.naugthyvideo.bean.VideoInfo;
+import com.example.pc_0775.naugthyvideo.model.bean.VideoInfo;
 import com.example.pc_0775.naugthyvideo.Constants.Constants;
 import com.example.pc_0775.naugthyvideo.util.NetWorkUtil;
 

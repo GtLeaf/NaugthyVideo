@@ -1,6 +1,6 @@
 package com.example.pc_0775.naugthyvideo.other.retrofit
 
-import com.example.pc_0775.naugthyvideo.myInterface.MovieService
+import com.example.pc_0775.naugthyvideo.model.remote.DoubanMovieService
 import com.example.pc_0775.naugthyvideo.util.HttpCommonInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -36,7 +36,7 @@ object RetrofitServiceManager{
                 .client(builder.build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(MovieService.baseUrl)
+                .baseUrl(DoubanMovieService.baseUrl)
                 .build()
     }
 
